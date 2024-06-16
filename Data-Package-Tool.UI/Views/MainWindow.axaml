@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:Data_Package_Tool.UI.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Data_Package_Tool.UI.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Data_Package_Tool.UI">
+        Icon="/Assets/icon.ico"
+        Title="Data Package Tool">
         <views:MainView />
 </Window>

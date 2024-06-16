@@ -33,7 +33,7 @@ namespace Data_Package_Tool.Classes.Parsing
         }
         public bool IsDeletedUser
         {
-            get => this.Id == Consts.DeletedUserId;
+            get => this.Id == Constants.DeletedUserId;
         }
         public string Tag
         {

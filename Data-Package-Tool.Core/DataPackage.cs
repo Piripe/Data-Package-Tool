@@ -134,7 +134,7 @@ namespace Data_Package_Tool.Classes
                             var recipientId = channel.GetOtherDMRecipient(this.User);
                             channel.DMRecipientId = recipientId;
 
-                            if (!this.UsersMap.ContainsKey(recipientId) && recipientId != Consts.DeletedUserId && channelNamesMap.TryGetValue(channelId, out var channelName))
+                            if (!this.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(channelId, out var channelName))
                             {
                                 var nameMatch = nameRegex.Match(channelName);
                                 if (nameMatch.Success)
