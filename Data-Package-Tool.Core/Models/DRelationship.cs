@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Data_Package_Tool.Classes.Parsing
+namespace DataPackageTool.Classes.Parsing
 {
     public class DRelationship
     {

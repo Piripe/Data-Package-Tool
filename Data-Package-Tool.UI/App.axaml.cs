@@ -2,10 +2,10 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using Data_Package_Tool.UI.ViewModels;
-using Data_Package_Tool.UI.Views;
+using DataPackageTool.UI.ViewModels;
+using DataPackageTool.UI.Views;
 
-namespace Data_Package_Tool.UI;
+namespace DataPackageTool.UI;
 
 public partial class App : Application
 {

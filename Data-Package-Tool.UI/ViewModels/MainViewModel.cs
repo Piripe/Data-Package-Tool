@@ -1,4 +1,4 @@
-﻿namespace Data_Package_Tool.UI.ViewModels;
+﻿namespace DataPackageTool.UI.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {

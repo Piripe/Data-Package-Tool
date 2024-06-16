@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace Data_Package_Tool.UI.Views;
+namespace DataPackageTool.UI.Views;
 
 public partial class MainView : UserControl
 {

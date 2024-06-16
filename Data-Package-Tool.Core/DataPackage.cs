@@ -1,5 +1,5 @@
-﻿using Data_Package_Tool.Classes.Parsing;
-using Data_Package_Tool.Helpers;
+﻿using DataPackageTool.Classes.Parsing;
+using DataPackageTool.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Data_Package_Tool.Classes
+namespace DataPackageTool.Classes
 {
     public struct LoadStatus
     {

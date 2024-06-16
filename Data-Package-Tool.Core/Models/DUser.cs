@@ -1,7 +1,7 @@
-﻿using Data_Package_Tool.Helpers;
+﻿using DataPackageTool.Helpers;
 using System.Text.Json.Serialization;
 
-namespace Data_Package_Tool.Classes.Parsing
+namespace DataPackageTool.Classes.Parsing
 {
     public class DUser
     {

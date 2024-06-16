@@ -3,7 +3,7 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 
-namespace Data_Package_Tool.UI.Desktop;
+namespace DataPackageTool.UI.Desktop;
 
 class Program
 {

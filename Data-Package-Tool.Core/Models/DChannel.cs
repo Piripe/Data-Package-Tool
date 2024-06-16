@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Microsoft.VisualBasic.FileIO;
 
-namespace Data_Package_Tool.Classes.Parsing
+namespace DataPackageTool.Classes.Parsing
 {
     public class DChannel
     {
