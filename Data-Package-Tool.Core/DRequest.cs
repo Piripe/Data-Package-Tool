@@ -11,28 +11,28 @@ namespace Data_Package_Tool.Classes
 {
     class DSuperProperties
     {
-        public string os;
-        public string browser;
-        public string device;
-        public string system_locale;
-        public string browser_user_agent;
-        public string browser_version;
-        public string os_version;
-        public string referrer;
-        public string referring_domain;
-        public string referrer_current;
-        public string referring_domain_current;
-        public string release_channel;
-        public int client_build_number;
-        public string client_event_source;
+        public string? os;
+        public string? browser;
+        public string? device;
+        public string? system_locale;
+        public string? browser_user_agent;
+        public string? browser_version;
+        public string? os_version;
+        public string? referrer;
+        public string? referring_domain;
+        public string? referrer_current;
+        public string? referring_domain_current;
+        public string? release_channel;
+        public int? client_build_number;
+        public string? client_event_source;
 
     }
     class DHeaders
     {
-        public static string BROWSER_VERSION;
-        public static string BROWSER_VERSION_FULL;
+        public static string? BROWSER_VERSION;
+        public static string? BROWSER_VERSION_FULL;
 
-        public static string USER_AGENT;
+        public static string? USER_AGENT;
 
         public static int ClientBuildNumber;
 
@@ -53,30 +53,31 @@ namespace Data_Package_Tool.Classes
 
         public static string SuperProperties()
         {
-            if (!_initialized) throw new Exception("Headers not initialized");
+            throw new NotImplementedException();
+            //if (!_initialized) throw new Exception("Headers not initialized");
 
-            var propsJson = Newtonsoft.Json.JsonConvert.SerializeObject(new DSuperProperties
-            {
-                os = "Windows",
-                browser = "Chrome",
-                device = "",
-                system_locale = "en-US",
-                browser_user_agent = USER_AGENT,
-                browser_version = BROWSER_VERSION_FULL,
-                os_version = "10",
-                referrer = "",
-                referring_domain = "",
-                referrer_current = "",
-                referring_domain_current = "",
-                release_channel = "canary",
-                client_build_number = ClientBuildNumber,
-                client_event_source = null
-            });
+            //var propsJson = Newtonsoft.Json.JsonConvert.SerializeObject(new DSuperProperties
+            //{
+            //    os = "Windows",
+            //    browser = "Chrome",
+            //    device = "",
+            //    system_locale = "en-US",
+            //    browser_user_agent = USER_AGENT,
+            //    browser_version = BROWSER_VERSION_FULL,
+            //    os_version = "10",
+            //    referrer = "",
+            //    referring_domain = "",
+            //    referrer_current = "",
+            //    referring_domain_current = "",
+            //    release_channel = "canary",
+            //    client_build_number = ClientBuildNumber,
+            //    client_event_source = null
+            //});
 
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(propsJson));
+            //return Convert.ToBase64String(Encoding.UTF8.GetBytes(propsJson));
         }
 
-        public static Dictionary<string, string> DefaultBrowserHeaders(Dictionary<string, string> extraHeaders = null)
+        public static Dictionary<string, string> DefaultBrowserHeaders(Dictionary<string, string>? extraHeaders = null)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>{
                 {"Accept", "*/*"},
@@ -87,7 +88,7 @@ namespace Data_Package_Tool.Classes
                 {"sec-fetch-dest", "empty"},
                 {"sec-fetch-mode", "cors"},
                 {"sec-fetch-site", "same-origin"},
-                {"User-Agent", USER_AGENT},
+                {"User-Agent", USER_AGENT!},
                 {"x-debug-options", "bugReporterEnabled"},
                 {"x-discord-locale", "en-US"},
                 {"x-discord-timezone", "America/New_York"},
@@ -126,22 +127,23 @@ namespace Data_Package_Tool.Classes
             throw new Exception("Failed to get client build number");
         }
 
-        public static async Task<string> GetLatestChromeVersion()
+        public static Task<string> GetLatestChromeVersion()
         {
-            var res = await new HttpClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"));
-            var content = await res.Content.ReadAsStringAsync();
-            
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(content);
-            string latest = data.versions[0].version;
-            var majorNum = latest.Split('.')[0];
+            throw new NotImplementedException();
+            //var res = await new HttpClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"));
+            //var content = await res.Content.ReadAsStringAsync();
 
-            return majorNum;
+            //var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(content);
+            //string latest = data.versions[0].version;
+            //var majorNum = latest.Split('.')[0];
+
+            //return majorNum;
         }
     }
     class DRequest
     {
         public static HttpClient client = new HttpClient();
-        public static async Task<DRequestResponse> RequestAsync(HttpMethod method, string url, Dictionary<string, string> headers = null, string bodyData = null, bool includeDefaultHeaders = true)
+        public static async Task<DRequestResponse> RequestAsync(HttpMethod method, string url, Dictionary<string, string>? headers = null, string? bodyData = null, bool includeDefaultHeaders = true)
         {
             var request = new HttpRequestMessage(method, url);
 
@@ -177,7 +179,7 @@ namespace Data_Package_Tool.Classes
 
     public class DRequestResponse
     {
-        public HttpResponseMessage response;
-        public string body;
+        public HttpResponseMessage? response;
+        public string? body;
     }
 }

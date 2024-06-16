@@ -1,21 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Data_Package_Tool.Classes.Parsing
 {
     public class DRelationship
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = null!;
 
         // Data packages from before 04.2024 have `type` set to a number,
         // while the current ones have it set to a string.
         // The enum resolves both automatically.
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public RelationshipType Type { get; set; }
-        [JsonProperty("nickname")]
-        public string Nickname { get; set; }
-        [JsonProperty("user")]
-        public DUser User { get; set; }
+        [JsonPropertyName("nickname")]
+        public string Nickname { get; set; } = null!;
+        [JsonPropertyName("user")]
+        public DUser User { get; set; } = null!;
     }
 
     public enum RelationshipType

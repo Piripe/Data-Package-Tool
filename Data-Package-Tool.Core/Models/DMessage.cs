@@ -5,11 +5,11 @@ namespace Data_Package_Tool.Classes.Parsing
 {
     public class DMessage
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         public DateTime Timestamp { get; set; }
-        public string Content { get; set; }
+        public string Content { get; set; } = null!;
         public List<DAttachment> Attachments { get; } = new List<DAttachment>();
-        public DChannel Channel { get; set; }
+        public DChannel Channel { get; set; } = null!;
         public bool IsDeleted { get; set; } = false;
 
         public string GetMessageLink()

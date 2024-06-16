@@ -1,32 +1,28 @@
 ﻿using Data_Package_Tool.Helpers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Media.Imaging;
+using System.Text.Json.Serialization;
 
 namespace Data_Package_Tool.Classes.Parsing
 {
     public class DUser
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-        [JsonProperty("username")]
-        public string Username { get; set; }
-        [JsonProperty("global_name")]
-        public string DisplayName { get; set; }
-        [JsonProperty("discriminator")]
-        public string Discriminator { get; set; }
-        [JsonProperty("avatar_hash")]
-        public string AvatarHash { get; set; }
-        [JsonProperty("avatar")]
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
+        [JsonPropertyName("global_name")]
+        public string DisplayName { get; set; } = string.Empty;
+        [JsonPropertyName("discriminator")]
+        public string Discriminator { get; set; } = string.Empty;
+        [JsonPropertyName("avatar_hash")]
+        public string AvatarHash { get; set; } = string.Empty;
+        [JsonPropertyName("avatar")]
         private string AvatarHash2 { set => AvatarHash = value; } // relationship user field
-        [JsonProperty("relationships")]
-        public List<DRelationship> Relationships { get; set; }
-        [JsonProperty("notes")]
-        public Dictionary<string, string> Notes { get; set; }
+        [JsonPropertyName("relationships")]
+        public List<DRelationship> Relationships { get; set; } = null!;
+        [JsonPropertyName("notes")]
+        public Dictionary<string, string> Notes { get; set; } = null!;
 
-        public BitmapImage AvatarImage { get; set; }
+        //public BitmapImage AvatarImage { get; set; }
         public bool IsPomelo
         {
             get => this.Discriminator == "0" || this.Discriminator == "0000";
@@ -66,14 +62,14 @@ namespace Data_Package_Tool.Classes.Parsing
             }
         }
 
-        public Bitmap GetDefaultAvatarBitmap()
-        {
-            return Properties.Resources.ResourceManager.GetObject($"DefaultAvatar{this.DefaultAvatarId}") as Bitmap;
-        }
+        //public Bitmap GetDefaultAvatarBitmap()
+        //{
+        //    return Properties.Resources.ResourceManager.GetObject($"DefaultAvatar{this.DefaultAvatarId}") as Bitmap;
+        //}
 
-        public BitmapImage GetDefaultAvatarBitmapImage()
-        {
-            return Discord.DefaultAvatars[DefaultAvatarId];
-        }
+        //public BitmapImage GetDefaultAvatarBitmapImage()
+        //{
+        //    return Discord.DefaultAvatars[DefaultAvatarId];
+        //}
     }
 }

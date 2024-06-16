@@ -1,40 +1,40 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace Data_Package_Tool.Classes.Parsing
 {
     public class DAnalyticsEvent
     {
-        [JsonProperty("event_type")]
-        public string EventType { get; set; }
+        [JsonPropertyName("event_type")]
+        public string EventType { get; set; } = null!;
 
-        [JsonProperty("guild")]
-        public string GuildId { get; set; } // the guild id on invite events
-        [JsonProperty("channel_id")]
-        public string ChannelId { get; set; } // the channel id on voice events
-        [JsonProperty("channel_type")]
-        public string ChannelType { get; set; }
-        [JsonProperty("invite")]
-        public string InviteCode { get; set; }
+        [JsonPropertyName("guild")]
+        public string GuildId { get; set; } = null!; // the guild id on invite events
+        [JsonPropertyName("channel_id")]
+        public string ChannelId { get; set; } = null!; // the channel id on voice events
+        [JsonPropertyName("channel_type")]
+        public string ChannelType { get; set; } = null!;
+        [JsonPropertyName("invite")]
+        public string InviteCode { get; set; } = null!;
 
-        [JsonProperty("guild_id")]
+        [JsonPropertyName("guild_id")]
         private string GuildId2 { set => GuildId = value; }
-        [JsonProperty("join_type")]
-        public string JoinType { get; set; }
-        [JsonProperty("join_method")]
-        public string JoinMethod { get; set; }
-        [JsonProperty("application_id")]
-        public string ApplicationId { get; set; }
-        [JsonProperty("location")]
-        public string Location { get; set; }
-        [JsonProperty("invite_code")]
+        [JsonPropertyName("join_type")]
+        public string JoinType { get; set; } = null!;
+        [JsonPropertyName("join_method")]
+        public string JoinMethod { get; set; } = null!;
+        [JsonPropertyName("application_id")]
+        public string ApplicationId { get; set; } = null!;
+        [JsonPropertyName("location")]
+        public string Location { get; set; } = null!;
+        [JsonPropertyName("invite_code")]
         private string InviteCode2 { set => InviteCode = value; }
         public DateTime Timestamp { get; set; }
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         private string Timestamp2 { set => Timestamp = DateTime.Parse(value.Replace("\"", ""), null, DateTimeStyles.RoundtripKind); }
 
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
         public long Duration { get; set; } // the call duration on voice disconnect events
     }
 }

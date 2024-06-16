@@ -3,10 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data-Package-Tool.UI", "Data-Package-Tool.UI\Data-Package-Tool.UI.csproj", "{635A8495-45CF-443C-8C12-190F6325849B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC42478B-FD1F-4772-976E-64BA90BE956A} = {AC42478B-FD1F-4772-976E-64BA90BE956A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data-Package-Tool.UI.Desktop", "Data-Package-Tool.UI.Desktop\Data-Package-Tool.UI.Desktop.csproj", "{D066EDF9-9076-489F-B0C8-856D55EDE116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data-Package-Tool.Core", "Data-Package-Tool.Core\Data-Package-Tool.Core.csproj", "{AC42478B-FD1F-4772-976E-64BA90BE956A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data-Package-Tool.Core", "Data-Package-Tool.Core\Data-Package-Tool.Core.csproj", "{AC42478B-FD1F-4772-976E-64BA90BE956A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
