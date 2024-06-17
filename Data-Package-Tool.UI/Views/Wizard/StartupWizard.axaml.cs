@@ -30,16 +30,17 @@ namespace DataPackageTool.UI.Views.Wizard
         {
             PlaySurprisedAnim();
 
-            TitleLabel.Content = "Loading package.zip...";
-            SubtitleLabel.Content = "Wait a sec";
+            TitleText.Text = "Loading package.zip...";
+            SubtitleText.Text = "Wait a sec";
             StatusProgressBar.IsVisible = true;
 
             DataPackage package = await DataPackage.LoadAsync(fileName, (LoadStatus status) =>
             {
-                SubtitleLabel.Content = status.Status;
+                SubtitleText.Text = status.Status;
                 StatusProgressBar.Value = status.Progress*100;
-                if (status.Finished) TitleLabel.Content = "Package loaded!";
             });
+            TitleText.Text = "Package loaded!";
+            DataPackageLoaded?.Invoke(this, package);
         }
 
         private void PlaySurprisedAnim()

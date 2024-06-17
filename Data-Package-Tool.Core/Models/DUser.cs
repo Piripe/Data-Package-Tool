@@ -25,26 +25,26 @@ namespace DataPackageTool.Core.Models
         public IImage? AvatarImage { get; set; }
         public bool IsPomelo
         {
-            get => this.Discriminator == "0" || this.Discriminator == "0000";
+            get => Discriminator == "0" || Discriminator == "0000" || Discriminator == null;
         }
         public bool IsDeletedUser
         {
-            get => this.Id == Constants.DeletedUserId;
+            get => Id == Constants.DeletedUserId;
         }
         public string? Tag
         {
-            get => this.IsPomelo ? this.Username : $"{this.Username}#{this.Discriminator}";
+            get => IsPomelo ? Username : $"{Username}#{Discriminator}";
         }
         private int DefaultAvatarId
         {
             get
             {
-                if(this.IsPomelo)
+                if(IsPomelo)
                 {
-                    return (int)((Int64.Parse(this.Id??"0") >> 22) % 6);
+                    return (int)((long.Parse(Id??"0") >> 22) % 6);
                 } else
                 {
-                    return Int32.Parse(this.Discriminator??"0") % 5;
+                    return int.Parse(Discriminator??"0") % 5;
                 }
             }
         }
@@ -77,7 +77,11 @@ namespace DataPackageTool.Core.Models
 
         Bitmap GetDefaultAvatarBitmap()
         {
-            return new Bitmap(AssetLoader.Open(new Uri($"avares://DataPackageTool.UI/Assets/Discord/DefaultAvatar{DefaultAvatarId}.png")));
+            return GetDefaultAvatarBitmap(DefaultAvatarId);
+        }
+        public static Bitmap GetDefaultAvatarBitmap(int avatarId)
+        {
+            return new Bitmap(AssetLoader.Open(new Uri($"avares://DataPackageTool.UI/Assets/Discord/DefaultAvatar{avatarId}.png")));
         }
         async Task<Bitmap> DownloadAvatar()
         {
@@ -90,5 +94,6 @@ namespace DataPackageTool.Core.Models
                 return GetDefaultAvatarBitmap();
             }
         }
+        public string GetUsername() => DisplayName ?? Tag ?? (Id != null ? (Id == Constants.DeletedUserId ? "Deleted User" : $"<@{Id}>") : "Unknown user");
     }
 }

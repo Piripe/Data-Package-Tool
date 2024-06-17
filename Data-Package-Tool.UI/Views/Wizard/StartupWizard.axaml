@@ -49,7 +49,7 @@
 	</UserControl.Styles>
 	
 	
-	<Grid DragDrop.AllowDrop="True" Background="#88000000" x:Name="DropZone">
+	<Grid DragDrop.AllowDrop="True" Background="{DynamicResource BackgroundTertiary}" x:Name="DropZone">
 			<Border x:Name="OpenDialogButton" Classes="OpenDialogButton" BoxShadow="0 0 64 10 #1000" Cursor="Hand" CornerRadius="10" Padding="10" Width="330" Height="190" Background="{StaticResource Brand500}">
 				<Border.Transitions>
 					<Transitions>
@@ -66,8 +66,8 @@
 						</Image>
 					</Canvas>
 					<StackPanel Grid.Row="1">
-						<Label x:Name="TitleLabel" Foreground="{StaticResource White500}" FontSize="22" FontWeight="700" HorizontalAlignment="Center">Drop package.zip</Label>
-						<Label x:Name="SubtitleLabel" Foreground="{StaticResource White500}" FontSize="12" HorizontalAlignment="Center">You can also click here to open a dialog</Label>
+						<TextBlock x:Name="TitleText" Foreground="{StaticResource White500}" FontSize="22" FontWeight="700" HorizontalAlignment="Center" Text="Drop package.zip"/>
+						<TextBlock x:Name="SubtitleText" Foreground="{StaticResource White500}" FontSize="12" HorizontalAlignment="Center" Text="You can also click here to open a dialog"/>
 					</StackPanel>
 					<ProgressBar x:Name="StatusProgressBar" IsVisible="False" Grid.Row="2" Classes="Outlined" VerticalAlignment="Bottom" Margin="8 0 8 16" Value="50"/>
 				</Grid>

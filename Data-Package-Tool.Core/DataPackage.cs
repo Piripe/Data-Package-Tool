@@ -24,7 +24,7 @@ namespace DataPackageTool.Core
     }
     public class DataPackage
     {
-        public DUser? User { get; private set; }
+        public DUser User { get; private set; } = new DUser();
         public readonly MemoryStream Avatar = new();
         public readonly List<DChannel> Channels = new();
         public readonly Dictionary<string, DChannel> ChannelsMap = new();
@@ -92,7 +92,7 @@ namespace DataPackageTool.Core
 
 
 
-                dp.User = JsonSerializer.Deserialize<DUser>(userFile.Open(), serializerOptions);
+                dp.User = JsonSerializer.Deserialize<DUser>(userFile.Open(), serializerOptions)??dp.User;
 
                 if (dp.User == null)
                 {

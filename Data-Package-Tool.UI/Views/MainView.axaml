@@ -2,15 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:DataPackageTool.UI.ViewModels"
+             xmlns:v="clr-namespace:DataPackageTool.UI.Views"
+             xmlns:sb="clr-namespace:DataPackageTool.UI.Views.Sidebar"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.MainView"
-             x:DataType="vm:MainViewModel">
+             x:DataType="v:MainViewModel">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
+    <v:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Grid ColumnDefinitions="72,*">
+		<Grid Grid.Column="1" ColumnDefinitions="240,*">
+			<Grid Background="{DynamicResource BackgroundSecondary}"/>
+			<TextBlock Grid.Column="1" Text="{Binding Username, StringFormat=Welcome {0}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		</Grid>
+		<Grid ColumnDefinitions="312">
+		    <sb:SidebarView DataContext="{CompiledBinding Sidebar}"/>
+		</Grid>
+	</Grid>
 </UserControl>
