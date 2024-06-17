@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Microsoft.VisualBasic.FileIO;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DChannel
     {
@@ -24,9 +24,9 @@ namespace DataPackageTool.Classes.Parsing
         public string DMRecipientId { get; set; } = null!;
         public bool HasDuplicates { get; set; }
 
-        public void LoadMessagesFromCsv(string csv)
+        public void LoadMessagesFromCsv(Stream csv)
         {
-            using(TextFieldParser parser = new TextFieldParser(new StringReader(csv)))
+            using(TextFieldParser parser = new TextFieldParser(csv))
             {
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(",");
@@ -46,7 +46,7 @@ namespace DataPackageTool.Classes.Parsing
             }
         }
 
-        public void LoadMessagesFromJson(string json)
+        public void LoadMessagesFromJson(Stream json)
         {
             var jsonMsgArray = JsonNode.Parse(json)?.AsArray();
             if (jsonMsgArray == null) return;

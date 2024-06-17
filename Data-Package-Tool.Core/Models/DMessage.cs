@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DMessage
     {

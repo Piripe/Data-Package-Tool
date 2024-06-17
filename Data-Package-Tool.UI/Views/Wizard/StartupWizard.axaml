@@ -63,7 +63,7 @@
 					</Canvas>
 					<StackPanel Grid.Row="2">
 						<Label Foreground="{StaticResource White500}" FontSize="22" FontWeight="700" HorizontalAlignment="Center">Drop package.zip</Label>
-						<Label Foreground="{StaticResource White500}" FontSize="12" HorizontalAlignment="Center">You can also click here to open a dialog</Label>
+						<Label x:Name="StatusLabel" Foreground="{StaticResource White500}" FontSize="12" HorizontalAlignment="Center">You can also click here to open a dialog</Label>
 					</StackPanel>
 				</Grid>
 			</Border>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DAnalyticsEvent
     {

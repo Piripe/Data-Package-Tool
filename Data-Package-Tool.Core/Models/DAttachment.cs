@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DAttachment
     {

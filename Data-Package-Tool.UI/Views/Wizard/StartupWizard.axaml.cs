@@ -2,6 +2,7 @@ using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using DataPackageTool.Core;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +12,7 @@ namespace DataPackageTool.UI.Views.Wizard
 {
     public partial class StartupWizard : UserControl
     {
+        public event EventHandler<DataPackage>? DataPackageLoaded;
         public StartupWizard()
         {
             InitializeComponent();
@@ -27,8 +29,12 @@ namespace DataPackageTool.UI.Views.Wizard
             var result = await new OpenFileDialog() { AllowMultiple = false, Filters = [new FileDialogFilter { Name = "Discord Package files", Extensions = ["zip"] }]}.ShowAsync(GetWindow());
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            if (result != null) {
-                Debug.WriteLine($"File name : {result[0]}\tFile size : {new FileInfo(result[0]).Length}");
+            if (result != null && result.Length > 0)
+            {
+                DataPackage package = await DataPackage.LoadAsync(result[0], (LoadStatus status) =>
+                {
+                    StatusLabel.Content = status.Status;
+                });
             }
         }
 
@@ -40,8 +46,10 @@ namespace DataPackageTool.UI.Views.Wizard
                 if (files.Count() < 1) return;
                 string file = files.First().Path.LocalPath;
 
-
-                Debug.WriteLine($"File name : {file}\tFile size : {new FileInfo(file).Length}");
+                DataPackage package = await DataPackage.LoadAsync(file, (LoadStatus status) =>
+                {
+                    StatusLabel.Content = status.Status;
+                });
             }
         }
         bool dragOnWindow = false;

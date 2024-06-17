@@ -1,4 +1,4 @@
-﻿namespace DataPackageTool.Helpers
+﻿namespace DataPackageTool.Core
 {
     public static class Constants
     {

@@ -10,7 +10,7 @@
     <ApplicationIcon>..\Data-Package-Tool.UI\Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
   </ItemGroup>
 
   <ItemGroup>

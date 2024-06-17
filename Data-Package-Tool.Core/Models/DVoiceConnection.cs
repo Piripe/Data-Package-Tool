@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DVoiceConnection
     {

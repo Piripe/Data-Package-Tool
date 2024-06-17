@@ -1,20 +1,16 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DRelationship
     {
-        [JsonPropertyName("id")]
         public string Id { get; set; } = null!;
 
         // Data packages from before 04.2024 have `type` set to a number,
         // while the current ones have it set to a string.
         // The enum resolves both automatically.
-        [JsonPropertyName("type")]
         public RelationshipType Type { get; set; }
-        [JsonPropertyName("nickname")]
         public string Nickname { get; set; } = null!;
-        [JsonPropertyName("user")]
         public DUser User { get; set; } = null!;
     }
 

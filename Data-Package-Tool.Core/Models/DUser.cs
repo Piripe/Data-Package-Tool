@@ -1,28 +1,28 @@
-﻿using DataPackageTool.Helpers;
+﻿using Avalonia.Markup.Xaml.Converters;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using System.Net;
 using System.Text.Json.Serialization;
 
-namespace DataPackageTool.Classes.Parsing
+namespace DataPackageTool.Core.Models
 {
     public class DUser
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; } = string.Empty;
-        [JsonPropertyName("username")]
-        public string Username { get; set; } = string.Empty;
+        public string? Id { get; set; }
+        public string? Username { get; set; }
         [JsonPropertyName("global_name")]
-        public string DisplayName { get; set; } = string.Empty;
-        [JsonPropertyName("discriminator")]
-        public string Discriminator { get; set; } = string.Empty;
+        public string? DisplayName { get; set; }
+        public string? Discriminator { get; set; }
         [JsonPropertyName("avatar_hash")]
-        public string AvatarHash { get; set; } = string.Empty;
+        public string? AvatarHash { get; set; }
         [JsonPropertyName("avatar")]
         private string AvatarHash2 { set => AvatarHash = value; } // relationship user field
         [JsonPropertyName("relationships")]
-        public List<DRelationship> Relationships { get; set; } = null!;
-        [JsonPropertyName("notes")]
-        public Dictionary<string, string> Notes { get; set; } = null!;
+        public List<DRelationship>? Relationships { get; set; }
+        public Dictionary<string, string>? Notes { get; set; }
 
-        //public BitmapImage AvatarImage { get; set; }
+        public IImage? AvatarImage { get; set; }
         public bool IsPomelo
         {
             get => this.Discriminator == "0" || this.Discriminator == "0000";
@@ -31,7 +31,7 @@ namespace DataPackageTool.Classes.Parsing
         {
             get => this.Id == Constants.DeletedUserId;
         }
-        public string Tag
+        public string? Tag
         {
             get => this.IsPomelo ? this.Username : $"{this.Username}#{this.Discriminator}";
         }
@@ -41,10 +41,10 @@ namespace DataPackageTool.Classes.Parsing
             {
                 if(this.IsPomelo)
                 {
-                    return (int)((Int64.Parse(this.Id) >> 22) % 6);
+                    return (int)((Int64.Parse(this.Id??"0") >> 22) % 6);
                 } else
                 {
-                    return Int32.Parse(this.Discriminator) % 5;
+                    return Int32.Parse(this.Discriminator??"0") % 5;
                 }
             }
         }
@@ -52,24 +52,43 @@ namespace DataPackageTool.Classes.Parsing
         {
             get
             {
-                string avatarHash = this.AvatarHash;
-                if (avatarHash != null)
+                if (AvatarHash != null)
                 {
-                    return $"https://cdn.discordapp.com/avatars/{this.Id}/{avatarHash}.png?size=64";
+                    return $"https://cdn.discordapp.com/avatars/{this.Id}/{AvatarHash}.png?size=64";
                 }
 
                 return $"https://cdn.discordapp.com/embed/avatars/{this.DefaultAvatarId}.png?size=64";
             }
         }
 
-        //public Bitmap GetDefaultAvatarBitmap()
-        //{
-        //    return Properties.Resources.ResourceManager.GetObject($"DefaultAvatar{this.DefaultAvatarId}") as Bitmap;
-        //}
+        public async Task<IImage> GetAvatar()
+        {
+            if (AvatarImage != null) return AvatarImage;
+            if (AvatarHash == null)
+            {
+                AvatarImage = GetDefaultAvatarBitmap();
+            }
+            else
+            {
+                AvatarImage = await DownloadAvatar();
+            }
+            return AvatarImage;
+        }
 
-        //public BitmapImage GetDefaultAvatarBitmapImage()
-        //{
-        //    return Discord.DefaultAvatars[DefaultAvatarId];
-        //}
+        Bitmap GetDefaultAvatarBitmap()
+        {
+            return new Bitmap(AssetLoader.Open(new Uri($"avares://DataPackageTool.UI/Assets/Discord/DefaultAvatar{DefaultAvatarId}.png")));
+        }
+        async Task<Bitmap> DownloadAvatar()
+        {
+            HttpResponseMessage res = await new HttpClient().GetAsync(AvatarURL);
+            if (res.IsSuccessStatusCode) {
+                return new Bitmap(res.Content.ReadAsStream());
+            }
+            else
+            {
+                return GetDefaultAvatarBitmap();
+            }
+        }
     }
 }

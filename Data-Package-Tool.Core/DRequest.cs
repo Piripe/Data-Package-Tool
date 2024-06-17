@@ -7,26 +7,26 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DataPackageTool.Classes
+namespace DataPackageTool.Core
 {
-    class DSuperProperties
-    {
-        public string? os;
-        public string? browser;
-        public string? device;
-        public string? system_locale;
-        public string? browser_user_agent;
-        public string? browser_version;
-        public string? os_version;
-        public string? referrer;
-        public string? referring_domain;
-        public string? referrer_current;
-        public string? referring_domain_current;
-        public string? release_channel;
-        public int? client_build_number;
-        public string? client_event_source;
+    //class DSuperProperties
+    //{
+    //    public string? os;
+    //    public string? browser;
+    //    public string? device;
+    //    public string? system_locale;
+    //    public string? browser_user_agent;
+    //    public string? browser_version;
+    //    public string? os_version;
+    //    public string? referrer;
+    //    public string? referring_domain;
+    //    public string? referrer_current;
+    //    public string? referring_domain_current;
+    //    public string? release_channel;
+    //    public int? client_build_number;
+    //    public string? client_event_source;
 
-    }
+    //}
     class DHeaders
     {
         public static string? BROWSER_VERSION;
