@@ -54,18 +54,21 @@ namespace DataPackageTool.Core
         }
         public static Task<DataPackage> LoadAsync(string fileName, Action<LoadStatus> statusCallback)
         {
-            void UpdateStatus(string status,float progress,bool finished = false)
+            string currentStatus = "Loading user infos";
+            void UpdateStatus(float progress, string? status = null, bool finished = false)
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    statusCallback.Invoke(new LoadStatus { Status = status, Progress = progress, Finished = finished });
+                    Debug.WriteLine($"Status progress: {MathF.Round(progress,2)}");
+                    if (status != null) currentStatus = status;
+                    statusCallback.Invoke(new LoadStatus { Status = currentStatus, Progress = progress, Finished = finished });
                 });
             }
             return Task.Run(() =>
             {
                 var startTime = DateTime.Now;
 
-                UpdateStatus("Loading user infos", 0f);
+                UpdateStatus(0f);
 
                 var serializerOptions = new JsonSerializerOptions()
                 {
@@ -134,9 +137,11 @@ namespace DataPackageTool.Core
                     var nameRegex = new Regex(@"^Direct Message with (.+)#(\d{1,4})$", RegexOptions.Compiled);
 
 
-                UpdateStatus("Reading messages...", 0.05f);
-                List<object?> parsedEntries = zip.Entries.Select<ZipArchiveEntry, ZipEntryStreamAndMatches>((entry) =>
+                UpdateStatus(0.05f, "Reading messages...");
+                int entriesCount = zip.Entries.Count;
+                List<object?> parsedEntries = zip.Entries.Select((entry, i) =>
                 {
+                    if (i % 100 == 0) UpdateStatus(((float)i / entriesCount) * 0.75f + 0.05f);
                     var match = messagesRegex.Match(entry.FullName);
                     bool avatarMatch = false;
                     MemoryStream? channelStream = null;
@@ -166,9 +171,9 @@ namespace DataPackageTool.Core
                         return new ZipEntryStreamAndMatches() { stream = ms, messageMatch = match, avatarMatch = avatarMatch, channelStream = channelStream };
                     }
                     return new ZipEntryStreamAndMatches() { stream = null };
-                }).Where((ZipEntryStreamAndMatches x) => x.stream != null).AsParallel().WithDegreeOfParallelism(16).Select<ZipEntryStreamAndMatches, object?>((entry) => //
-                    {
-                        if (entry.messageMatch.Success)
+                }).Where((ZipEntryStreamAndMatches x) => x.stream != null).AsParallel().WithDegreeOfParallelism(16).Select<ZipEntryStreamAndMatches, object?>((entry,i) =>
+                {
+                    if (entry.messageMatch.Success)
                         {
                             var channelId = entry.messageMatch.Groups[2].Value;
                             var folderName = entry.messageMatch.Groups[1].Value; // folder name might not start with "c" in older versions
@@ -257,7 +262,7 @@ namespace DataPackageTool.Core
                             dp.User.AvatarImage = avatar;
                     }
                     i++;
-                    if (i % 100 == 0) UpdateStatus($"Loading data ({i}/{parsedEntries.Count})", (i / parsedEntries.Count)*0.95f+0.05f);
+                    if (i % 100 == 0) UpdateStatus((i / parsedEntries.Count)*0.05f+0.95f, $"Loading data ({i}/{parsedEntries.Count})");
                 }
                     
                     
@@ -265,7 +270,7 @@ namespace DataPackageTool.Core
                     file.Dispose();
 
                     dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => long.Parse(o.Message.Id)).ToList();
-                    UpdateStatus($"Finished! Parsed {dp.TotalMessages.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}",1f,true);
+                    UpdateStatus(1f,$"Finished! Parsed {dp.TotalMessages.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}",true);
 
                 return dp;
             });
