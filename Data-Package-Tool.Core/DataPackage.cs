@@ -134,7 +134,8 @@ namespace DataPackageTool.Core
                     var nameRegex = new Regex(@"^Direct Message with (.+)#(\d{1,4})$", RegexOptions.Compiled);
 
 
-                IEnumerable<object?> parsedEntries = zip.Entries.Select<ZipArchiveEntry, ZipEntryStreamAndMatches>((entry) =>
+                UpdateStatus("Reading messages...", 0.05f);
+                List<object?> parsedEntries = zip.Entries.Select<ZipArchiveEntry, ZipEntryStreamAndMatches>((entry) =>
                 {
                     var match = messagesRegex.Match(entry.FullName);
                     bool avatarMatch = false;
@@ -165,7 +166,7 @@ namespace DataPackageTool.Core
                         return new ZipEntryStreamAndMatches() { stream = ms, messageMatch = match, avatarMatch = avatarMatch, channelStream = channelStream };
                     }
                     return new ZipEntryStreamAndMatches() { stream = null };
-                }).AsParallel().WithDegreeOfParallelism(16).Where((ZipEntryStreamAndMatches x) => x.stream != null).Select<ZipEntryStreamAndMatches, object?>((entry) => //
+                }).Where((ZipEntryStreamAndMatches x) => x.stream != null).AsParallel().WithDegreeOfParallelism(16).Select<ZipEntryStreamAndMatches, object?>((entry) => //
                     {
                         if (entry.messageMatch.Success)
                         {
@@ -210,9 +211,9 @@ namespace DataPackageTool.Core
                             return avatar;
                         }
                         return null;
-                    }).Where((object? x)=>x!=null);
+                    }).ToList();
 
-                
+                    int i = 0;
                     foreach (object? entry in parsedEntries)
                     {
                         if (entry is DChannel channel)
@@ -254,8 +255,11 @@ namespace DataPackageTool.Core
                         else if (entry is Bitmap avatar)
                         {
                             dp.User.AvatarImage = avatar;
-                        }
                     }
+                    i++;
+                    if (i % 100 == 0) UpdateStatus($"Loading data ({i}/{parsedEntries.Count})", (i / parsedEntries.Count)*0.95f+0.05f);
+                }
+                    
                     
                     zip.Dispose();
                     file.Dispose();

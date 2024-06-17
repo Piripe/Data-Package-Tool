@@ -9,10 +9,14 @@
 		<ResourceDictionary x:Key='Light'>
 			<SolidColorBrush x:Key='BackgroundPrimary'>#fff</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#000</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundModifierActive'>#3380848e</SolidColorBrush>
+			<SolidColorBrush x:Key='OnBrandModifier'>#55ffffff</SolidColorBrush>
 		</ResourceDictionary>
 		<ResourceDictionary x:Key='Dark'>
 			<SolidColorBrush x:Key='BackgroundPrimary'>#313338</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#fff</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundModifierActive'>#7a4e5058</SolidColorBrush>
+			<SolidColorBrush x:Key='OnBrandModifier'>#7a000000</SolidColorBrush>
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

@@ -1,0 +1,32 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+			<StackPanel Orientation="Vertical" Spacing="8">
+				<Label HorizontalAlignment="Left">Progressbar</Label>
+				<ProgressBar HorizontalAlignment="Left" Width="200" Value="25"/>
+				<Border HorizontalAlignment="Left" Padding="8" CornerRadius="50" Background="{StaticResource Brand500}">
+					<ProgressBar Classes="Outlined" Width="204" Value="25"/>
+				</Border>
+			</StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+
+	<Style Selector="ProgressBar">
+		<Setter Property="Height" Value="6"/>
+		<Setter Property="CornerRadius" Value="3"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundModifierActive}"/>
+		<Setter Property="Foreground" Value="{StaticResource Brand500}"/>
+	</Style>
+	<Style Selector="ProgressBar.Outlined">
+		<Setter Property="BorderBrush" Value="{DynamicResource OnBrandModifier}"/>
+		<Setter Property="Background" Value="{DynamicResource OnBrandModifier}"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="Height" Value="10"/>
+		<Setter Property="CornerRadius" Value="5"/>
+		
+	</Style>
+    <!-- Add Styles Here -->
+</Styles>

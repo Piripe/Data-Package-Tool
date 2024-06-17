@@ -7,12 +7,15 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataPackageTool.UI.Views.Wizard
 {
     public partial class StartupWizard : UserControl
     {
         public event EventHandler<DataPackage>? DataPackageLoaded;
+
+
         public StartupWizard()
         {
             InitializeComponent();
@@ -23,18 +26,42 @@ namespace DataPackageTool.UI.Views.Wizard
             OpenDialogButton.Tapped += OpenDialogButton_Tapped;
         }
 
+        private async Task LoadPackage(string fileName)
+        {
+            PlaySurprisedAnim();
+
+            TitleLabel.Content = "Loading package.zip...";
+            SubtitleLabel.Content = "Wait a sec";
+            StatusProgressBar.IsVisible = true;
+
+            DataPackage package = await DataPackage.LoadAsync(fileName, (LoadStatus status) =>
+            {
+                SubtitleLabel.Content = status.Status;
+                StatusProgressBar.Value = status.Progress*100;
+                if (status.Finished) TitleLabel.Content = "Package loaded!";
+            });
+        }
+
+        private void PlaySurprisedAnim()
+        {
+            if (DateTime.Now.Subtract(lastAnimPlay).Seconds > 0.8)
+            {
+                lastAnimPlay = DateTime.Now;
+                var anim = (Animation)Resources["SurprisedFile"]!;
+                anim.RunAsync(CenterFile);
+            }
+        }
+
         private async void OpenDialogButton_Tapped(object? sender, TappedEventArgs e)
         {
+            PlaySurprisedAnim();
 #pragma warning disable CS0618 // Type or member is obsolete
             var result = await new OpenFileDialog() { AllowMultiple = false, Filters = [new FileDialogFilter { Name = "Discord Package files", Extensions = ["zip"] }]}.ShowAsync(GetWindow());
 #pragma warning restore CS0618 // Type or member is obsolete
 
             if (result != null && result.Length > 0)
             {
-                DataPackage package = await DataPackage.LoadAsync(result[0], (LoadStatus status) =>
-                {
-                    StatusLabel.Content = status.Status;
-                });
+                await LoadPackage(result[0]);
             }
         }
 
@@ -46,21 +73,16 @@ namespace DataPackageTool.UI.Views.Wizard
                 if (files.Count() < 1) return;
                 string file = files.First().Path.LocalPath;
 
-                DataPackage package = await DataPackage.LoadAsync(file, (LoadStatus status) =>
-                {
-                    StatusLabel.Content = status.Status;
-                });
+                await LoadPackage(file);
             }
         }
         bool dragOnWindow = false;
         DateTime lastAnimPlay = DateTime.MinValue;
         void onDragEnter(object? sender, DragEventArgs e)
         {
-            if (isDragDropValid(e) && e.Source == DropZone && !dragOnWindow && DateTime.Now.Subtract(lastAnimPlay).Seconds > 0.8)
+            if (isDragDropValid(e) && e.Source == DropZone && !dragOnWindow)
             {
-                lastAnimPlay = DateTime.Now;
-                var anim = (Animation)Resources["SurprisedFile"]!;
-                anim.RunAsync(CenterFile);
+                PlaySurprisedAnim();
             }
             dragOnWindow = true;
         }

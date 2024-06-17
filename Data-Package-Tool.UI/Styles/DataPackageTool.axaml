@@ -13,7 +13,9 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Styles.Resources>
-
+	
+	<StyleInclude Source="/Styles/Discord/Controls.axaml"/>
+	
 	<Style Selector="Window">
 		<Setter Property="Background" Value="{DynamicResource BackgroundPrimary}"/>
 	</Style>
