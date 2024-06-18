@@ -4,6 +4,9 @@
 
 	<SolidColorBrush x:Key='Brand500'>#5865f2</SolidColorBrush>
 	<SolidColorBrush x:Key='White500'>#fff</SolidColorBrush>
+
+
+	<SolidColorBrush x:Key='InteractiveNormal'>#b5bac1</SolidColorBrush>
 	
 	<ResourceDictionary.ThemeDictionaries>
 		<ResourceDictionary x:Key='Light'>
