@@ -2,7 +2,6 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using DataPackageTool.UI.ViewModels;
 using DataPackageTool.UI.Views;
 
 namespace DataPackageTool.UI;

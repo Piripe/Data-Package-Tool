@@ -9,11 +9,18 @@
 				<Border HorizontalAlignment="Left" Padding="8" CornerRadius="50" Background="{StaticResource Brand500}">
 					<ProgressBar Classes="Outlined" Width="204" Value="25"/>
 				</Border>
+				<Label HorizontalAlignment="Left">Card</Label>
+				<Border Classes="Card">
+					<Label HorizontalAlignment="Left">Content</Label>
+				</Border>
+				<Label HorizontalAlignment="Left">Button</Label>
+				<Button Classes="Hyperlink">Button</Button>
 			</StackPanel>
         </Border>
     </Design.PreviewWith>
 
 
+	<!--ProgressBar-->
 	<Style Selector="ProgressBar">
 		<Setter Property="Height" Value="6"/>
 		<Setter Property="CornerRadius" Value="3"/>
@@ -26,7 +33,28 @@
 		<Setter Property="BorderThickness" Value="2"/>
 		<Setter Property="Height" Value="10"/>
 		<Setter Property="CornerRadius" Value="5"/>
+	</Style>
+
+	
+	<!--Border-->
+	<Style Selector="Border.Card">
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundSecondary}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource BackgroundSecondaryAlt}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Padding" Value="16"/>
+	</Style>
+
+
+	<!--Button-->
+	<Style Selector="Button.Hyperlink ContentPresenter#PART_ContentPresenter">
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="MinWidth" Value="32"/>
 		
 	</Style>
-    <!-- Add Styles Here -->
+	<Style Selector="Button.Hyperlink:pointerover ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="AliceBlue"/>
+		<Setter Property="MinWidth" Value="32"/>
+	</Style>
 </Styles>

@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using DataPackageTool.Core;
-using DataPackageTool.UI.ViewModels;
 
 namespace DataPackageTool.UI.Views;
 

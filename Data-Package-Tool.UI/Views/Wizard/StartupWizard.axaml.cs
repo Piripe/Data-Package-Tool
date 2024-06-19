@@ -30,6 +30,8 @@ namespace DataPackageTool.UI.Views.Wizard
         {
             PlaySurprisedAnim();
 
+            // TODO: Manage exceptions with a cute error message
+
             TitleText.Text = "Loading package.zip...";
             SubtitleText.Text = "Wait a sec";
             StatusProgressBar.IsVisible = true;

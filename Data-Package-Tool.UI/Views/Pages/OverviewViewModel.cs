@@ -8,24 +8,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataPackageTool.UI.Views.Sidebar
+namespace DataPackageTool.UI.Views.Pages
 {
-    public class SidebarViewModel : ReactiveObject
+    public class OverviewViewModel : ReactiveObject, IRoutableViewModel
     {
+        public IScreen HostScreen { get; } = null!;
+        public string? UrlPathSegment => "overview";
+
         public DataPackage Package { get; set; } = new DataPackage();
         public IImage Avatar { get; set; } = DUser.GetDefaultAvatarBitmap(0);
         public string Username => Package.User.GetUsername();
-
-        public SidebarViewModel()
+        public OverviewViewModel()
         {
             Init();
         }
-        public SidebarViewModel(DataPackage package)
+        public OverviewViewModel(DataPackage package)
         {
             Package = package;
             Init();
         }
-        private void Init() {
+        private void Init()
+        {
             Task<IImage> avatarTask = Package.User.GetAvatar();
             avatarTask.Wait(); // Supposed to be instant
             Avatar = avatarTask.Result;

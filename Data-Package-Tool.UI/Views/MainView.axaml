@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:rxui="http://reactiveui.net"
              xmlns:v="clr-namespace:DataPackageTool.UI.Views"
              xmlns:sb="clr-namespace:DataPackageTool.UI.Views.Sidebar"
+             xmlns:pages="clr-namespace:DataPackageTool.UI.Views.Pages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.MainView"
              x:DataType="v:MainViewModel">
@@ -16,7 +18,11 @@
 	<Grid ColumnDefinitions="72,*">
 		<Grid Grid.Column="1" ColumnDefinitions="240,*">
 			<Grid Background="{DynamicResource BackgroundSecondary}"/>
-			<TextBlock Grid.Column="1" Text="{Binding Username, StringFormat=Welcome {0}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
+				<rxui:RoutedViewHost.DefaultContent>
+					<pages:Overview DataContext="{CompiledBinding Overview}"/>
+				</rxui:RoutedViewHost.DefaultContent>
+			</rxui:RoutedViewHost>
 		</Grid>
 		<Grid ColumnDefinitions="312">
 		    <sb:SidebarView DataContext="{CompiledBinding Sidebar}"/>

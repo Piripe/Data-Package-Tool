@@ -47,4 +47,8 @@
       <DependentUpon>StartupWizard.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Pages\Overview.axaml" />
+  </ItemGroup>
 </Project>
