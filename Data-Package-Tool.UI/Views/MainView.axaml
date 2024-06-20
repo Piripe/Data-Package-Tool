@@ -16,14 +16,11 @@
   </Design.DataContext>
 
 	<Grid ColumnDefinitions="72,*">
-		<Grid Grid.Column="1" ColumnDefinitions="240,*">
-			<Grid Background="{DynamicResource BackgroundSecondary}"/>
-			<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
-				<rxui:RoutedViewHost.DefaultContent>
-					<pages:Overview DataContext="{CompiledBinding Overview}"/>
-				</rxui:RoutedViewHost.DefaultContent>
-			</rxui:RoutedViewHost>
-		</Grid>
+		<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
+			<rxui:RoutedViewHost.DefaultContent>
+				<pages:Overview DataContext="{CompiledBinding Overview}"/>
+			</rxui:RoutedViewHost.DefaultContent>
+		</rxui:RoutedViewHost>
 		<Grid ColumnDefinitions="312">
 		    <sb:SidebarView DataContext="{CompiledBinding Sidebar}"/>
 		</Grid>

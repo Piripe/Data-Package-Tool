@@ -10,8 +10,9 @@
 	<Design.DataContext>
 		<pages:OverviewViewModel />
 	</Design.DataContext>
-	<Grid>
-		<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+	<Grid ColumnDefinitions="240,*">
+		<Grid Background="{DynamicResource BackgroundSecondary}"/>
+		<ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
 			<Border Padding="8 0 8 0">
 				<StackPanel Orientation="Vertical" Spacing="4">
 					<Border Classes="Card" Margin="0 8 0 0">
@@ -21,9 +22,8 @@
 									<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
 								</Border>
 								<Grid RowDefinitions="*,*">
-									<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="{CompiledBinding Username}"/>
-									<!--BADGES HERE-->
-									<ItemsControl Grid.Row="1" ItemsSource="{CompiledBinding Badges}" >
+									<TextBlock Grid.Row="0" VerticalAlignment="Center" FontSize="20" FontWeight="600" Text="{CompiledBinding Username}"/>
+									<ItemsControl Grid.Row="1" VerticalAlignment="Top" ItemsSource="{CompiledBinding Badges}" >
 										<ItemsControl.ItemsPanel>
 											<ItemsPanelTemplate>
 												<StackPanel Orientation="Horizontal" Spacing="2"/>
@@ -31,7 +31,7 @@
 										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
-												<Image Width="24" Source="{CompiledBinding Image}" ToolTip.Placement="Center" ToolTip.Tip="{CompiledBinding Tooltip}"/>
+												<Image Width="24" Source="{CompiledBinding Image}"  ToolTip.Placement="Center" ToolTip.Tip="{CompiledBinding Tooltip}"/>
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>
@@ -61,7 +61,6 @@
 							<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Interesting stats"/>
 						</Border>
 					</Grid>
-
 				</StackPanel>
 			</Border>
 		</ScrollViewer>

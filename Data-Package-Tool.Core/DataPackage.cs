@@ -25,7 +25,13 @@ namespace DataPackageTool.Core
     }
     public class DataPackage
     {
-        public User User { get; private set; } = new User() { DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023,10,5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
+        public User User { get; private set; } = new User()
+#if DEBUG
+        // Dummy user for debugging/previewing
+{ DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023,10,5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
+#else
+;
+#endif
         public readonly MemoryStream Avatar = new();
         public readonly List<DChannel> Channels = new();
         public readonly Dictionary<string, DChannel> ChannelsMap = new();

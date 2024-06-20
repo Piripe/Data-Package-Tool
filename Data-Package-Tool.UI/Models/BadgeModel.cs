@@ -14,15 +14,10 @@ using System.Threading.Tasks;
 
 namespace DataPackageTool.UI.Models
 {
-    public class BadgeModel
+    public class BadgeModel(IImage image, string tooltip)
     {
-        public IImage Image { get; set; }
-        public string Tooltip { get; set; }
-        public BadgeModel(IImage image, string tooltip)
-        {
-            Image = image;
-            Tooltip = tooltip;
-        }
+        public IImage Image { get; set; } = image;
+        public string Tooltip { get; set; } = tooltip;
 
         public static List<BadgeModel> GetUserBadges(User user, DateTime packageDate)
         {

@@ -6,7 +6,6 @@
 	<SolidColorBrush x:Key='White500'>#fff</SolidColorBrush>
 
 
-	<SolidColorBrush x:Key='InteractiveNormal'>#b5bac1</SolidColorBrush>
 	
 	<ResourceDictionary.ThemeDictionaries>
 		<ResourceDictionary x:Key='Light'>
@@ -17,7 +16,11 @@
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#3380848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3d80848e</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#000</SolidColorBrush>
+			<SolidColorBrush x:Key='HeaderPrimary'>#060607</SolidColorBrush>
+			<SolidColorBrush x:Key='InteractiveNormal'>#4e5058</SolidColorBrush>
+			<SolidColorBrush x:Key='InteractiveHover'>#313338</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#55ffffff</SolidColorBrush>
+			<SolidColorBrush x:Key='TextNormal'>#313338</SolidColorBrush>
 		</ResourceDictionary>
 		<ResourceDictionary x:Key='Dark'>
 			<SolidColorBrush x:Key='BackgroundPrimary'>#313338</SolidColorBrush>
@@ -27,7 +30,11 @@
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#7a4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#994e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#fff</SolidColorBrush>
+			<SolidColorBrush x:Key='HeaderPrimary'>#f2f3f5</SolidColorBrush>
+			<SolidColorBrush x:Key='InteractiveNormal'>#b5bac1</SolidColorBrush>
+			<SolidColorBrush x:Key='InteractiveHover'>#dbdee1</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#7a000000</SolidColorBrush>
+			<SolidColorBrush x:Key='TextNormal'>#dbdee1</SolidColorBrush>
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
