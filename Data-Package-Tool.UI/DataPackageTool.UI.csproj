@@ -13,11 +13,25 @@
 
   
   <ItemGroup>
+    <AvaloniaResource Remove="Assets\Discord\Fonts.axaml" />
     <AvaloniaResource Remove="Assets\Discord\Icons.axaml" />
   </ItemGroup>
 
   
   <ItemGroup>
+    <None Remove="Assets\Discord\Fonts\gg-sans-Bold.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-BoldItalic.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-ExtraBold.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-ExtraBoldItalic.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-Medium.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-MediumItalic.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-Normal.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-NormalItalic.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-Semibold.ttf" />
+    <None Remove="Assets\Discord\Fonts\gg-sans-SemiboldItalic.ttf" />
+    <None Remove="Assets\Discord\Fonts\Ginto-Nord-Black.ttf" />
+    <None Remove="Assets\Discord\Fonts\Ginto-Nord-Bold.ttf" />
+    <None Remove="Assets\Discord\Fonts\Ginto-Nord-ExtraBold.ttf" />
     <None Remove="Assets\Discord\test.svg" />
   </ItemGroup>
 
@@ -54,5 +68,11 @@
 
   <ItemGroup>
     <Folder Include="Views\Pages\OverviewCards\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Assets\Discord\Fonts.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
   </ItemGroup>
 </Project>

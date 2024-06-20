@@ -32,7 +32,6 @@ namespace DataPackageTool.UI.Views.Sidebar
         public SidebarViewModel(DataPackage package)
         {
             Package = package;
-            
             Init();
         }
         private void Init() {

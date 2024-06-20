@@ -4,17 +4,17 @@
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
 			<StackPanel Orientation="Vertical" Spacing="8">
-				<Label HorizontalAlignment="Left">Progressbar</Label>
+				<TextBlock HorizontalAlignment="Left" Text="Progressbar" />
 				<ProgressBar HorizontalAlignment="Left" Width="200" Value="25"/>
 				<Border HorizontalAlignment="Left" Padding="8" CornerRadius="50" Background="{StaticResource Brand500}">
 					<ProgressBar Classes="Outlined" Width="204" Value="25"/>
 				</Border>
-				<Label HorizontalAlignment="Left">Card</Label>
+				<TextBlock HorizontalAlignment="Left" Text="Card"/>
 				<Border Classes="Card">
-					<Label HorizontalAlignment="Left">Content</Label>
+					<TextBlock HorizontalAlignment="Left" Text="Content"/>
 				</Border>
-				<Label HorizontalAlignment="Left">Button</Label>
-				<Button Classes="Hyperlink">Button</Button>
+				<TextBlock HorizontalAlignment="Left" Text="Button"/>
+				<Button Classes="Hyperlink">Hyperlink Button</Button>
 			</StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -68,5 +68,16 @@
 	<Style Selector="Button.Hyperlink:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource BackgroundModifierSelected}"/>
 		<Setter Property="MinWidth" Value="32"/>
+	</Style>
+	
+	<!--Textboxes-->
+
+	<Style Selector="TextBlock">
+		<Setter Property="FontFamily" Value="{StaticResource gg sans}"/>
+		<Setter Property="FontWeight" Value="500"/>
+	</Style>
+	<Style Selector="TextBlock.Ginto">
+		<Setter Property="FontFamily" Value="{StaticResource Ginto Nord}"/>
+		<Setter Property="FontWeight" Value="800"/>
 	</Style>
 </Styles>

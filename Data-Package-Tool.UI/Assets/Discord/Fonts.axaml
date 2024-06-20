@@ -1,0 +1,5 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<FontFamily x:Key="gg sans">/Assets/Discord/Fonts#gg-sans</FontFamily>
+	<FontFamily x:Key="Ginto Nord">/Assets/Discord/Fonts#Ginto-Nord</FontFamily>
+</ResourceDictionary>

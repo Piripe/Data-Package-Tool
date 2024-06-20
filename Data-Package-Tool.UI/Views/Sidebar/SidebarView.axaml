@@ -71,19 +71,23 @@
 						<Setter Property="Fill" Value="{DynamicResource HeaderPrimary}"/>
 						<Setter Property="RadiusX" Value="4"/>
 						<Setter Property="RadiusY" Value="4"/>
-						<Setter Property="Height" Value="8"/>
+						<Setter Property="Height" Value="0"/>
+						<Setter Property="Margin" Value="-8 0 0 0"/>
 					</Style>
 					<Style Selector="ListBoxItem:pointerover Rectangle.Indicator">
 						<Setter Property="Transitions">
 							<Setter.Value>
 								<Transitions>
 									<DoubleTransition Property="Height" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
+									<ThicknessTransition Property="Margin" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
 								</Transitions>
 							</Setter.Value>
 						</Setter>
 						<Setter Property="Height" Value="20"/>
+						<Setter Property="Margin" Value="-4 0 0 0"/>
 					</Style>
 					<Style Selector="ListBoxItem:selected Rectangle.Indicator">
+						<Setter Property="Margin" Value="-4 0 0 0"/>
 						<Setter Property="Height" Value="40"/>
 					</Style>
 				</ListBox.Styles>
@@ -95,7 +99,7 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<Grid Width="72" ColumnDefinitions="12,*" Height="48">
-							<Rectangle Classes="Indicator" HorizontalAlignment="Left" Margin="-4 0 0 0" Width="8" Grid.Column="0" />
+							<Rectangle Classes="Indicator" HorizontalAlignment="Left" Width="8" Grid.Column="0" />
 							<Border Grid.Column="1" HorizontalAlignment="Left" Classes="ItemImage" Width="48" Height="48">
 								<Border.Transitions>
 									<Transitions>
