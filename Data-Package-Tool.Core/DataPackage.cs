@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Data_Package_Tool.Core.Utils.Json;
+using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -24,20 +25,20 @@ namespace DataPackageTool.Core
     }
     public class DataPackage
     {
-        public DUser User { get; private set; } = new DUser();
+        public User User { get; private set; } = new User() { DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023,10,5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
         public readonly MemoryStream Avatar = new();
         public readonly List<DChannel> Channels = new();
         public readonly Dictionary<string, DChannel> ChannelsMap = new();
-        public readonly Dictionary<string, DMessage> MessagesMap = new();
-        public readonly Dictionary<string, DUser> UsersMap = new();
+        public readonly Dictionary<string, Message> MessagesMap = new();
+        public readonly Dictionary<string, User> UsersMap = new();
 
-        public List<DAttachment> ImageAttachments { get; private set; } = new List<DAttachment>();
-        public List<DAnalyticsGuild> JoinedGuilds { get; private set; } = new List<DAnalyticsGuild>();
-        public List<DAnalyticsEvent> AcceptedInvites { get; private set; } = new List<DAnalyticsEvent>();
-        public List<DVoiceConnection> VoiceDisconnections { get; private set; } = new List<DVoiceConnection>();
-        public Dictionary<string, string> GuildNamesMap { get; private set; } = new Dictionary<string, string>();
+        public List<Attachment> ImageAttachments { get; private set; } = new List<Attachment>();
+        public List<AnalyticsGuild> JoinedGuilds { get; private set; } = new List<AnalyticsGuild>();
+        public List<AnalyticsEvent> AcceptedInvites { get; private set; } = new List<AnalyticsEvent>();
+        public List<VoiceConnection> VoiceDisconnections { get; private set; } = new List<VoiceConnection>();
+        public Dictionary<long, string> GuildNamesMap { get; private set; } = new();
 
-        public DateTime CreationTime { get; private set; }
+        public DateTime CreationTime { get; private set; } = DateTime.Now;
         public int TotalMessages { get; private set; } = 0;
 
         public bool UsesUnsignedCDNLinks
@@ -92,7 +93,7 @@ namespace DataPackageTool.Core
 
 
 
-                dp.User = JsonSerializer.Deserialize<DUser>(userFile.Open(), serializerOptions)??dp.User;
+                dp.User = JsonSerializer.Deserialize<User>(userFile.Open(), serializerOptions)??dp.User;
 
                 if (dp.User == null)
                 {
@@ -103,18 +104,18 @@ namespace DataPackageTool.Core
                 {
                     foreach (var relationship in dp.User.Relationships)
                     {
-                        if (relationship.User.Id != null) dp.UsersMap.Add(relationship.User.Id, relationship.User);
+                        if(relationship.User.Id!=null) dp.UsersMap.TryAdd(relationship.User.Id, relationship.User);
                     }
                 } else
                 {
                     // TODO: Add a warning for missing relationships
                 }
 
-                var channelNamesMap = new Dictionary<string, string>();
+                var channelNamesMap = new Dictionary<long, string>();
                 var messagesIndexFile = zip.GetEntry("messages/index.json");
                 if (messagesIndexFile != null)
                 {
-                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(messagesIndexFile.Open(), serializerOptions) ?? channelNamesMap;
+                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(messagesIndexFile.Open(), serializerOptions) ?? channelNamesMap;
                 }
                 else
                 {
@@ -125,7 +126,7 @@ namespace DataPackageTool.Core
                 var serversIndexFile = zip.GetEntry("servers/index.json");
                 if (serversIndexFile != null)
                 {
-                    dp.GuildNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(serversIndexFile.Open(), serializerOptions) ?? new Dictionary<string, string>();
+                    dp.GuildNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(serversIndexFile.Open(), serializerOptions) ?? new Dictionary<long, string>();
                 }
                 else
                 {
@@ -175,7 +176,7 @@ namespace DataPackageTool.Core
                 {
                     if (entry.messageMatch.Success)
                         {
-                            var channelId = entry.messageMatch.Groups[2].Value;
+                            var channelId = long.Parse(entry.messageMatch.Groups[2].Value);
                             var folderName = entry.messageMatch.Groups[1].Value; // folder name might not start with "c" in older versions
                             var fileExtension = entry.messageMatch.Groups[3].Value;
 
@@ -190,7 +191,7 @@ namespace DataPackageTool.Core
                             {
                                 // TODO: Add a warning for wrong data in messages/{folderName}/channel.json
 
-                                channel = new DChannel() { Id = channelId }; // A partial channel should be enough
+                                channel = new DChannel() { Id = channelId.ToString() }; // A partial channel should be enough
                             }
 
                             switch (fileExtension)
@@ -227,12 +228,12 @@ namespace DataPackageTool.Core
                             {
                                 var recipientId = channel.GetOtherDMRecipient(dp.User);
                                 channel.DMRecipientId = recipientId;
-                                if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(channel.Id, out var channelName))
+                                if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(long.Parse(channel.Id??"0"), out var channelName))
                                 {
                                     var nameMatch = nameRegex.Match(channelName);
                                     if (nameMatch.Success)
                                     {
-                                        dp.UsersMap.Add(recipientId, new DUser
+                                        dp.UsersMap.Add(recipientId, new User
                                         {
                                             Id = recipientId,
                                             Username = nameMatch.Groups[1].Value,
@@ -269,7 +270,7 @@ namespace DataPackageTool.Core
                     zip.Dispose();
                     file.Dispose();
 
-                    dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => long.Parse(o.Message.Id)).ToList();
+                    dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
                     UpdateStatus(1f,$"Finished! Parsed {dp.TotalMessages.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}",true);
 
                 return dp;

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="clr-namespace:Avalonia.Controls"
              xmlns:pages="clr-namespace:DataPackageTool.UI.Views.Pages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.Pages.Overview"
@@ -21,22 +22,20 @@
 								</Border>
 								<Grid RowDefinitions="*,*">
 									<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="{CompiledBinding Username}"/>
+									<!--BADGES HERE-->
+									<ItemsControl Grid.Row="1" ItemsSource="{CompiledBinding Badges}" >
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal" Spacing="2"/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Image Width="24" Source="{CompiledBinding Image}" ToolTip.Placement="Center" ToolTip.Tip="{CompiledBinding Tooltip}"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
 									<StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal" Spacing="4">
-										<Border CornerRadius="32" Width="24" Height="24" ClipToBounds="True">
-											<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
-										</Border>
-										<Border CornerRadius="32" Width="24" Height="24" ClipToBounds="True">
-											<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
-										</Border>
-										<Border CornerRadius="32" Width="24" Height="24" ClipToBounds="True">
-											<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
-										</Border>
-										<Border CornerRadius="32" Width="24" Height="24" ClipToBounds="True">
-											<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
-										</Border>
-										<Border CornerRadius="32" Width="24" Height="24" ClipToBounds="True">
-											<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
-										</Border>
 									</StackPanel>
 								</Grid>
 							</StackPanel>

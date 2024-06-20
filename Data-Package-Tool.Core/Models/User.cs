@@ -2,12 +2,13 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using DataPackageTool.Core.Enums;
 using System.Net;
 using System.Text.Json.Serialization;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DUser
+    public class User
     {
         public string? Id { get; set; }
         public string? Username { get; set; }
@@ -18,9 +19,12 @@ namespace DataPackageTool.Core.Models
         public string? AvatarHash { get; set; }
         [JsonPropertyName("avatar")]
         private string AvatarHash2 { set => AvatarHash = value; } // relationship user field
-        [JsonPropertyName("relationships")]
-        public List<DRelationship>? Relationships { get; set; }
+        public List<Relationship>? Relationships { get; set; }
         public Dictionary<string, string>? Notes { get; set; }
+        public UserFlag Flags { get; set; }
+
+        [JsonPropertyName("user_profile_metadata")]
+        public UserProfileMetadata? ProfileMetadata { get; set; }
 
         public IImage? AvatarImage { get; set; }
         public bool IsPomelo
@@ -94,6 +98,6 @@ namespace DataPackageTool.Core.Models
                 return GetDefaultAvatarBitmap();
             }
         }
-        public string GetUsername() => DisplayName ?? Tag ?? (Id != null ? (Id == Constants.DeletedUserId ? "Deleted User" : $"<@{Id}>") : "Unknown user");
+        public string GetUsername() => DisplayName ?? Tag ?? (Id == Constants.DeletedUserId ? "Deleted User" : (Id == null  ? "Unknown User" : $"<@{Id}>"));
     }
 }

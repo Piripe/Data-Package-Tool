@@ -49,11 +49,11 @@
 					</Button>
 				</StackPanel>
 				<Button Classes="Hyperlink" HorizontalAlignment="Stretch" Height="42" Padding="2 0 0 0" Margin="0 0 8 0">
-					<StackPanel Orientation="Horizontal" Spacing="6">
+					<StackPanel Orientation="Horizontal" Spacing="8">
 						<Border CornerRadius="16" Width="32" Height="32" ClipToBounds="True">
 							<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
 						</Border>
-						<TextBlock VerticalAlignment="Center" Text="{CompiledBinding Username}"/>
+						<TextBlock Margin="0 6 0 0" VerticalAlignment="Top" Text="{CompiledBinding Username}"/>
 					</StackPanel>
 				</Button>
 			</DockPanel>

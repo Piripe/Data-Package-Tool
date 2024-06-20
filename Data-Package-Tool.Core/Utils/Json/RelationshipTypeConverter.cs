@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DataPackageTool.Core.Models;
+using DataPackageTool.Core.Enums;
 
 namespace Data_Package_Tool.Core.Utils.Json
 {

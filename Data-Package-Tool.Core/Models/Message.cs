@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DMessage
+    public class Message
     {
-        public string Id { get; set; } = null!;
+        public string? Id { get; set; }
         public DateTime Timestamp { get; set; }
         public string Content { get; set; } = null!;
-        public List<DAttachment> Attachments { get; } = new List<DAttachment>();
+        public List<Attachment> Attachments { get; } = new List<Attachment>();
         public DChannel Channel { get; set; } = null!;
         public bool IsDeleted { get; set; } = false;
 
@@ -17,7 +17,7 @@ namespace DataPackageTool.Core.Models
             string guild;
             if (this.Channel.Guild != null)
             {
-                guild = this.Channel.Guild.Id;
+                guild = Channel.Guild.Id.ToString();
             }
             else if (this.Channel.IsDM() || this.Channel.IsGroupDM())
             {

@@ -15,7 +15,7 @@
 			<SolidColorBrush x:Key='BackgroundSecondaryAlt'>#ebedef</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundTertiary'>#e3e5e8</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#3380848e</SolidColorBrush>
-			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3380848e</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3d80848e</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#000</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#55ffffff</SolidColorBrush>
 		</ResourceDictionary>
@@ -25,7 +25,7 @@
 			<SolidColorBrush x:Key='BackgroundSecondaryAlt'>#232428</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundTertiary'>#1e1f22</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#7a4e5058</SolidColorBrush>
-			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3380848e</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundModifierSelected'>#994e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#fff</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#7a000000</SolidColorBrush>
 		</ResourceDictionary>

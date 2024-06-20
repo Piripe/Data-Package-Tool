@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DAttachment
+    public class Attachment
     {
         public static readonly List<string> ImageExtensions = new() { "png", "gif", "jpg", "jpeg", "apng", "jfif", "webp" };
         public static readonly List<string> VideoExtensions = new() { "mp4", "webm", "avi", "mov" };
 
         public string Url { get; private set; }
-        public DMessage Message { get; private set; }
+        public Message Message { get; private set; }
 
         public string Id { get; private set; }
         public string FileName { get; private set; }
@@ -25,7 +25,7 @@ namespace DataPackageTool.Core.Models
             get => VideoExtensions.Contains(this.Extension);
         }
 
-        public DAttachment(string url, DMessage message)
+        public Attachment(string url, Message message)
         {
             this.Url = url;
             this.Message = message;

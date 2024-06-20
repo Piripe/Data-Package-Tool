@@ -10,18 +10,18 @@ namespace DataPackageTool.Core.Models
     public class DChannel
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; } = null!;
+        public string? Id { get; set; }
         [JsonPropertyName("type")]
         public int Type { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; } = null!;
         [JsonPropertyName("guild")]
-        public DPartialGuild Guild { get; set; } = null!;
+        public PartialGuild Guild { get; set; } = null!;
         [JsonPropertyName("recipients")]
         public List<string> RecipientIds { get; set; } = null!;
 
-        public List<DMessage> Messages { get; } = new List<DMessage>();
-        public string DMRecipientId { get; set; } = null!;
+        public List<Message> Messages { get; } = new List<Message>();
+        public string? DMRecipientId { get; set; }
         public bool HasDuplicates { get; set; }
 
         public void LoadMessagesFromCsv(Stream csv)
@@ -63,7 +63,7 @@ namespace DataPackageTool.Core.Models
 
         private void AddMessage(string id, string timestamp, string contents, string attachments)
         {
-            var msg = new DMessage
+            var msg = new Message
             {
                 Id = id,
                 Timestamp = DateTime.Parse(timestamp),
@@ -75,7 +75,7 @@ namespace DataPackageTool.Core.Models
             {
                 foreach (var url in attachments.Split(' '))
                 {
-                    var attachment = new DAttachment(url, msg);
+                    var attachment = new Attachment(url, msg);
                     msg.Attachments.Add(attachment);
                 }
             }
@@ -98,7 +98,7 @@ namespace DataPackageTool.Core.Models
             return this.Type == 2 || this.Type == 13;
         }
 
-        public string GetOtherDMRecipient(DUser user)
+        public string GetOtherDMRecipient(User user)
         {
             if(!this.IsDM())
             {
@@ -107,7 +107,7 @@ namespace DataPackageTool.Core.Models
 
             foreach(string id in RecipientIds)
             {
-                if(id != user.Id)
+                if(id != user.Id.ToString())
                 {
                     return id;
                 }

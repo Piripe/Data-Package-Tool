@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DAnalyticsEvent
+    public class AnalyticsEvent
     {
         [JsonPropertyName("event_type")]
         public string EventType { get; set; } = null!;
@@ -25,7 +25,7 @@ namespace DataPackageTool.Core.Models
         [JsonPropertyName("join_method")]
         public string JoinMethod { get; set; } = null!;
         [JsonPropertyName("application_id")]
-        public string ApplicationId { get; set; } = null!;
+        public long ApplicationId { get; set; }
         [JsonPropertyName("location")]
         public string Location { get; set; } = null!;
         [JsonPropertyName("invite_code")]

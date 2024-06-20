@@ -22,10 +22,18 @@
 
 	<!--ProgressBar-->
 	<Style Selector="ProgressBar">
+		<Setter Property="MinHeight" Value="6" />
 		<Setter Property="Height" Value="6"/>
 		<Setter Property="CornerRadius" Value="3"/>
 		<Setter Property="Background" Value="{DynamicResource BackgroundModifierActive}"/>
 		<Setter Property="Foreground" Value="{StaticResource Brand500}"/>
+	</Style>
+	<Style Selector="ProgressBar:horizontal">
+		<Setter Property="MinHeight" Value="6" />
+	</Style>
+	<Style Selector="ProgressBar /template/ Border#PART_Indicator">
+		<Setter Property="Height" Value="6"/>
+		<Setter Property="CornerRadius" Value="3"/>
 	</Style>
 	<Style Selector="ProgressBar.Outlined">
 		<Setter Property="BorderBrush" Value="{DynamicResource OnBrandModifier}"/>
@@ -47,14 +55,18 @@
 
 
 	<!--Button-->
-	<Style Selector="Button.Hyperlink ContentPresenter#PART_ContentPresenter">
+	<Style Selector="Button">
+		<Setter Property="Cursor" Value="Hand"/>
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+	<Style Selector="Button.Hyperlink /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="CornerRadius" Value="4"/>
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="MinWidth" Value="32"/>
-		
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 	</Style>
-	<Style Selector="Button.Hyperlink:pointerover ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="AliceBlue"/>
+	<Style Selector="Button.Hyperlink:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource BackgroundModifierSelected}"/>
 		<Setter Property="MinWidth" Value="32"/>
 	</Style>
 </Styles>

@@ -13,7 +13,7 @@ namespace DataPackageTool.UI.Views.Sidebar
     public class SidebarViewModel : ReactiveObject
     {
         public DataPackage Package { get; set; } = new DataPackage();
-        public IImage Avatar { get; set; } = DUser.GetDefaultAvatarBitmap(0);
+        public IImage Avatar { get; set; } = User.GetDefaultAvatarBitmap(0);
         public string Username => Package.User.GetUsername();
 
         public SidebarViewModel()

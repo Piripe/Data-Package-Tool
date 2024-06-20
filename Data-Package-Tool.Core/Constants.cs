@@ -1,4 +1,8 @@
-﻿namespace DataPackageTool.Core
+﻿using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+
+namespace DataPackageTool.Core
 {
     public static class Constants
     {
@@ -9,7 +13,9 @@
         public const string InvalidBotTokenError = "Entered token is invalid!";
         public const string WrongTokenType = "Entered bot token belongs to your own account!";
         public const string UnknownDeletedUserId = "The user id of this deleted user is unknown. Use Fetch Info first.";
-               
+
         public const string DeletedUserId = "456226577798135808";
+
+        public static readonly List<int> BoostLevels = [1,2,3,6,9,12,15,18,24];
     }
 }

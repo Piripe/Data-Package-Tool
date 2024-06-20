@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DVoiceConnection
+    public class VoiceConnection
     {
         public string GuildId { get; set; } = null!;
         public string ChannelId { get; set; } = null!;

@@ -20,4 +20,5 @@
 	<Style Selector="Window">
 		<Setter Property="Background" Value="{DynamicResource BackgroundPrimary}"/>
 	</Style>
+	
 </Styles>
