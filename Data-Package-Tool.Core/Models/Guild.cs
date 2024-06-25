@@ -17,20 +17,18 @@ namespace DataPackageTool.Core.Models
         public string Location { get; set; } = null!;
         public List<string> Invites { get; set; } = new();
         public DateTime Timestamp { get; set; }
+        public DataPackage? DataPackage { get; set; }
 
         private bool _fetchedInviteData;
         private Invite? _inviteData;
 
-        public IImage? IconImage { get; set; }
 
         private async Task FetchInviteData()
         {
             _fetchedInviteData = true;
             foreach (var invite in Invites)
             {
-                string inviteReq = await DRequest.GetStringAsync("invites/"+invite) ?? "{}";
-                Debug.WriteLine(inviteReq);
-                Invite? inviteData = JsonSerializer.Deserialize<Invite>(inviteReq,Shared.JsonSerializerOptions);
+                Invite? inviteData = JsonSerializer.Deserialize<Invite>(await DRequest.GetStringAsync("invites/" + invite) ?? "{}", Shared.JsonSerializerOptions);
                 if (inviteData == null) continue;
                 if (inviteData.GuildId != Id) continue;
 
@@ -39,12 +37,26 @@ namespace DataPackageTool.Core.Models
             }
         }
 
+        private IImage? _iconImage;
         public async Task<IImage> GetIcon()
         {
-            if (IconImage != null) return IconImage;
-            IconImage = await DownloadIcon();
-            
-            return IconImage;
+            if (_iconImage != null) return _iconImage;
+            _iconImage = await DownloadIcon();
+
+            return _iconImage;
+        }
+        private string? _name;
+        public async Task<string> GetName()
+        {
+            if (_name != null) return _name;
+
+            if (!_fetchedInviteData)
+            {
+                await FetchInviteData();
+            }
+            _name = _inviteData?.Guild?.Name ?? ((DataPackage?.GuildNamesMap.TryGetValue(Id,out string? name)??false) ? name : null);
+
+            return _name ?? Id;
         }
 
         async Task<Bitmap> DownloadIcon()

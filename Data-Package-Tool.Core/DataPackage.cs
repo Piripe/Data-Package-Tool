@@ -74,7 +74,6 @@ namespace DataPackageTool.Core
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    Debug.WriteLine($"Status progress: {MathF.Round(progress,2)}");
                     if (status != null) currentStatus = status;
                     statusCallback.Invoke(new LoadStatus { Status = currentStatus, Progress = progress, Finished = finished });
                 });

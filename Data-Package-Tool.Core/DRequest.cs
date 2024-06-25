@@ -149,8 +149,6 @@ namespace DataPackageTool.Core
         {
             var request = new HttpRequestMessage(method, new Uri(new Uri(isCDN ? Constants.CDNEndpoint : Constants.APIEndpoint),url));
 
-            Debug.WriteLine(request.ToString());
-
             if (includeDefaultHeaders)
             {
                 if (DHeaders.USER_AGENT == null) await DHeaders.Init();
@@ -197,7 +195,6 @@ namespace DataPackageTool.Core
             {
                 return await res.Content.ReadAsStringAsync();
             }
-            Debug.WriteLine(res.ToString());
             return null;
         }
     }

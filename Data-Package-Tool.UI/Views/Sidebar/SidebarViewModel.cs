@@ -44,13 +44,12 @@ namespace DataPackageTool.UI.Views.Sidebar
         private async Task InitData()
         {
             foreach (var guild in Package.JoinedGuilds) {
-                Debug.WriteLine("Getting Guild Icon " + guild.Id);
                 try
                 {
                     NavItems.Add(new NavItemModel()
                     {
-                        Tooltip = Package.GuildNamesMap.TryGetValue(guild.Id, out string? name) ? name : guild.Id,
-                        Image = await guild.GetIcon()
+                        Image = await guild.GetIcon(),
+                        Tooltip = await guild.GetName(),
                     });
                 } catch (Exception ex)
                 {

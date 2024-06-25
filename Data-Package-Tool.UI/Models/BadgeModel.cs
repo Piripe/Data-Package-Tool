@@ -29,7 +29,6 @@ namespace DataPackageTool.UI.Models
 
             // Boost
             int boostingLevel = user.ProfileMetadata?.GetBoostingLevel(packageDate) ?? 0;
-            Debug.WriteLine($"Boosting level {boostingLevel} since {user.ProfileMetadata?.BoosingStartedAt!.Value.ToString()}");
             if (boostingLevel > 0)
                 list.Add(new BadgeModel(new SvgImage() { Source = SvgSource.Load($"/Assets/Discord/Badges/Boost{boostingLevel}.svg", new Uri("avares://DataPackageTool.UI")) }, user.ProfileMetadata?.BoosingStartedAt!.Value.ToString("'Server boosting since 'MM/dd/yyyy' at 'hh:mm:ss tt")?? ""));
 
