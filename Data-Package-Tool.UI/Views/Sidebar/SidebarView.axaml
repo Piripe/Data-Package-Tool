@@ -42,7 +42,7 @@
 	
 	<Grid ColumnDefinitions="72,240">
 		<ScrollViewer Background="{DynamicResource BackgroundTertiary}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" >
-			<ListBox Background="{DynamicResource BackgroundTertiary}" ItemsSource="{CompiledBinding NavItems}" SelectedIndex="0" Padding="0 4 0 8" BorderThickness="0">
+			<ListBox Background="{DynamicResource BackgroundTertiary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="0 4 0 8" BorderThickness="0">
 				<ListBox.Styles>
 					<Style Selector="ListBoxItem">
 						<Setter Property="Padding" Value="0"/>
@@ -90,6 +90,18 @@
 						<Setter Property="Margin" Value="-4 0 0 0"/>
 						<Setter Property="Height" Value="40"/>
 					</Style>
+					<Style Selector="Border.ItemImage">
+						<Setter Property="Transitions">
+							<Setter.Value>
+								<Transitions>
+									<CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
+									<BrushTransition Property="Background" Duration="0:0:0.1" Easing="QuadraticEaseOut" />
+								</Transitions>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="Width" Value="48" />
+						<Setter Property="Height" Value="48" />
+					</Style>
 				</ListBox.Styles>
 				<ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -100,15 +112,10 @@
 					<DataTemplate>
 						<Grid Width="72" ColumnDefinitions="12,*" Height="48">
 							<Rectangle Classes="Indicator" HorizontalAlignment="Left" Width="8" Grid.Column="0" />
-							<Border Grid.Column="1" HorizontalAlignment="Left" Classes="ItemImage" Width="48" Height="48">
-								<Border.Transitions>
-									<Transitions>
-										<CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
-										<BrushTransition Property="Background" Duration="0:0:0.1" Easing="QuadraticEaseOut" />
-									</Transitions>
-								</Border.Transitions>
-								<Grid>
-									<Image Source="{CompiledBinding Image}" Width="48"/>
+								<Grid Grid.Column="1" HorizontalAlignment="Left" ToolTip.Tip="{CompiledBinding Tooltip}">
+									<Border Classes="ItemImage" ClipToBounds="True">
+										<Image Source="{CompiledBinding Image}" Width="48"/>
+									</Border>
 									<PathIcon Data="{CompiledBinding Path}" Width="20" Height="20">
 										<PathIcon.Transitions>
 											<Transitions>
@@ -117,7 +124,6 @@
 										</PathIcon.Transitions>
 									</PathIcon>
 								</Grid>
-							</Border>
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
@@ -136,7 +142,7 @@
 				<Button Classes="Hyperlink" HorizontalAlignment="Stretch" Height="42" Padding="2 0 0 0" Margin="0 0 8 0">
 					<StackPanel Orientation="Horizontal" Spacing="8">
 						<Border CornerRadius="16" Width="32" Height="32" ClipToBounds="True">
-							<Image ClipToBounds="True" Source="{CompiledBinding Avatar}"/>
+							<Image Source="{CompiledBinding Avatar}"/>
 						</Border>
 						<TextBlock Margin="0 6 0 0" VerticalAlignment="Top" Text="{CompiledBinding Username}"/>
 					</StackPanel>

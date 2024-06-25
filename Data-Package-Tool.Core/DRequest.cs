@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -88,11 +90,11 @@ namespace DataPackageTool.Core
                 {"sec-fetch-dest", "empty"},
                 {"sec-fetch-mode", "cors"},
                 {"sec-fetch-site", "same-origin"},
-                {"User-Agent", USER_AGENT!},
+                {"User-Agent", USER_AGENT},
                 {"x-debug-options", "bugReporterEnabled"},
                 {"x-discord-locale", "en-US"},
                 {"x-discord-timezone", "America/New_York"},
-                {"x-super-properties", SuperProperties()}
+                //{"x-super-properties", SuperProperties()}
             };
 
             if(extraHeaders != null)
@@ -127,28 +129,31 @@ namespace DataPackageTool.Core
             throw new Exception("Failed to get client build number");
         }
 
-        public static Task<string> GetLatestChromeVersion()
+        public static async Task<string> GetLatestChromeVersion()
         {
-            throw new NotImplementedException();
-            //var res = await new HttpClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"));
-            //var content = await res.Content.ReadAsStringAsync();
+            return "126";
+            var res = await new HttpClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"));
+            var content = await res.Content.ReadAsStringAsync();
 
-            //var data = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(content);
-            //string latest = data.versions[0].version;
-            //var majorNum = latest.Split('.')[0];
+            var data = JsonSerializer.Deserialize<dynamic>(content);
+            string latest = data?["versions"][0]["version"] ?? "126.0.6478.61";
+            var majorNum = latest.Split('.')[0];
 
-            //return majorNum;
+            return majorNum;
         }
     }
     class DRequest
     {
         public static HttpClient client = new HttpClient();
-        public static async Task<DRequestResponse> RequestAsync(HttpMethod method, string url, Dictionary<string, string>? headers = null, string? bodyData = null, bool includeDefaultHeaders = true)
+        public static async Task<HttpResponseMessage> RequestAsync(HttpMethod method, string url, bool isCDN = false, Dictionary<string, string>? headers = null, string? bodyData = null, bool includeDefaultHeaders = true)
         {
-            var request = new HttpRequestMessage(method, url);
+            var request = new HttpRequestMessage(method, new Uri(new Uri(isCDN ? Constants.CDNEndpoint : Constants.APIEndpoint),url));
+
+            Debug.WriteLine(request.ToString());
 
             if (includeDefaultHeaders)
             {
+                if (DHeaders.USER_AGENT == null) await DHeaders.Init();
                 foreach (KeyValuePair<string, string> kvp in DHeaders.DefaultBrowserHeaders(headers))
                 {
                     request.Headers.Add(kvp.Key, kvp.Value);
@@ -169,17 +174,31 @@ namespace DataPackageTool.Core
             HttpResponseMessage response;
             response = await client.SendAsync(request);
 
-            return new DRequestResponse
-            {
-                response = response,
-                body = await response.Content.ReadAsStringAsync()
-            };
+            return response;
         }
-    }
 
-    public class DRequestResponse
-    {
-        public HttpResponseMessage? response;
-        public string? body;
+        public static Task<HttpResponseMessage> GetAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true)
+        {
+            return RequestAsync(HttpMethod.Get, url, isCDN, headers, null, includeDefaultHeaders);
+        }
+        public static async Task<Stream?> GetStreamAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true)
+        {
+            var res = await GetAsync(url, isCDN, headers, includeDefaultHeaders);
+            if (res.IsSuccessStatusCode)
+            {
+                return res.Content.ReadAsStream();
+            }
+            return null;
+        }
+        public static async Task<string?> GetStringAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true)
+        {
+            var res = await GetAsync(url, isCDN, headers, includeDefaultHeaders);
+            if (res.IsSuccessStatusCode)
+            {
+                return await res.Content.ReadAsStringAsync();
+            }
+            Debug.WriteLine(res.ToString());
+            return null;
+        }
     }
 }

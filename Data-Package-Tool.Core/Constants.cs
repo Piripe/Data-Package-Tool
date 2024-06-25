@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using System.Text.Json;
 
 namespace DataPackageTool.Core
 {
@@ -17,5 +18,8 @@ namespace DataPackageTool.Core
         public const string DeletedUserId = "456226577798135808";
 
         public static readonly List<int> BoostLevels = [1,2,3,6,9,12,15,18,24];
+
+        public const string APIEndpoint = "https://discordapp.com/api/v9/";
+        public const string CDNEndpoint = "https://cdn.discordapp.com/";
     }
 }

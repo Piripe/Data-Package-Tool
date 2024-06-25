@@ -39,10 +39,18 @@ namespace DataPackageTool.Core
         public readonly Dictionary<string, User> UsersMap = new();
 
         public List<Attachment> ImageAttachments { get; private set; } = new List<Attachment>();
-        public List<AnalyticsGuild> JoinedGuilds { get; private set; } = new List<AnalyticsGuild>();
+        public List<Guild> JoinedGuilds { get; private set; } = new List<Guild>()
+#if DEBUG
+        { new Guild() { 
+            Id = "603970300668805120",
+            Invites = ["discord-603970300668805120"]
+        } };
+#else
+            ;
+#endif
         public List<AnalyticsEvent> AcceptedInvites { get; private set; } = new List<AnalyticsEvent>();
         public List<VoiceConnection> VoiceDisconnections { get; private set; } = new List<VoiceConnection>();
-        public Dictionary<long, string> GuildNamesMap { get; private set; } = new();
+        public Dictionary<string, string> GuildNamesMap { get; private set; } = new();
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
         public int TotalMessages { get; private set; } = 0;
@@ -77,12 +85,14 @@ namespace DataPackageTool.Core
 
                 UpdateStatus(0f);
 
-                var serializerOptions = new JsonSerializerOptions()
+
+                Shared.JsonSerializerOptions = new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true,
                 };
-                serializerOptions.Converters.Add(new RelationshipTypeConverter());
-                serializerOptions.Converters.Add(new AutoNumberToStringConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new RelationshipTypeConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new InviteTypeConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new AutoNumberToStringConverter());
 
                 DataPackage dp = new DataPackage();
 
@@ -99,7 +109,7 @@ namespace DataPackageTool.Core
 
 
 
-                dp.User = JsonSerializer.Deserialize<User>(userFile.Open(), serializerOptions)??dp.User;
+                dp.User = JsonSerializer.Deserialize<User>(userFile.Open(), Shared.JsonSerializerOptions) ??dp.User;
 
                 if (dp.User == null)
                 {
@@ -121,7 +131,7 @@ namespace DataPackageTool.Core
                 var messagesIndexFile = zip.GetEntry("messages/index.json");
                 if (messagesIndexFile != null)
                 {
-                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(messagesIndexFile.Open(), serializerOptions) ?? channelNamesMap;
+                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(messagesIndexFile.Open(), Shared.JsonSerializerOptions) ?? channelNamesMap;
                 }
                 else
                 {
@@ -132,7 +142,7 @@ namespace DataPackageTool.Core
                 var serversIndexFile = zip.GetEntry("servers/index.json");
                 if (serversIndexFile != null)
                 {
-                    dp.GuildNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(serversIndexFile.Open(), serializerOptions) ?? new Dictionary<long, string>();
+                    dp.GuildNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(serversIndexFile.Open(), Shared.JsonSerializerOptions) ?? dp.GuildNamesMap;
                 }
                 else
                 {
