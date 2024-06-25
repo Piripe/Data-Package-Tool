@@ -15,6 +15,8 @@
 				</Border>
 				<TextBlock HorizontalAlignment="Left" Text="Button"/>
 				<Button Classes="Hyperlink">Hyperlink Button</Button>
+				<TextBlock HorizontalAlignment="Left" Text="ToolTip"/>
+				<Border Classes="Card" ToolTip.Tip="ToolTip" ToolTip.Placement="Right" ToolTip.VerticalOffset="0" ToolTip.HorizontalOffset="16" Width="64" HorizontalAlignment="Left"/>
 			</StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -79,5 +81,18 @@
 	<Style Selector="TextBlock.Ginto">
 		<Setter Property="FontFamily" Value="{StaticResource Ginto Nord}"/>
 		<Setter Property="FontWeight" Value="800"/>
+	</Style>
+
+	<!--Tooltip-->
+
+	<Style Selector="ToolTip">
+		<Setter Property="CornerRadius" Value="5"/>
+		<Setter Property="Background" Value="{DynamicResource BackgroundFloating}"/>
+		<Setter Property="Foreground" Value="{DynamicResource TextNormal}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Padding" Value="10 6"/>
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="MaxWidth" Value="196"/>
+		<Setter Property="FontWeight" Value="600"/>
 	</Style>
 </Styles>

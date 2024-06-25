@@ -15,6 +15,7 @@
 			<SolidColorBrush x:Key='BackgroundTertiary'>#e3e5e8</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#3380848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3d80848e</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundFloating'>#fff</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#000</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderPrimary'>#060607</SolidColorBrush>
 			<SolidColorBrush x:Key='InteractiveNormal'>#4e5058</SolidColorBrush>
@@ -29,6 +30,7 @@
 			<SolidColorBrush x:Key='BackgroundTertiary'>#1e1f22</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#7a4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#994e5058</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundFloating'>#111214</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#fff</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderPrimary'>#f2f3f5</SolidColorBrush>
 			<SolidColorBrush x:Key='InteractiveNormal'>#b5bac1</SolidColorBrush>

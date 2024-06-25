@@ -112,7 +112,7 @@
 					<DataTemplate>
 						<Grid Width="72" ColumnDefinitions="12,*" Height="48">
 							<Rectangle Classes="Indicator" HorizontalAlignment="Left" Width="8" Grid.Column="0" />
-								<Grid Grid.Column="1" HorizontalAlignment="Left" ToolTip.Tip="{CompiledBinding Tooltip}">
+								<Grid Grid.Column="1" HorizontalAlignment="Left" ToolTip.Tip="{CompiledBinding Tooltip}" ToolTip.Placement="Right" ToolTip.VerticalOffset="0" ToolTip.HorizontalOffset="16" ToolTip.ShowDelay="0">
 									<Border Classes="ItemImage" ClipToBounds="True">
 										<Image Source="{CompiledBinding Image}" Width="48"/>
 									</Border>
@@ -139,7 +139,7 @@
 						</Viewbox>
 					</Button>
 				</StackPanel>
-				<Button Classes="Hyperlink" HorizontalAlignment="Stretch" Height="42" Padding="2 0 0 0" Margin="0 0 8 0">
+				<Button x:Name="UserArea" Classes="Hyperlink" HorizontalAlignment="Stretch" Height="42" Padding="2 0 0 0" Margin="0 0 8 0">
 					<StackPanel Orientation="Horizontal" Spacing="8">
 						<Border CornerRadius="16" Width="32" Height="32" ClipToBounds="True">
 							<Image Source="{CompiledBinding Avatar}"/>
