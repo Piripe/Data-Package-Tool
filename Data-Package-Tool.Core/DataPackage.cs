@@ -1,19 +1,17 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia.Controls.Shapes;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Data_Package_Tool.Core.Utils.Json;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
-using System;
+using DataPackageTool.Core.Models.Analytics;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Channels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataPackageTool.Core
 {
@@ -28,32 +26,30 @@ namespace DataPackageTool.Core
         public User User { get; private set; } = new User()
 #if DEBUG
         // Dummy user for debugging/previewing
-{ DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023,10,5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
+        { DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023, 10, 5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
 #else
 ;
 #endif
-        public readonly MemoryStream Avatar = new();
-        public readonly List<DChannel> Channels = new();
-        public readonly Dictionary<string, DChannel> ChannelsMap = new();
+        public readonly List<Channel> Channels = new();
+        public readonly Dictionary<string, Channel> ChannelsMap = new();
         public readonly Dictionary<string, Message> MessagesMap = new();
         public readonly Dictionary<string, User> UsersMap = new();
 
-        public List<Attachment> ImageAttachments { get; private set; } = new List<Attachment>();
-        public List<Guild> JoinedGuilds { get; private set; } = new List<Guild>()
+        public List<Attachment> ImageAttachments { get; private set; } = new();
+        public List<Guild> JoinedGuilds { get; private set; } = new()
 #if DEBUG
-        { new Guild() { 
+        { new Guild() {
             Id = "603970300668805120",
             Invites = ["discord-603970300668805120"]
         } };
 #else
             ;
 #endif
-        public List<AnalyticsEvent> AcceptedInvites { get; private set; } = new List<AnalyticsEvent>();
-        public List<VoiceConnection> VoiceDisconnections { get; private set; } = new List<VoiceConnection>();
+        public List<AnalyticsEvent> AnalyticsEvents { get; private set; } = new List<AnalyticsEvent>();
+        public List<VoiceDisconnect> VoiceDisconnections { get; private set; } = new List<VoiceDisconnect>();
         public Dictionary<string, string> GuildNamesMap { get; private set; } = new();
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
-        public int TotalMessages { get; private set; } = 0;
 
         public bool UsesUnsignedCDNLinks
         {
@@ -66,6 +62,8 @@ namespace DataPackageTool.Core
             public MemoryStream? channelStream;
             public Match messageMatch;
             public bool avatarMatch;
+            public bool analyticsMatch;
+            public string? FullName;
         }
         public static Task<DataPackage> LoadAsync(string fileName, Action<LoadStatus> statusCallback)
         {
@@ -92,6 +90,7 @@ namespace DataPackageTool.Core
                 Shared.JsonSerializerOptions.Converters.Add(new RelationshipTypeConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new InviteTypeConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new AutoNumberToStringConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new AutoStringToIntConverter());
 
                 DataPackage dp = new DataPackage();
 
@@ -108,7 +107,7 @@ namespace DataPackageTool.Core
 
 
 
-                dp.User = JsonSerializer.Deserialize<User>(userFile.Open(), Shared.JsonSerializerOptions) ??dp.User;
+                dp.User = JsonSerializer.Deserialize<User>(userFile.Open(), Shared.JsonSerializerOptions) ?? dp.User;
 
                 if (dp.User == null)
                 {
@@ -119,9 +118,10 @@ namespace DataPackageTool.Core
                 {
                     foreach (var relationship in dp.User.Relationships)
                     {
-                        if(relationship.User.Id!=null) dp.UsersMap.TryAdd(relationship.User.Id, relationship.User);
+                        if (relationship.User.Id != null) dp.UsersMap.TryAdd(relationship.User.Id, relationship.User);
                     }
-                } else
+                }
+                else
                 {
                     // TODO: Add a warning for missing relationships
                 }
@@ -148,18 +148,22 @@ namespace DataPackageTool.Core
                     // TODO: Add a warning for missing servers/index.json
                 }
 
-                    var messagesRegex = new Regex(@"messages/(c?(\d+))/messages\.(csv|json)", RegexOptions.Compiled);
-                    var avatarRegex = new Regex(@"account/avatar\.[a-z]+", RegexOptions.Compiled);
-                    var nameRegex = new Regex(@"^Direct Message with (.+)#(\d{1,4})$", RegexOptions.Compiled);
+                var messagesRegex = new Regex(@"messages/(c?(\d+))/messages\.(csv|json)", RegexOptions.Compiled);
+                var avatarRegex = new Regex(@"account/avatar\.[a-z]+", RegexOptions.Compiled);
+                var nameRegex = new Regex(@"^Direct Message with (.+)#(\d{1,4})$", RegexOptions.Compiled);
+                var activityRegex = new Regex(@"activity/(analytics|reporting)/events.+\.json", RegexOptions.Compiled);
+
+                List<ZipArchiveEntry> analyticsFiles = new List<ZipArchiveEntry>();
 
 
                 UpdateStatus(0.05f, "Reading messages...");
                 int entriesCount = zip.Entries.Count;
-                List<object?> parsedEntries = zip.Entries.Select((entry, i) =>
+                IEnumerable<ZipEntryStreamAndMatches> readedStreams = zip.Entries.Select((entry, i) =>
                 {
-                    if (i % 100 == 0) UpdateStatus(((float)i / entriesCount) * 0.75f + 0.05f);
+                    if (i % 100 == 0) UpdateStatus(((float)i / entriesCount) * 0.45f + 0.05f);
                     var match = messagesRegex.Match(entry.FullName);
                     bool avatarMatch = false;
+                    bool activityMatch = false;
                     MemoryStream? channelStream = null;
                     if (match.Success)
                     {
@@ -177,6 +181,13 @@ namespace DataPackageTool.Core
                     else
                     {
                         avatarMatch = avatarRegex.IsMatch(entry.FullName);
+                        if (!avatarMatch) activityMatch = activityRegex.IsMatch(entry.FullName);
+
+                        if (activityMatch)
+                        {
+                            Debug.WriteLine($"{entry.FullName} is an analytics file");
+                            analyticsFiles.Add(entry); 
+                        }
                     }
                     if (match.Success || avatarMatch)
                     {
@@ -187,106 +198,153 @@ namespace DataPackageTool.Core
                         return new ZipEntryStreamAndMatches() { stream = ms, messageMatch = match, avatarMatch = avatarMatch, channelStream = channelStream };
                     }
                     return new ZipEntryStreamAndMatches() { stream = null };
-                }).Where((ZipEntryStreamAndMatches x) => x.stream != null).AsParallel().WithDegreeOfParallelism(16).Select<ZipEntryStreamAndMatches, object?>((entry,i) =>
+                }).Where((ZipEntryStreamAndMatches x) => x.stream != null).ToList();
+
+
+                Debug.WriteLine($"Analytics files: {analyticsFiles.Count}");
+                Task analyticsTask = Task.Run(() => {
+                    long analyticsLength = analyticsFiles.Sum(f => f.Length);
+                    long bytesRead = 0;
+                    int fileIndex = 0;
+
+                    foreach (ZipArchiveEntry entry in analyticsFiles)
+                    {
+                        using (var reader = new StreamReader(entry.Open()))
+                        {
+                            int updateCounter = 1000;
+                            while (!reader.EndOfStream)
+                            {
+                                var line = reader.ReadLine() ?? "";
+                                Task.Run(() =>
+                                {
+                                    bytesRead += line.Length;
+
+                                    if (Constants.ParsedEvents.Any(x => line.StartsWith("{\"event_type\":\"" + x + "\"")))
+                                    {
+                                        AnalyticsEvent? e = JsonSerializer.Deserialize<AnalyticsEvent>(line, Shared.JsonSerializerOptions);
+                                        if (e != null) dp.AnalyticsEvents.Add(e);
+                                    }
+
+                                    updateCounter++;
+                                    if (updateCounter >= 1000)
+                                    {
+                                        updateCounter = 0;
+                                        UpdateStatus(((float)bytesRead / analyticsLength) * 0.40f + 0.55f, $"Loading analytics ({fileIndex}/{analyticsFiles.Count})");
+                                    }
+                                });
+                            }
+                        }
+                        fileIndex++;
+                    }
+                });
+
+                List<object?> parsedEntries = readedStreams.AsParallel().WithDegreeOfParallelism(16).Select<ZipEntryStreamAndMatches, object?>((entry, i) =>
                 {
                     if (entry.messageMatch.Success)
-                        {
-                            var channelId = long.Parse(entry.messageMatch.Groups[2].Value);
-                            var folderName = entry.messageMatch.Groups[1].Value; // folder name might not start with "c" in older versions
-                            var fileExtension = entry.messageMatch.Groups[3].Value;
-
-                            DChannel? channel = null;
-                            if (entry.channelStream != null)
-                            {
-                                channel = JsonSerializer.Deserialize<DChannel>(entry.channelStream);
-                                entry.channelStream.Dispose();
-                            }
-                            
-                            if (channel == null)
-                            {
-                                // TODO: Add a warning for wrong data in messages/{folderName}/channel.json
-
-                                channel = new DChannel() { Id = channelId.ToString() }; // A partial channel should be enough
-                            }
-
-                            switch (fileExtension)
-                            {
-                                case "csv":
-                                    channel.LoadMessagesFromCsv(entry.stream!);
-                                    break;
-                                case "json":
-                                    channel.LoadMessagesFromJson(entry.stream!);
-                                    break;
-                            }
-
-                            entry.stream!.Dispose();
-
-                            return channel;
-                        }
-                        else if (entry.avatarMatch)
-                        {
-                            var avatar = new Bitmap(entry.stream!);
-
-                            entry.stream!.Dispose();
-
-                            return avatar;
-                        }
-                        return null;
-                    }).ToList();
-
-                    int i = 0;
-                    foreach (object? entry in parsedEntries)
                     {
-                        if (entry is DChannel channel)
-                        {
-                            if (channel.IsDM())
-                            {
-                                var recipientId = channel.GetOtherDMRecipient(dp.User);
-                                channel.DMRecipientId = recipientId;
-                                if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(long.Parse(channel.Id??"0"), out var channelName))
-                                {
-                                    var nameMatch = nameRegex.Match(channelName);
-                                    if (nameMatch.Success)
-                                    {
-                                        dp.UsersMap.Add(recipientId, new User
-                                        {
-                                            Id = recipientId,
-                                            Username = nameMatch.Groups[1].Value,
-                                            Discriminator = nameMatch.Groups[2].Value
-                                        });
-                                    }
-                                }
-                            }
+                        var channelId = long.Parse(entry.messageMatch.Groups[2].Value);
+                        var folderName = entry.messageMatch.Groups[1].Value; // folder name might not start with "c" in older versions
+                        var fileExtension = entry.messageMatch.Groups[3].Value;
 
-                            foreach (var msg in channel.Messages)
+                        Channel? channel = null;
+                        if (entry.channelStream != null)
+                        {
+                            channel = JsonSerializer.Deserialize<Channel>(entry.channelStream);
+                            entry.channelStream.Dispose();
+                        }
+
+                        if (channel == null)
+                        {
+                            // TODO: Add a warning for wrong data in messages/{folderName}/channel.json
+
+                            channel = new Channel() { Id = channelId.ToString() }; // A partial channel should be enough
+                        }
+
+                        switch (fileExtension)
+                        {
+                            case "csv":
+                                channel.LoadMessagesFromCsv(entry.stream!);
+                                break;
+                            case "json":
+                                channel.LoadMessagesFromJson(entry.stream!);
+                                break;
+                        }
+
+                        entry.stream!.Dispose();
+
+                        return channel;
+                    }
+                    else if (entry.avatarMatch)
+                    {
+                        var avatar = new Bitmap(entry.stream!);
+
+                        entry.stream!.Dispose();
+
+                        return avatar;
+                    }
+                    return null;
+                }).ToList();
+
+                int i = 0;
+                foreach (object? entry in parsedEntries)
+                {
+                    if (entry is Channel channel)
+                    {
+                        if (channel.IsDM())
+                        {
+                            var recipientId = channel.GetOtherDMRecipient(dp.User);
+                            channel.DMRecipientId = recipientId;
+                            if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(long.Parse(channel.Id ?? "0"), out var channelName))
                             {
-                                dp.MessagesMap.Add(msg.Id, msg);
-                                foreach (var attachment in msg.Attachments)
+                                var nameMatch = nameRegex.Match(channelName);
+                                if (nameMatch.Success)
                                 {
-                                    if (attachment.IsImage)
+                                    dp.UsersMap.Add(recipientId, new User
                                     {
-                                        dp.ImageAttachments.Add(attachment);
-                                    }
+                                        Id = recipientId,
+                                        Username = nameMatch.Groups[1].Value,
+                                        Discriminator = nameMatch.Groups[2].Value
+                                    });
                                 }
                             }
-                            dp.TotalMessages += channel.Messages.Count;
-                            dp.Channels.Add(channel);
-                            dp.ChannelsMap[channel.Id] = channel;
                         }
-                        else if (entry is Bitmap avatar)
+
+                        foreach (var msg in channel.Messages)
                         {
-                            dp.User.AvatarImage = avatar;
+                            dp.MessagesMap.Add(msg.Id, msg);
+                            foreach (var attachment in msg.Attachments)
+                            {
+                                if (attachment.IsImage)
+                                {
+                                    dp.ImageAttachments.Add(attachment);
+                                }
+                            }
+                        }
+                        dp.Channels.Add(channel);
+                        dp.ChannelsMap[channel.Id] = channel;
+                    }
+                    else if (entry is Bitmap avatar)
+                    {
+                        dp.User.AvatarImage = avatar;
+                    }
+                    else if (entry is ZipArchiveEntry zipEntry)
+                    {
+                        analyticsFiles.Add(zipEntry);
                     }
                     i++;
-                    if (i % 100 == 0) UpdateStatus((i / parsedEntries.Count)*0.05f+0.95f, $"Loading data ({i}/{parsedEntries.Count})");
+                    //if (i % 100 == 0) UpdateStatus((i / parsedEntries.Count) * 0.05f + 0.5f, $"Loading data ({i}/{parsedEntries.Count})");
                 }
-                    
-                    
-                    zip.Dispose();
-                    file.Dispose();
 
-                    dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
-                    UpdateStatus(1f,$"Finished! Parsed {dp.TotalMessages.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}",true);
+                analyticsTask.Wait();
+
+                zip.Dispose();
+                file.Dispose();
+
+                dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
+
+                Debug.WriteLine($"Analytics events: {dp.AnalyticsEvents.Count}");
+
+                UpdateStatus(1f, $"Finished! Parsed {dp.MessagesMap.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
 
                 return dp;
             });

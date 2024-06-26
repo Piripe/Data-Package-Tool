@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace DataPackageTool.Core.Models
 {
-    public class User
+    public class User : DataPackageEntryBase
     {
         public string? Id { get; set; }
         public string? Username { get; set; }

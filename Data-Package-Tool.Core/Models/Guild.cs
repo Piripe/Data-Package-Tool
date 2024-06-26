@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace DataPackageTool.Core.Models
 {
-    public class Guild
+    public class Guild : DataPackageEntryBase
     {
         public string Id { get; set; } = "";
         public string JoinType { get; set; } = null!;
@@ -17,7 +17,6 @@ namespace DataPackageTool.Core.Models
         public string Location { get; set; } = null!;
         public List<string> Invites { get; set; } = new();
         public DateTime Timestamp { get; set; }
-        public DataPackage? DataPackage { get; set; }
 
         private bool _fetchedInviteData;
         private Invite? _inviteData;

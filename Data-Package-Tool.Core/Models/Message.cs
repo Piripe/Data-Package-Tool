@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace DataPackageTool.Core.Models
 {
-    public class Message
+    public class Message : DataPackageEntryBase
     {
         public string? Id { get; set; }
         public DateTime Timestamp { get; set; }
         public string Content { get; set; } = null!;
         public List<Attachment> Attachments { get; } = new List<Attachment>();
-        public DChannel Channel { get; set; } = null!;
+        public Channel Channel { get; set; } = null!;
         public bool IsDeleted { get; set; } = false;
 
         public string GetMessageLink()

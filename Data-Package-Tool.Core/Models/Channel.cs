@@ -7,7 +7,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace DataPackageTool.Core.Models
 {
-    public class DChannel
+    public class Channel
     {
         [JsonPropertyName("id")]
         public string? Id { get; set; }
