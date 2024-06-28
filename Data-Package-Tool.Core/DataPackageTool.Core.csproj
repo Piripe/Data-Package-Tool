@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Avalonia" Version="11.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Invite\" />
   </ItemGroup>
 
 </Project>

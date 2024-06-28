@@ -1,10 +1,12 @@
-﻿using Avalonia.Controls.Shapes;
+﻿using AutoMapper;
+using Avalonia.Controls.Shapes;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Data_Package_Tool.Core.Utils.Json;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
 using DataPackageTool.Core.Models.Analytics;
+using DataPackageTool.Core.Models.UserModels;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,13 +32,10 @@ namespace DataPackageTool.Core
 #else
 ;
 #endif
-        public readonly List<Channel> Channels = new();
-        public readonly Dictionary<string, Channel> ChannelsMap = new();
-        public readonly Dictionary<string, Message> MessagesMap = new();
-        public readonly Dictionary<string, User> UsersMap = new();
+        public List<Channel> Channels { get; } = new();
+        public Dictionary<string, Channel> ChannelsMap { get; } = new();
 
-        public List<Attachment> ImageAttachments { get; private set; } = new();
-        public List<Guild> JoinedGuilds { get; private set; } = new()
+        public List<Guild> Guilds { get; private set; } = new()
 #if DEBUG
         { new Guild() {
             Id = "603970300668805120",
@@ -45,9 +44,15 @@ namespace DataPackageTool.Core
 #else
             ;
 #endif
+        public Dictionary<string, Guild> GuildsMap { get; } = new();
+
+        public Dictionary<string, Message> MessagesMap { get; } = new();
+
+        public Dictionary<string, User> UsersMap { get; } = new();
+
+        public List<Attachment> ImageAttachments { get; private set; } = new();
         public List<AnalyticsEvent> AnalyticsEvents { get; private set; } = new List<AnalyticsEvent>();
         public List<VoiceDisconnect> VoiceDisconnections { get; private set; } = new List<VoiceDisconnect>();
-        public Dictionary<string, string> GuildNamesMap { get; private set; } = new();
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
 
@@ -126,11 +131,11 @@ namespace DataPackageTool.Core
                     // TODO: Add a warning for missing relationships
                 }
 
-                var channelNamesMap = new Dictionary<long, string>();
+                var channelNamesMap = new Dictionary<string, string>();
                 var messagesIndexFile = zip.GetEntry("messages/index.json");
                 if (messagesIndexFile != null)
                 {
-                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<long, string>>(messagesIndexFile.Open(), Shared.JsonSerializerOptions) ?? channelNamesMap;
+                    channelNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(messagesIndexFile.Open(), Shared.JsonSerializerOptions) ?? channelNamesMap;
                 }
                 else
                 {
@@ -141,7 +146,11 @@ namespace DataPackageTool.Core
                 var serversIndexFile = zip.GetEntry("servers/index.json");
                 if (serversIndexFile != null)
                 {
-                    dp.GuildNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(serversIndexFile.Open(), Shared.JsonSerializerOptions) ?? dp.GuildNamesMap;
+                    var guildNamesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(serversIndexFile.Open(), Shared.JsonSerializerOptions);
+                    if (guildNamesMap != null)
+                    {
+                        dp.Guilds = guildNamesMap.Select(x => new Guild() { Id = x.Key, Name = x.Value }).ToList();
+                    }
                 }
                 else
                 {
@@ -186,7 +195,7 @@ namespace DataPackageTool.Core
                         if (activityMatch)
                         {
                             Debug.WriteLine($"{entry.FullName} is an analytics file");
-                            analyticsFiles.Add(entry); 
+                            analyticsFiles.Add(entry);
                         }
                     }
                     if (match.Success || avatarMatch)
@@ -200,9 +209,8 @@ namespace DataPackageTool.Core
                     return new ZipEntryStreamAndMatches() { stream = null };
                 }).Where((ZipEntryStreamAndMatches x) => x.stream != null).ToList();
 
-
-                Debug.WriteLine($"Analytics files: {analyticsFiles.Count}");
-                Task analyticsTask = Task.Run(() => {
+                Task analyticsTask = Task.Run(() =>
+                {
                     long analyticsLength = analyticsFiles.Sum(f => f.Length);
                     long bytesRead = 0;
                     int fileIndex = 0;
@@ -294,7 +302,7 @@ namespace DataPackageTool.Core
                         {
                             var recipientId = channel.GetOtherDMRecipient(dp.User);
                             channel.DMRecipientId = recipientId;
-                            if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(long.Parse(channel.Id ?? "0"), out var channelName))
+                            if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(channel.Id ?? "", out var channelName))
                             {
                                 var nameMatch = nameRegex.Match(channelName);
                                 if (nameMatch.Success)
@@ -340,15 +348,89 @@ namespace DataPackageTool.Core
                 zip.Dispose();
                 file.Dispose();
 
-                dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
+                var mapper = new MapperConfiguration(cfg => {
+                    cfg.CreateMap<Guild, Guild>()
+                    .BeforeMap((source, dest) =>
+                    {
+                        source.Invites.AddRange(dest.Invites);
+                        source.Name = source.Name ?? dest.Name;
+                    }); 
+                }).CreateMapper();
 
-                Debug.WriteLine($"Analytics events: {dp.AnalyticsEvents.Count}");
+                void MergeGuild(Guild guild)
+                {
+                    Guild? alreadyIncludedGuild = dp.Guilds.FirstOrDefault(x => x.Id == guild.Id);
+                    if (alreadyIncludedGuild == null)
+                    {
+                        dp.Guilds.Add(guild);
+                        return;
+                    }
+                    mapper.Map(guild,alreadyIncludedGuild);
+                }
+
+                var analyticsGroups = dp.AnalyticsEvents.GroupBy(x => x.GetType());
+
+                foreach (var group in analyticsGroups)
+                {
+                    switch (group.First())
+                    {
+                        case GuildJoined:
+                            IEnumerable<Guild> partialJoinedGuilds = group.Cast<GuildJoined>()
+                            .Select(x => x.GuildId != null ? new Guild()
+                            {
+                                Id = x.GuildId,
+                                JoinMethod = x.JoinMethod,
+                                JoinType = x.JoinType
+                            } : null).Where(x => x != null).Cast<Guild>();
+
+                            foreach (Guild partialGuild in partialJoinedGuilds)
+                            {
+                                MergeGuild(partialGuild);
+                            }
+                            break;
+                        case AcceptedInstantInvite:
+                            IEnumerable<Guild> partialAcceptedInstantInviteGuilds = group.Cast<AcceptedInstantInvite>()
+                            .Select(x => x.GuildId != null ? new Guild()
+                            {
+                                Id = x.GuildId,
+                                Invites = [x.Invite]
+                            } : null).Where(x => x != null).Cast<Guild>();
+
+                            foreach (Guild partialGuild in partialAcceptedInstantInviteGuilds)
+                            {
+                                MergeGuild(partialGuild);
+                            }
+                            break;
+                    }
+                }
+
+                dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
+                List<GuildFolder>? folders = dp.User.Settings?.Settings?.GuildFolders?.Folders;
+                if (folders != null)
+                {
+                    List<string> guildsOrder = folders.SelectMany(x => x.GuildIds ?? new List<string>()).ToList();
+                    dp.Guilds.Sort((x,y) => {
+                        int xPos = guildsOrder.IndexOf(x.Id);
+                        int yPos = guildsOrder.IndexOf(y.Id);
+                        if (xPos == -1)
+                        {
+                            xPos = int.TryParse(x.Id.Remove(8), out int xId) ? xId : int.MaxValue;
+                        }
+                        if (yPos == -1)
+                        {
+                            yPos = int.TryParse(y.Id.Remove(8), out int yId) ? yId : int.MaxValue;
+                        }
+                        return (xPos).CompareTo(yPos);
+                        });
+                }
 
                 UpdateStatus(1f, $"Finished! Parsed {dp.MessagesMap.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
 
                 return dp;
             });
         }
+
+
 
         public void LoadGuilds(string fileName)
         {

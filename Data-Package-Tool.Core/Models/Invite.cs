@@ -12,9 +12,9 @@ namespace DataPackageTool.Core.Models
     {
         public InviteType Type { get; set; }
         public string Code { get; set; } = "";
-        public InviteGuild? Guild { get; set; }
-        public InviteChannel? Channel { get; set; }
-        public InviteInviter? Inviter { get; set; }
+        public Guild? Guild { get; set; }
+        public Channel? Channel { get; set; }
+        public User? Inviter { get; set; }
         public DateTime? ExpireAt { get; set; }
         [JsonPropertyName("guild_id")]
         public string? GuildId { get; set; }

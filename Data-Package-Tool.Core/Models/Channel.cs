@@ -107,7 +107,7 @@ namespace DataPackageTool.Core.Models
 
             foreach(string id in RecipientIds)
             {
-                if(id != user.Id.ToString())
+                if(id != user.Id?.ToString())
                 {
                     return id;
                 }

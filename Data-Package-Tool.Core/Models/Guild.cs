@@ -11,10 +11,15 @@ namespace DataPackageTool.Core.Models
     public class Guild : DataPackageEntryBase
     {
         public string Id { get; set; } = "";
-        public string JoinType { get; set; } = null!;
-        public string JoinMethod { get; set; } = null!;
+        public string? Name { get; set; }
+        public string? JoinType { get; set; }
+        public string? JoinMethod { get; set; }
         public long ApplicationId { get; set; }
-        public string Location { get; set; } = null!;
+        public string? Splash { get; set; }
+        public string? Banner { get; set; }
+        public string? Description { get; set; }
+        public string? Icon { get; set; }
+        public List<string> Features { get; set; } = new();
         public List<string> Invites { get; set; } = new();
         public DateTime Timestamp { get; set; }
 
@@ -24,10 +29,12 @@ namespace DataPackageTool.Core.Models
 
         private async Task FetchInviteData()
         {
+            if (Invites.Count == 0) return;
+
             _fetchedInviteData = true;
             foreach (var invite in Invites)
             {
-                Invite? inviteData = JsonSerializer.Deserialize<Invite>(await DRequest.GetStringAsync("invites/" + invite) ?? "{}", Shared.JsonSerializerOptions);
+                Invite? inviteData = JsonSerializer.Deserialize<Invite>(await DRequest.GetStringAsync("invites/" + invite, queue: "invite") ?? "{}", Shared.JsonSerializerOptions);
                 if (inviteData == null) continue;
                 if (inviteData.GuildId != Id) continue;
 
@@ -37,28 +44,37 @@ namespace DataPackageTool.Core.Models
         }
 
         private IImage? _iconImage;
-        public async Task<IImage> GetIcon()
+        public IImage? GetIcon() => _iconImage;
+        public async Task<IImage> GetIconAsync()
         {
             if (_iconImage != null) return _iconImage;
-            _iconImage = await DownloadIcon();
+            IImage icon = await DownloadIcon();
+            if (_inviteData != null) _iconImage = icon;
 
-            return _iconImage;
+            return icon;
         }
-        private string? _name;
-        public async Task<string> GetName()
+        public string? GetName()
         {
-            if (_name != null) return _name;
+            if (Name != null) return Name;
+
+            if (_fetchedInviteData) Name = _inviteData?.Guild?.Name;
+
+            return Name;
+        }
+        public async Task<string> GetNameAsync()
+        {
+            if (Name != null) return Name;
 
             if (!_fetchedInviteData)
             {
                 await FetchInviteData();
             }
-            _name = _inviteData?.Guild?.Name ?? ((DataPackage?.GuildNamesMap.TryGetValue(Id,out string? name)??false) ? name : null);
+            Name = _inviteData?.Guild?.Name;
 
-            return _name ?? Id;
+            return Name ?? Id;
         }
 
-        async Task<Bitmap> DownloadIcon()
+        async Task<IImage> DownloadIcon()
         {
             if (!_fetchedInviteData)
             {
@@ -68,21 +84,25 @@ namespace DataPackageTool.Core.Models
             {
                 string? iconHash = _inviteData.Guild?.Icon;
                 if (iconHash == null) return User.GetDefaultAvatarBitmap(1);
-                Stream? iconStream = await DRequest.GetStreamAsync($"icons/{Id}/{iconHash}.png?size=256",true);
+                Stream? iconStream = await DRequest.GetStreamAsync($"icons/{Id}/{iconHash}.png?size=256", true, queue:"cdn");
                 if (iconStream != null)
                 {
                     return new Bitmap(iconStream);
                 }
                 else
                 {
-                    return User.GetDefaultAvatarBitmap(1);
+                    return DefaultIcon();
                 }
             }
             else
             {
-                return User.GetDefaultAvatarBitmap(1);
+                return DefaultIcon();
             }
-            
+
+        }
+        public IImage DefaultIcon()
+        {
+            return User.GetDefaultAvatarBitmap(1);
         }
     }
 }

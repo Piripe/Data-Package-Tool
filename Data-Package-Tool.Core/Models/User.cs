@@ -3,6 +3,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DataPackageTool.Core.Enums;
+using DataPackageTool.Core.Models.UserModels;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -18,13 +19,14 @@ namespace DataPackageTool.Core.Models
         [JsonPropertyName("avatar_hash")]
         public string? AvatarHash { get; set; }
         [JsonPropertyName("avatar")]
-        private string AvatarHash2 { set => AvatarHash = value; } // relationship user field
-        public List<Relationship>? Relationships { get; set; }
+        private string _avatar { set => AvatarHash = value; } // relationship user field
         public Dictionary<string, string>? Notes { get; set; }
         public UserFlag Flags { get; set; }
 
         [JsonPropertyName("user_profile_metadata")]
         public UserProfileMetadata? ProfileMetadata { get; set; }
+        public List<Relationship>? Relationships { get; set; }
+        public UserSettingsCategory? Settings { get; set; }
 
         public IImage? AvatarImage { get; set; }
         public bool IsPomelo
@@ -52,18 +54,6 @@ namespace DataPackageTool.Core.Models
                 }
             }
         }
-        public string AvatarURL
-        {
-            get
-            {
-                if (AvatarHash != null)
-                {
-                    return $"https://cdn.discordapp.com/avatars/{this.Id}/{AvatarHash}.png?size=64";
-                }
-
-                return $"https://cdn.discordapp.com/embed/avatars/{this.DefaultAvatarId}.png?size=64";
-            }
-        }
 
         public async Task<IImage> GetAvatar()
         {
@@ -89,9 +79,10 @@ namespace DataPackageTool.Core.Models
         }
         async Task<Bitmap> DownloadAvatar()
         {
-            HttpResponseMessage res = await new HttpClient().GetAsync(AvatarURL);
-            if (res.IsSuccessStatusCode) {
-                return new Bitmap(res.Content.ReadAsStream());
+            Stream? iconStream = await DRequest.GetStreamAsync($"avatars/{Id}/{AvatarHash}.png?size=256", true, queue: "cdn");
+            if (iconStream != null)
+            {
+                return new Bitmap(iconStream);
             }
             else
             {

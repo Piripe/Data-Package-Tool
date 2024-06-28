@@ -78,8 +78,8 @@
 						<Setter Property="Transitions">
 							<Setter.Value>
 								<Transitions>
-									<DoubleTransition Property="Height" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
-									<ThicknessTransition Property="Margin" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
+									<DoubleTransition Property="Height" Duration="0:0:0.2" Easing="QuadraticEaseOut"/>
+									<ThicknessTransition Property="Margin" Duration="0:0:0.2" Easing="QuadraticEaseOut"/>
 								</Transitions>
 							</Setter.Value>
 						</Setter>
@@ -94,8 +94,8 @@
 						<Setter Property="Transitions">
 							<Setter.Value>
 								<Transitions>
-									<CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.1" Easing="QuadraticEaseOut"/>
-									<BrushTransition Property="Background" Duration="0:0:0.1" Easing="QuadraticEaseOut" />
+									<CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.2" Easing="QuadraticEaseOut"/>
+									<BrushTransition Property="Background" Duration="0:0:0.2" Easing="QuadraticEaseOut" />
 								</Transitions>
 							</Setter.Value>
 						</Setter>

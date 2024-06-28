@@ -39,18 +39,32 @@ namespace DataPackageTool.UI.Views.Sidebar
             Task<IImage> avatarTask = Package.User.GetAvatar();
             avatarTask.Wait(); // Supposed to be instant
             Avatar = avatarTask.Result;
-            Task dataTask = InitData();
+            InitData();
         }
-        private async Task InitData()
+        private void InitData()
         {
-            foreach (var guild in Package.JoinedGuilds) {
+            foreach (var guild in Package.Guilds) {
                 try
                 {
-                    NavItems.Add(new NavItemModel()
+                    IImage? icon = guild.GetIcon();
+                    string? name = guild.GetName();
+
+                    var model = new NavItemModel()
                     {
-                        Image = await guild.GetIcon(),
-                        Tooltip = await guild.GetName(),
-                    });
+                        Image = icon ?? guild.DefaultIcon(),
+                        Tooltip = name ?? guild.Id,
+                    };
+
+                    NavItems.Add(model);
+                    if (icon == null || name == null)
+                    {
+                        Task.Run(async () =>
+                        {
+                            model.Image = await guild.GetIconAsync();
+                            model.Tooltip = await guild.GetNameAsync();
+                        });
+                    }
+
                 } catch (Exception ex)
                 {
                     Debug.WriteLine($"{ex.ToString()}");

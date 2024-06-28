@@ -1,6 +1,6 @@
 ﻿using DataPackageTool.Core.Enums;
 
-namespace DataPackageTool.Core.Models
+namespace DataPackageTool.Core.Models.UserModels
 {
     public class Relationship
     {
@@ -10,7 +10,7 @@ namespace DataPackageTool.Core.Models
         // while the current ones have it set to a string.
         // The enum resolves both automatically.
         public RelationshipType Type { get; set; }
-        public string Nickname { get; set; } = null!;
-        public User User { get; set; } = null!;
+        public string? Nickname { get; set; }
+        public User? User { get; set; }
     }
 }

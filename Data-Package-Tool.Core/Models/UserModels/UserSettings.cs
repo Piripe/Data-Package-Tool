@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataPackageTool.Core.Models
+namespace DataPackageTool.Core.Models.UserModels
 {
-    public partial class Invite
+    public class UserSettings
     {
-        public class InviteInviter
-        {
-        }
+        public GuildFolders? GuildFolders { get; set; }
     }
 }
