@@ -9,14 +9,34 @@
 				<Border HorizontalAlignment="Left" Padding="8" CornerRadius="50" Background="{StaticResource Brand500}">
 					<ProgressBar Classes="Outlined" Width="204" Value="25"/>
 				</Border>
+				<Separator/>
 				<TextBlock HorizontalAlignment="Left" Text="Card"/>
 				<Border Classes="Card">
 					<TextBlock HorizontalAlignment="Left" Text="Content"/>
 				</Border>
+				<Separator/>
 				<TextBlock HorizontalAlignment="Left" Text="Button"/>
 				<Button Classes="Hyperlink">Hyperlink Button</Button>
+				<Separator/>
 				<TextBlock HorizontalAlignment="Left" Text="ToolTip"/>
 				<Border Classes="Card" ToolTip.Tip="ToolTip" ToolTip.Placement="Right" ToolTip.VerticalOffset="0" ToolTip.HorizontalOffset="16" Width="64" HorizontalAlignment="Left"/>
+				<Separator/>
+				<TextBlock HorizontalAlignment="Left" Text="RadioButton"/>
+				<RadioButton GroupName="Test">
+					<RadioButton.Content>
+						<TextBlock TextWrapping="Wrap" Text="Test 1"/>
+					</RadioButton.Content>
+				</RadioButton>
+				<RadioButton GroupName="Test">
+					<RadioButton.Content>
+						<TextBlock TextWrapping="Wrap" Text="I prefer Test 2"/>
+					</RadioButton.Content>
+				</RadioButton>
+				<RadioButton GroupName="Test">
+					<RadioButton.Content>
+						<TextBlock TextWrapping="Wrap" Text="Test 3 is also pretty good"/>
+					</RadioButton.Content>
+				</RadioButton>
 			</StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -72,7 +92,7 @@
 		<Setter Property="MinWidth" Value="32"/>
 	</Style>
 	
-	<!--Textboxes-->
+	<!--Textblock-->
 
 	<Style Selector="TextBlock">
 		<Setter Property="FontFamily" Value="{StaticResource gg sans}"/>
@@ -81,6 +101,21 @@
 	<Style Selector="TextBlock.Ginto">
 		<Setter Property="FontFamily" Value="{StaticResource Ginto Nord}"/>
 		<Setter Property="FontWeight" Value="800"/>
+	</Style>
+	<Style Selector="TextBlock.h1">
+		<Setter Property="FontSize" Value="32"/>
+	</Style>
+	<Style Selector="TextBlock.h2">
+		<Setter Property="FontSize" Value="24"/>
+	</Style>
+	<Style Selector="TextBlock.h3">
+		<Setter Property="FontSize" Value="20"/>
+	</Style>
+	<Style Selector="TextBlock.h4">
+		<Setter Property="FontSize" Value="16"/>
+	</Style>
+	<Style Selector="TextBlock.h5">
+		<Setter Property="FontSize" Value="14"/>
 	</Style>
 
 	<!--Tooltip-->
@@ -95,4 +130,69 @@
 		<Setter Property="MaxWidth" Value="196"/>
 		<Setter Property="FontWeight" Value="600"/>
 	</Style>
+
+	<!--Separator-->
+	
+	<Style Selector="Separator">
+		<Setter Property="Background" Value="{DynamicResource BackgroundModifierAccent}"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="Margin" Value="0 20 0 0"/>
+	</Style>
+
+	<!--RadioButton-->
+
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
+				<Setter Property="Background" Value="{DynamicResource BackgroundSecondary}"/>
+				<Setter Property="Margin" Value="0 0 0 8"/>
+				<Setter Property="Foreground" Value="{DynamicResource InteractiveNormal}"/>
+				<Setter Property="Cursor" Value="Hand"/>
+				<Setter Property="CornerRadius" Value="3"/>
+				<Setter Property="Padding" Value="10"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type RadioButton}">
+							<ControlTemplate.Content>
+								<Border
+									CornerRadius="{TemplateBinding CornerRadius}"
+									Background="{TemplateBinding Background}"
+									Padding="{TemplateBinding Padding}"
+									Cursor="{TemplateBinding Cursor}">
+									<Grid ColumnDefinitions="Auto,*">
+										<Grid Height="24" VerticalAlignment="Center" >
+											<Ellipse Name="border" Width="20" Height="20" Stroke="{TemplateBinding Foreground}" StrokeThickness="2"/>
+											<Ellipse Name="checkMark" Width="10" Height="10" VerticalAlignment="Center" Fill="{TemplateBinding Foreground}"/>
+										</Grid>
+										<ContentPresenter
+											Grid.Column="1"
+											Name="PART_ContentPresenter"
+											Content="{TemplateBinding Content}"
+											VerticalAlignment="Center"
+											Margin="8 0"
+											FontSize="16"
+											FontWeight="500"/>
+									</Grid>
+								</Border>
+							</ControlTemplate.Content>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+				<Style Selector="^ /template/ Ellipse#checkMark">
+					<Setter Property="IsVisible" Value="false"/>
+				</Style>
+				<Style Selector="^:pointerover">
+					<Setter Property="Background" Value="{DynamicResource BackgroundModifierHover}"/>
+					<Setter Property="Foreground" Value="{DynamicResource InteractiveHover}"/>
+				</Style>
+				<Style Selector="^:checked">
+					<Setter Property="Background" Value="{DynamicResource BackgroundModifierActive}"/>
+					<Setter Property="Foreground" Value="{DynamicResource InteractiveActive}"/>
+				</Style>
+				<Style Selector="^:checked /template/ Ellipse#checkMark">
+					<Setter Property="IsVisible" Value="true"/>
+				</Style>
+			</ControlTheme>
+		</ResourceDictionary>
+	</Styles.Resources>
 </Styles>
