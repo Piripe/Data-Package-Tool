@@ -3,6 +3,8 @@
 
 
 	<SolidColorBrush x:Key='Brand500'>#5865f2</SolidColorBrush>
+	<SolidColorBrush x:Key='Brand560'>#4752c4</SolidColorBrush>
+	<SolidColorBrush x:Key='Brand600'>#3c45a5</SolidColorBrush>
 	<SolidColorBrush x:Key='White500'>#fff</SolidColorBrush>
 
 

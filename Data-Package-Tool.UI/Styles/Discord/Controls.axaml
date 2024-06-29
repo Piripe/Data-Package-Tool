@@ -16,6 +16,7 @@
 				</Border>
 				<Separator/>
 				<TextBlock HorizontalAlignment="Left" Text="Button"/>
+				<Button>Button</Button>
 				<Button Classes="Hyperlink">Hyperlink Button</Button>
 				<Separator/>
 				<TextBlock HorizontalAlignment="Left" Text="ToolTip"/>
@@ -74,23 +75,6 @@
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Padding" Value="16"/>
 	</Style>
-
-
-	<!--Button-->
-	<Style Selector="Button">
-		<Setter Property="Cursor" Value="Hand"/>
-		<Setter Property="BorderThickness" Value="0"/>
-	</Style>
-	<Style Selector="Button.Hyperlink /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="CornerRadius" Value="4"/>
-		<Setter Property="Background" Value="Transparent"/>
-		<Setter Property="MinWidth" Value="32"/>
-		<Setter Property="HorizontalContentAlignment" Value="Left"/>
-	</Style>
-	<Style Selector="Button.Hyperlink:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource BackgroundModifierSelected}"/>
-		<Setter Property="MinWidth" Value="32"/>
-	</Style>
 	
 	<!--Textblock-->
 
@@ -139,10 +123,73 @@
 		<Setter Property="Margin" Value="0 20 0 0"/>
 	</Style>
 
-	<!--RadioButton-->
 
 	<Styles.Resources>
 		<ResourceDictionary>
+			<!--Button-->
+			<ControlTheme x:Key="{x:Type Button}" TargetType="Button">
+				<Setter Property="Cursor" Value="Hand"/>
+				<Setter Property="Background" Value="{StaticResource Brand500}"/>
+				<Setter Property="Foreground" Value="{StaticResource White500}"/>
+				<Setter Property="CornerRadius" Value="3"/>
+				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="FontWeight" Value="500"/>
+				<Setter Property="Padding" Value="16 2"/>
+				<Setter Property="Height" Value="32"/>
+				<Setter Property="MinWidth" Value="60"/>
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="HorizontalContentAlignment" Value="Center"/>
+				<Setter Property="Transitions">
+					<Setter.Value>
+						<Transitions>
+							<BrushTransition Property="Background" Duration="0:0:0.17"/>
+						</Transitions>
+					</Setter.Value>
+				</Setter>
+				<Setter Property="Template">
+					<ControlTemplate>
+						<ContentPresenter Name="PART_ContentPresenter"
+										  Padding="{TemplateBinding Padding}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  Background="{TemplateBinding Background}"
+										  BorderBrush="{TemplateBinding BorderBrush}"
+										  BorderThickness="{TemplateBinding BorderThickness}"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  CornerRadius="{TemplateBinding CornerRadius}"
+										  RecognizesAccessKey="True"
+										  TextElement.Foreground="{TemplateBinding Foreground}" />
+					</ControlTemplate>
+				</Setter>
+				<Style Selector="^:pointerover">
+					<Setter Property="Background" Value="{StaticResource Brand560}"/>
+				</Style>
+				<Style Selector="^:pressed">
+					<Setter Property="Background" Value="{StaticResource Brand600}"/>
+				</Style>
+				<Style Selector="^.Hyperlink">
+					<Setter Property="CornerRadius" Value="4"/>
+					<Setter Property="Background" Value="Transparent"/>
+					<Setter Property="Foreground" Value="{DynamicResource TextNormal}"/>
+					<Setter Property="MinWidth" Value="32"/>
+					<Setter Property="Padding" Value="4"/>
+					<Setter Property="HorizontalContentAlignment" Value="Left"/>
+					<Setter Property="Transitions">
+						<Setter.Value>
+							<Transitions>
+								<BrushTransition Property="Background" Duration="0:0:0"/>
+							</Transitions>
+						</Setter.Value>
+					</Setter>
+				</Style>
+				<Style Selector="^.Hyperlink:pointerover">
+					<Setter Property="Background" Value="{DynamicResource BackgroundModifierSelected}"/>
+				</Style>
+			</ControlTheme>
+				
+			
+			<!--RadioButton-->
 			<ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
 				<Setter Property="Background" Value="{DynamicResource BackgroundSecondary}"/>
 				<Setter Property="Margin" Value="0 0 0 8"/>
