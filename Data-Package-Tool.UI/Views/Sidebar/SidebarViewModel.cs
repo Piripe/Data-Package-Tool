@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DataPackageTool.UI.Views.Sidebar
 {
@@ -43,11 +44,10 @@ namespace DataPackageTool.UI.Views.Sidebar
         }
         private void InitData()
         {
+            Task partialGuilds = Package.GetPartialGuilds();
             foreach (var guild in Package.Guilds) {
-                try
-                {
                     IImage? icon = guild.GetIcon();
-                    string? name = guild.GetName();
+                    string? name = guild.Name;
 
                     var model = new NavItemModel()
                     {
@@ -56,19 +56,16 @@ namespace DataPackageTool.UI.Views.Sidebar
                     };
 
                     NavItems.Add(model);
+
                     if (icon == null || name == null)
                     {
                         Task.Run(async () =>
                         {
+                            await partialGuilds;
                             model.Image = await guild.GetIconAsync();
                             model.Tooltip = await guild.GetNameAsync();
                         });
                     }
-
-                } catch (Exception ex)
-                {
-                    Debug.WriteLine($"{ex.ToString()}");
-                }
 
             }
         }

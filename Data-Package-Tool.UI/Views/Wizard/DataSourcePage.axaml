@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="512" d:DesignHeight="1330"
+             x:Class="DataPackageTool.UI.Views.Wizard.DataSourcePage">
+		<Border BoxShadow="0 0 64 10 #1000" CornerRadius="10" Background="{DynamicResource BackgroundPrimary}">
+			<ScrollViewer>
+				<Border Padding="32 24">
+					
+			<Grid RowDefinitions="48,*">
+				<TextBlock Classes="h3" FontWeight="600" Text="Data Source" VerticalAlignment="Top"/>
+				<StackPanel Margin="12 0 16 0" Grid.Row="1">
+					<TextBlock Classes="h5" Foreground="{DynamicResource HeaderPrimary}" Text="You need a data source to see server icons and use some features."/>
+					<TextBlock Margin="12 16 0 0" Classes="h3" FontWeight="600" Text="Sources"/>
+					<StackPanel Margin="24 0 0 0" Grid.Row="1">
+						<Grid Margin="0 16 0 0" ColumnDefinitions="*,64">
+							<TextBlock Classes="h4" FontWeight="600" Text="Invite data"/>
+						</Grid>
+						<TextBlock Margin="0 8" TextWrapping="Wrap" Foreground="{DynamicResource HeaderSecondary}" Text="The invite data source uses the data provided by the invite codes in the package. Some codes may have expired now, so not all server icons will be displayed."/>
+						<RadioButton x:Name="InviteDataMode0" GroupName="InviteDataMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Don't use: Prevent Data Package Tool from requesting invite"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="InviteDataMode1" GroupName="InviteDataMode" IsChecked="true">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Manual: Request data when needed (e.g., Opening a server)"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="InviteDataMode2" GroupName="InviteDataMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Automatic: Request data automatically (not recommanded, may temporarily ban your IP)"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<Separator/>
+						<Grid Margin="0 16 0 0" ColumnDefinitions="*,64">
+							<TextBlock Classes="h4" FontWeight="600" Text="Self-bot"/>
+						</Grid>
+						<TextBlock Margin="0 8" TextWrapping="Wrap" Foreground="{DynamicResource HeaderSecondary}" Text="This source accesses the Discord API using the user token provided.
+								   This source against Discord ToS, so we are not responsible if your Discord account get banned."/>
+						<RadioButton x:Name="SelfBotMode0" Name="NoUserToken" GroupName="SelfBotMode" IsChecked="true">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Don't use: Prevent Data Package Tool from using user token"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="SelfBotMode1" GroupName="SelfBotMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Manual: Request data when needed (e.g., Opening a server)"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="SelfBotMode2" GroupName="SelfBotMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Automatic: Request data automatically"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<TextBlock Margin="0 8" Classes="h4" FontWeight="600" Text="User Token" IsEnabled="{CompiledBinding #NoUserToken.IsChecked, Converter={x:Static BoolConverters.Not}}"/>
+						<TextBox x:Name="UserTokenBox" Watermark="User token" PasswordChar="●" IsEnabled="{CompiledBinding #NoUserToken.IsChecked, Converter={x:Static BoolConverters.Not}}"/>
+						<Separator/>
+						<Grid Margin="0 16 0 0" ColumnDefinitions="*,64">
+							<TextBlock Classes="h4" FontWeight="600" Text="Bot"/>
+						</Grid>
+						<TextBlock Margin="0 8" TextWrapping="Wrap" Foreground="{DynamicResource HeaderSecondary}" Text="This source accesses the Discord API using the bot token provided.
+								   This source against Discord Developer ToS, so we are not responsible if your bot or Discord account get banned."/>
+						<RadioButton x:Name="BotMode0" Name="NoBotToken" GroupName="BotMode" IsChecked="true">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Don't use: Prevent Data Package Tool from using bot token"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="BotMode1" GroupName="BotMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Manual: Request data when needed (e.g., Opening a server)"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<RadioButton x:Name="BotMode2" GroupName="BotMode">
+							<RadioButton.Content>
+								<TextBlock TextWrapping="Wrap" Text="Automatic: Request data automatically"/>
+							</RadioButton.Content>
+						</RadioButton>
+						<TextBlock Margin="0 8" Classes="h4" FontWeight="600" Text="Bot Token" IsEnabled="{CompiledBinding #NoBotToken.IsChecked, Converter={x:Static BoolConverters.Not}}"/>
+						<TextBox x:Name="BotTokenBox" Watermark="Bot token" PasswordChar="●" IsEnabled="{CompiledBinding #NoBotToken.IsChecked, Converter={x:Static BoolConverters.Not}}"/>
+						<Separator/>
+						<Grid Margin="0 16">
+							<TextBlock x:Name="InvalidDataText" VerticalAlignment="Center" Margin="16 0" FontWeight="600" Text="Invalid token" IsVisible="False"/>
+							<Button x:Name="NextButton" HorizontalAlignment="Right" Content="Next"/>
+						</Grid>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+				</Border>
+		</ScrollViewer>
+		</Border>
+</UserControl>

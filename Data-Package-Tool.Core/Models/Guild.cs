@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Diagnostics;
+using DataPackageTool.Core.Enums;
+using DataPackageTool.Core.Utils;
+using Avalonia.Controls;
 
 namespace DataPackageTool.Core.Models
 {
@@ -23,12 +26,54 @@ namespace DataPackageTool.Core.Models
         public List<string> Invites { get; set; } = new();
         public DateTime Timestamp { get; set; }
 
-        private bool _fetchedInviteData;
+        private bool _fetchedData;
         private Invite? _inviteData;
 
 
-        private async Task FetchInviteData()
+        private async Task FetchData(DataSourceUsability neededUsability = DataSourceUsability.Auto, bool partialData = true)
         {
+            if (DataPackage == null) return;
+            _fetchedData = true;
+
+            object? DeserializeGuild(string json) => JsonSerializer.Deserialize<Guild>(json, Shared.JsonSerializerOptions);
+            object? DeserializeInvite(string json) => JsonSerializer.Deserialize<Invite>(json, Shared.JsonSerializerOptions);
+
+            object? res = await DataPackage.GetObjectFromSources(neededUsability,
+                    (partialData ? new List<DRequest>() : new List<DRequest>() {
+                        DRequest.Get("guilds/"+Id,context:DRequestContext.Bot),
+                        DRequest.Get("guilds/"+Id,context:DRequestContext.User)
+                    }).Concat(Invites.Select(x=>DRequest.Get("invites/"+x,context:DRequestContext.Invite,queue:"invite"))).ToList(),
+                    Enumerable.Repeat(DeserializeGuild, partialData ? 0 : 2).Concat(Enumerable.Repeat(DeserializeInvite,Invites.Count)).ToList(),
+                    (x, _) =>
+                    {
+                        switch (x)
+                        {
+                            case Invite invite:
+                                return invite.GuildId == Id;
+                            case Guild guild:
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                );
+
+            switch (res)
+            {
+                case Invite invite:
+                    _inviteData = invite;
+                    Shared.Mapper.Map(invite.Guild, this);
+                    break;
+                case Guild guild:
+                    Shared.Mapper.Map(guild, this);
+                    break;
+                default:
+                    _fetchedData = false;
+                    break;
+            }
+
+
+            /*
             if (Invites.Count == 0) return;
 
             _fetchedInviteData = true;
@@ -41,6 +86,7 @@ namespace DataPackageTool.Core.Models
                 _inviteData = inviteData;
                 break;
             }
+            */
         }
 
         private IImage? _iconImage;
@@ -53,38 +99,28 @@ namespace DataPackageTool.Core.Models
 
             return icon;
         }
-        public string? GetName()
-        {
-            if (Name != null) return Name;
-
-            if (_fetchedInviteData) Name = _inviteData?.Guild?.Name;
-
-            return Name;
-        }
         public async Task<string> GetNameAsync()
         {
             if (Name != null) return Name;
 
-            if (!_fetchedInviteData)
+            if (!_fetchedData)
             {
-                await FetchInviteData();
+                await FetchData();
             }
-            Name = _inviteData?.Guild?.Name;
 
             return Name ?? Id;
         }
 
         async Task<IImage> DownloadIcon()
         {
-            if (!_fetchedInviteData)
+            if (Icon == null && !_fetchedData)
             {
-                await FetchInviteData();
+                await FetchData();
             }
-            if (_inviteData != null)
+            if (Icon != null)
             {
-                string? iconHash = _inviteData.Guild?.Icon;
-                if (iconHash == null) return User.GetDefaultAvatarBitmap(1);
-                Stream? iconStream = await DRequest.GetStreamAsync($"icons/{Id}/{iconHash}.png?size=256", true, queue:"cdn");
+                if (Icon == null) return User.GetDefaultAvatarBitmap(1);
+                Stream? iconStream = (await DRequest.client.GetAsync(new Uri(new Uri(Constants.CDNEndpoint), $"icons/{Id}/{Icon}.png?size=256"))).Content.ReadAsStream();
                 if (iconStream != null)
                 {
                     return new Bitmap(iconStream);

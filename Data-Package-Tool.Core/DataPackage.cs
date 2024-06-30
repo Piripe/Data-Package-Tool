@@ -7,6 +7,7 @@ using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
 using DataPackageTool.Core.Models.Analytics;
 using DataPackageTool.Core.Models.UserModels;
+using DataPackageTool.Core.Utils;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -55,6 +56,10 @@ namespace DataPackageTool.Core
         public List<VoiceDisconnect> VoiceDisconnections { get; private set; } = new List<VoiceDisconnect>();
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
+
+        public DataSourceUsability InviteUsability { get; set; } = DataSourceUsability.Manual;
+        public DataSourceUsability SelfbotUsability { get; set; } = DataSourceUsability.None;
+        public DataSourceUsability BotUsability { get; set; } = DataSourceUsability.None;
 
         public bool UsesUnsignedCDNLinks
         {
@@ -348,15 +353,6 @@ namespace DataPackageTool.Core
                 zip.Dispose();
                 file.Dispose();
 
-                var mapper = new MapperConfiguration(cfg => {
-                    cfg.CreateMap<Guild, Guild>()
-                    .BeforeMap((source, dest) =>
-                    {
-                        source.Invites.AddRange(dest.Invites);
-                        source.Name = source.Name ?? dest.Name;
-                    }); 
-                }).CreateMapper();
-
                 void MergeGuild(Guild guild)
                 {
                     Guild? alreadyIncludedGuild = dp.Guilds.FirstOrDefault(x => x.Id == guild.Id);
@@ -365,7 +361,7 @@ namespace DataPackageTool.Core
                         dp.Guilds.Add(guild);
                         return;
                     }
-                    mapper.Map(guild,alreadyIncludedGuild);
+                    Shared.Mapper.Map(guild,alreadyIncludedGuild);
                 }
 
                 var analyticsGroups = dp.AnalyticsEvents.GroupBy(x => x.GetType());
@@ -424,12 +420,40 @@ namespace DataPackageTool.Core
                         });
                 }
 
+                dp.Guilds.ForEach((x) => x.DataPackage = dp);
+
                 UpdateStatus(1f, $"Finished! Parsed {dp.MessagesMap.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
 
                 return dp;
             });
         }
 
+        private bool _partialGuildsFetched = false;
+        public async Task GetPartialGuilds()
+        {
+            try
+            {
+                if (_partialGuildsFetched) return;
+                _partialGuildsFetched = true;
+
+                List<Guild>? partialGuilds = await this.GetObjectFromSources(DataSourceUsability.Auto, [DRequest.Get("users/@me/guilds", context: DRequestContext.User)], [(HttpResponseMessage res) => JsonSerializer.Deserialize<List<Guild>>(res.Content.ReadAsStream(),Shared.JsonSerializerOptions)]);
+
+                Debug.WriteLine("Partial guilds are null : "+(partialGuilds == null).ToString());
+                if (partialGuilds == null) return;
+
+                foreach (Guild guild in partialGuilds)
+                {
+                    Guild? packageGuild = Guilds.Find((x) => x.Id == guild.Id);
+                    if (packageGuild == null) continue;
+
+                    Shared.Mapper.Map(guild, packageGuild);
+                    Debug.WriteLine($"Guild {guild.Name}({guild.Id}) now has icon : {guild.Icon}");
+                }
+            }
+            catch (Exception ex) {
+            Debug.WriteLine(ex); 
+            }
+        }
 
 
         public void LoadGuilds(string fileName)

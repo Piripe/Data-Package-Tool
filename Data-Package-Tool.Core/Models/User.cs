@@ -79,7 +79,7 @@ namespace DataPackageTool.Core.Models
         }
         async Task<Bitmap> DownloadAvatar()
         {
-            Stream? iconStream = await DRequest.GetStreamAsync($"avatars/{Id}/{AvatarHash}.png?size=256", true, queue: "cdn");
+            Stream? iconStream = await DRequest.GetStreamAsync(DRequest.Get($"avatars/{Id}/{AvatarHash}.png?size=256", true, queue: "cdn"));
             if (iconStream != null)
             {
                 return new Bitmap(iconStream);

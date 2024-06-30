@@ -82,6 +82,9 @@
 		<Setter Property="FontFamily" Value="{StaticResource gg sans}"/>
 		<Setter Property="FontWeight" Value="500"/>
 	</Style>
+	<Style Selector="TextBlock:disabled">
+		<Setter Property="Opacity" Value="0.6"/>
+	</Style>
 	<Style Selector="TextBlock.Ginto">
 		<Setter Property="FontFamily" Value="{StaticResource Ginto Nord}"/>
 		<Setter Property="FontWeight" Value="800"/>

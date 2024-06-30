@@ -57,6 +57,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Wizard\DataSourcePage.axaml.cs">
+      <DependentUpon>DataSourcePage.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Wizard\StartupWizard.axaml.cs">
       <DependentUpon>StartupWizard.axaml</DependentUpon>
     </Compile>

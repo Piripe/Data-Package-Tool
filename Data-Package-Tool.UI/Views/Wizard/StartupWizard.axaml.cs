@@ -31,18 +31,40 @@ namespace DataPackageTool.UI.Views.Wizard
             PlaySurprisedAnim();
 
             // TODO: Manage exceptions with a cute error message
+            DataPackage? package = null;
 
-            TitleText.Text = "Loading package.zip...";
-            SubtitleText.Text = "Wait a sec";
-            StatusProgressBar.IsVisible = true;
-
-            DataPackage package = await DataPackage.LoadAsync(fileName, (LoadStatus status) =>
+            void LoadDataSourceConfigAndInvoke()
             {
-                SubtitleText.Text = status.Status;
+                if (package != null && DataSource.Config != null)
+                {
+                    package.InviteUsability = DataSource.Config.InviteMode;
+                    package.SelfbotUsability = DataSource.Config.SelfBotMode;
+                    package.BotUsability = DataSource.Config.BotMode;
+
+                    DataPackageLoaded?.Invoke(this, package);
+                }
+            }
+
+            ProgressbarBox.Classes.Add("Shown");
+
+            DataSource.DataSourceConfigLoaded += (sender, e) =>
+            {
+                OpenDialogButton.IsVisible = false;
+                DataSource.Classes.Remove("Shown");
+                LoadDataSourceConfigAndInvoke();
+            };
+
+            DataSource.Classes.Add("Shown");
+
+            package = await DataPackage.LoadAsync(fileName, (LoadStatus status) =>
+            {
+                StatusText.Text = status.Status;
                 StatusProgressBar.Value = status.Progress*100;
             });
-            TitleText.Text = "Package loaded!";
-            DataPackageLoaded?.Invoke(this, package);
+
+            LoadDataSourceConfigAndInvoke();
+
+            ProgressbarBox.Classes.Remove("Shown");
         }
 
         private void PlaySurprisedAnim()

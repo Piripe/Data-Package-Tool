@@ -15,6 +15,13 @@ using System.Threading.Tasks;
 
 namespace DataPackageTool.Core
 {
+    public enum DRequestContext
+    {
+        None,
+        Invite,
+        User,
+        Bot
+    }
     class DSuperProperties
     {
         public string? os;
@@ -94,7 +101,7 @@ namespace DataPackageTool.Core
                 {"sec-fetch-dest", "empty"},
                 {"sec-fetch-mode", "cors"},
                 {"sec-fetch-site", "same-origin"},
-                {"User-Agent", USER_AGENT},
+                {"User-Agent", USER_AGENT!},
                 {"x-debug-options", "bugReporterEnabled"},
                 {"x-discord-locale", "en-US"},
                 {"x-discord-timezone", "America/New_York"},
@@ -156,29 +163,35 @@ public Queue<DRequest> Queue { get; } = new();
         public DateTime RetryAfter { get; set; } = DateTime.Now;
         public Action<DRequestQueue>? AfterRes { get; set; }
     }
-    class DRequest
+    public class DRequest
     {
         public HttpMethod Method { get; set; }
         public string Url { get; set; }
         public bool IsCDN { get; set; }
+        public DRequestContext Context { get; set; }
         public Dictionary<string, string>? Headers { get; set; }
         public string? BodyData { get; set; }
         public bool IncludeDefaultHeaders { get; set; }
-        public TaskCompletionSource<HttpResponseMessage> OnResponse { get; set; }
+        public TaskCompletionSource<HttpResponseMessage>? OnResponse { get; set; }
         public uint MaxRetries { get; set; }
-        private DRequest(HttpMethod method, string url, bool isCDN, Dictionary<string, string>? headers, string? bodyData, bool includeDefaultHeaders, TaskCompletionSource<HttpResponseMessage> onResponse, uint maxRetries)
+        public string Queue { get; set; }
+
+        private DRequest(HttpMethod method, string url, bool isCDN, DRequestContext context, Dictionary<string, string>? headers, string? bodyData, bool includeDefaultHeaders, TaskCompletionSource<HttpResponseMessage>? onResponse, uint maxRetries, string queue = "main")
         {
             Method = method;
             Url = url;
             IsCDN = isCDN;
+            Context = context;
             Headers = headers;
             BodyData = bodyData;
             IncludeDefaultHeaders = includeDefaultHeaders;
             OnResponse = onResponse;
             MaxRetries = maxRetries;
+            Queue = queue;
         }
 
         public static HttpClient client = new HttpClient();
+        public static Dictionary<DRequestContext,string> Contexts = new();
         private static Dictionary<string, DRequestQueue> _requestsQueues = new();
         private static ConcurrentQueue<KeyValuePair<string, DRequest>> _asyncQueue = new();
         private static CancellationTokenSource _restartHandler = new CancellationTokenSource();
@@ -220,9 +233,20 @@ public Queue<DRequest> Queue { get; } = new();
                         waiting = false;
 
                         var dreq = queue.Queue.Peek();
+                        Debug.WriteLine($"Requesting ({dreq.Url}) in queue {dreq.Queue} with context {dreq.Context}");
                         try
                         {
                             var request = new HttpRequestMessage(dreq.Method, new Uri(new Uri(dreq.IsCDN ? Constants.CDNEndpoint : Constants.APIEndpoint), dreq.Url));
+
+                            switch (dreq.Context)
+                            {
+                                case DRequestContext.User:
+                                    request.Headers.Add("Authorization", Contexts[dreq.Context]);
+                                    break;
+                                case DRequestContext.Bot:
+                                    request.Headers.Add("Authorization", "Bot "+Contexts[dreq.Context]);
+                                    break;
+                            }
 
                             if (dreq.IncludeDefaultHeaders)
                             {
@@ -260,7 +284,7 @@ public Queue<DRequest> Queue { get; } = new();
                                 }
                             }
                             queue.Queue.Dequeue();
-                            dreq.OnResponse.TrySetResult(res);
+                            dreq.OnResponse?.TrySetResult(res);
                             queue.AfterRes?.Invoke(queue);
                         }
                         catch (Exception ex)
@@ -294,11 +318,13 @@ public Queue<DRequest> Queue { get; } = new();
                 if (error) await Task.Delay(500); // Wait a bit when error happen to avoid freezes
             }
         }
-        public static async Task<HttpResponseMessage> RequestAsync(HttpMethod method, string url, bool isCDN = false, Dictionary<string, string>? headers = null, string? bodyData = null, bool includeDefaultHeaders = true, uint maxRetries = 10, string queue = "main")
+        public static async Task<HttpResponseMessage> RequestAsync(DRequest dreq)
         {
             var onResponse = new TaskCompletionSource<HttpResponseMessage>();
 
-            _asyncQueue.Enqueue(new KeyValuePair<string, DRequest>(queue, new DRequest(method, url, isCDN, headers, bodyData, includeDefaultHeaders, onResponse, maxRetries)));
+            dreq.OnResponse = onResponse;
+
+            _asyncQueue.Enqueue(new KeyValuePair<string, DRequest>(dreq.Queue, dreq));
 
             if (!_restartHandler.IsCancellationRequested) _restartHandler.Cancel(); // Restart request handler is it's stopped
 
@@ -306,28 +332,25 @@ public Queue<DRequest> Queue { get; } = new();
 
             return res;
         }
-
-        public static async Task<HttpResponseMessage> GetAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true, uint maxRetry = 10, string queue = "main")
+        public static async Task<Stream?> GetStreamAsync(DRequest dreq)
         {
-            return await RequestAsync(HttpMethod.Get, url, isCDN, headers, null, includeDefaultHeaders, maxRetry, queue);
-        }
-        public static async Task<Stream?> GetStreamAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true, uint maxRetry = 10, string queue = "main")
-        {
-            var res = await GetAsync(url, isCDN, headers, includeDefaultHeaders, maxRetry, queue);
+            var res = await RequestAsync(dreq);
             if (res.IsSuccessStatusCode)
             {
                 return res.Content.ReadAsStream();
             }
             return null;
         }
-        public static async Task<string?> GetStringAsync(string url, bool isCDN = false, Dictionary<string, string>? headers = null, bool includeDefaultHeaders = true, uint maxRetry = 10, string queue = "main")
+        public static async Task<string?> GetStringAsync(DRequest dreq)
         {
-            var res = await GetAsync(url, isCDN, headers, true, maxRetry, queue);
+            var res = await RequestAsync(dreq);
             if (res.IsSuccessStatusCode)
             {
                 return await res.Content.ReadAsStringAsync();
             }
             return null;
         }
+
+        public static DRequest Get(string url, bool isCDN = false, DRequestContext context = DRequestContext.None, Dictionary<string, string>? headers = null, bool defaultHeaders = true, uint maxRetries = 10, string queue = "main") => new DRequest(HttpMethod.Get, url, isCDN, context, headers, null, defaultHeaders, null, maxRetries, queue);
     }
 }
