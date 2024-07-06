@@ -10,9 +10,11 @@ namespace DataPackageTool.UI
 {
     public class ViewLocator : IViewLocator
     {
-        public IViewFor? ResolveView<T>(T? viewModel, string? contract = null)
+        public IViewFor? ResolveView<T>(T? viewModel, string? contract = null) => viewModel switch
         {
-            return new Overview { DataContext = viewModel };
-        }
+            OverviewViewModel overview => new Overview { DataContext = overview },
+            ServerViewModel server => new Server { DataContext = server },
+            _ => default
+        };
     }
 }

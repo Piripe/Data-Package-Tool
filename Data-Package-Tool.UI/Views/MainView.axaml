@@ -6,6 +6,7 @@
              xmlns:v="clr-namespace:DataPackageTool.UI.Views"
              xmlns:sb="clr-namespace:DataPackageTool.UI.Views.Sidebar"
              xmlns:pages="clr-namespace:DataPackageTool.UI.Views.Pages"
+             xmlns:ui="clr-namespace:DataPackageTool.UI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.MainView"
              x:DataType="v:MainViewModel">
@@ -17,6 +18,12 @@
 
 	<Grid ColumnDefinitions="72,*">
 		<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
+			<rxui:RoutedViewHost.ViewLocator>
+				<ui:ViewLocator/>
+			</rxui:RoutedViewHost.ViewLocator>
+			<rxui:RoutedViewHost.PageTransition>
+				<x:Null/>
+			</rxui:RoutedViewHost.PageTransition>
 			<rxui:RoutedViewHost.DefaultContent>
 				<pages:Overview DataContext="{CompiledBinding Overview}"/>
 			</rxui:RoutedViewHost.DefaultContent>

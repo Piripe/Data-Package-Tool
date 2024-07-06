@@ -43,7 +43,7 @@ namespace DataPackageTool.Core.Models
                         DRequest.Get("guilds/"+Id,context:DRequestContext.Bot),
                         DRequest.Get("guilds/"+Id,context:DRequestContext.User)
                     }).Concat(Invites.Select(x=>DRequest.Get("invites/"+x,context:DRequestContext.Invite,queue:"invite"))).ToList(),
-                    Enumerable.Repeat(DeserializeGuild, partialData ? 0 : 2).Concat(Enumerable.Repeat(DeserializeInvite,Invites.Count)).ToList(),
+                    [..Enumerable.Repeat(DeserializeGuild, partialData ? 0 : 2),..Enumerable.Repeat(DeserializeInvite,Invites.Count)],
                     (x, _) =>
                     {
                         switch (x)
@@ -71,22 +71,6 @@ namespace DataPackageTool.Core.Models
                     _fetchedData = false;
                     break;
             }
-
-
-            /*
-            if (Invites.Count == 0) return;
-
-            _fetchedInviteData = true;
-            foreach (var invite in Invites)
-            {
-                Invite? inviteData = JsonSerializer.Deserialize<Invite>(await DRequest.GetStringAsync("invites/" + invite, queue: "invite") ?? "{}", Shared.JsonSerializerOptions);
-                if (inviteData == null) continue;
-                if (inviteData.GuildId != Id) continue;
-
-                _inviteData = inviteData;
-                break;
-            }
-            */
         }
 
         private IImage? _iconImage;
@@ -99,13 +83,13 @@ namespace DataPackageTool.Core.Models
 
             return icon;
         }
-        public async Task<string> GetNameAsync()
+        public async Task<string> GetNameAsync(DataSourceUsability neededUsability = DataSourceUsability.Auto)
         {
             if (Name != null) return Name;
 
             if (!_fetchedData)
             {
-                await FetchData();
+                await FetchData(neededUsability);
             }
 
             return Name ?? Id;

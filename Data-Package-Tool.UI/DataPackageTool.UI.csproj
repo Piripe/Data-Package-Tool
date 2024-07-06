@@ -70,7 +70,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Pages\OverviewCards\" />
+    <Folder Include="Views\Pages\ServerPages\" />
+    <Folder Include="Views\Pages\OverviewPages\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -31,7 +31,7 @@
 										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
-												<Image Width="24" Source="{CompiledBinding Image}"  ToolTip.Placement="Center" ToolTip.Tip="{CompiledBinding Tooltip}"/>
+												<Image Width="24" Source="{CompiledBinding Image}"  ToolTip.Placement="Bottom" ToolTip.VerticalOffset="4" ToolTip.Tip="{CompiledBinding Tooltip}"/>
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>

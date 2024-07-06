@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using DataPackageTool.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace DataPackageTool.Core
 {
@@ -17,7 +12,7 @@ namespace DataPackageTool.Core
             cfg.CreateMap<Guild, Guild>()
             .BeforeMap((source, dest) =>
             {
-                source.Invites.AddRange(dest.Invites);
+                source.Invites.AddRange(dest.Invites.Where(x=>!source.Invites.Contains(x)));
             }).ForAllMembers(opts=> opts.Condition((_,_,srcMember)=>srcMember!=null));
         }).CreateMapper();
     }

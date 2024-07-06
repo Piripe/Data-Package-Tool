@@ -118,6 +118,13 @@
 		<Setter Property="FontWeight" Value="600"/>
 	</Style>
 
+	<Style Selector="ToolTip /template/ ContentPresenter">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
+	<Style Selector="ToolTip /template/ TextBlock">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
+
 	<!--Separator-->
 	
 	<Style Selector="Separator">

@@ -1,8 +1,10 @@
 ﻿using Avalonia;
+using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using DataPackageTool.Core;
 using DataPackageTool.Core.Models;
 using DataPackageTool.UI.Models;
+using DataPackageTool.UI.Views.Pages;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -23,20 +25,27 @@ namespace DataPackageTool.UI.Views.Sidebar
         public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
                 new NavItemModel() {Path = (Application.Current!.TryGetResource("HomeIcon",Application.Current.ActualThemeVariant, out var homeIcon) ? homeIcon : throw new Exception()) as StreamGeometry, Tooltip="Overview"}
             ]);
-
-
+        public RoutingState? Router { get; }
+        //public ReactiveCommand<SelectingItemsControl, object?>? GotoPage { get; }
 
         public SidebarViewModel()
         {
 
             Init();
         }
-        public SidebarViewModel(DataPackage package)
+        public SidebarViewModel(DataPackage package, RoutingState router, OverviewViewModel overview)
         {
             Package = package;
+            Router = router;
+            NavItems[0].Link = overview;
+            //GotoPage = ReactiveCommand.Create<SelectingItemsControl, object?>(
+            //        (e) => {
+            //            }
+            //    );
             Init();
         }
-        private void Init() {
+        private void Init()
+        {
             Task<IImage> avatarTask = Package.User.GetAvatar();
             avatarTask.Wait(); // Supposed to be instant
             Avatar = avatarTask.Result;
@@ -45,27 +54,29 @@ namespace DataPackageTool.UI.Views.Sidebar
         private void InitData()
         {
             Task partialGuilds = Package.GetPartialGuilds();
-            foreach (var guild in Package.Guilds) {
-                    IImage? icon = guild.GetIcon();
-                    string? name = guild.Name;
+            foreach (var guild in Package.Guilds)
+            {
+                IImage? icon = guild.GetIcon();
+                string? name = guild.Name;
 
-                    var model = new NavItemModel()
+                var model = new NavItemModel()
+                {
+                    Image = icon ?? guild.DefaultIcon(),
+                    Tooltip = name ?? guild.Id,
+                    Link = new ServerViewModel(guild)
+                };
+
+                NavItems.Add(model);
+
+                if (icon == null || name == null)
+                {
+                    Task.Run(async () =>
                     {
-                        Image = icon ?? guild.DefaultIcon(),
-                        Tooltip = name ?? guild.Id,
-                    };
-
-                    NavItems.Add(model);
-
-                    if (icon == null || name == null)
-                    {
-                        Task.Run(async () =>
-                        {
-                            await partialGuilds;
-                            model.Image = await guild.GetIconAsync();
-                            model.Tooltip = await guild.GetNameAsync();
-                        });
-                    }
+                        await partialGuilds;
+                        model.Image = await guild.GetIconAsync();
+                        model.Tooltip = await guild.GetNameAsync();
+                    });
+                }
 
             }
         }

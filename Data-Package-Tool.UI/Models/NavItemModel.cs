@@ -16,5 +16,6 @@ namespace DataPackageTool.UI.Models
         private object? _tooltip;
         public object? Tooltip { get => _tooltip; set => this.RaiseAndSetIfChanged(ref _tooltip, value); }
         public StreamGeometry? Path { get; set; }
+        public IRoutableViewModel? Link { get; set; }
     }
 }

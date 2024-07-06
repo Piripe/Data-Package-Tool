@@ -42,7 +42,7 @@
 	
 	<Grid ColumnDefinitions="72,240">
 		<ScrollViewer Background="{DynamicResource BackgroundTertiary}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" >
-			<ListBox Background="{DynamicResource BackgroundTertiary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="0 4 0 8" BorderThickness="0">
+			<ListBox x:Name="NavBox" Background="{DynamicResource BackgroundTertiary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="0 4 0 8" BorderThickness="0">
 				<ListBox.Styles>
 					<Style Selector="ListBoxItem">
 						<Setter Property="Padding" Value="0"/>

@@ -1,6 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Avalonia.Threading;
+using DataPackageTool.Core.Models;
+using DataPackageTool.UI.Models;
+using DataPackageTool.UI.Views.Pages;
+using ReactiveUI;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace DataPackageTool.UI.Views.Sidebar
@@ -11,12 +17,28 @@ namespace DataPackageTool.UI.Views.Sidebar
         {
             InitializeComponent();
 
-            //this.FindControl<Grid>("TestTooltip")?.SetValue<bool>(ToolTip.IsPointerOverProperty, true);
+            NavBox.SelectionChanged += NavBox_SelectionChanged;
         }
 
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        private void NavBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            base.OnAttachedToVisualTree(e);
+            NavItemModel? navItem = e.AddedItems.Count > 0 ? (e.AddedItems[0] as NavItemModel) : null;
+            if (navItem == null) return;
+            Debug.WriteLine($"Going to page {navItem.Tooltip}");
+            IRoutableViewModel? link = navItem.Link;
+            if (link == null) return;
+            switch(link)
+            {
+                case ServerViewModel server:
+                    server.InitData().ContinueWith(async (_) =>
+                    {
+                        navItem.Image = await server.Guild.GetIconAsync();
+                        navItem.Tooltip = await server.Guild.GetNameAsync();
+                    });
+                    break;
+            }
+            ((SidebarViewModel)DataContext!).Router!.Navigate.Execute(link);
+            
         }
     }
 }
