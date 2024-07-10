@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using DataPackageTool.Core.Enums;
 using Microsoft.VisualBasic.FileIO;
 
 namespace DataPackageTool.Core.Models
 {
-    public class Channel
+    public class Channel : DataPackageEntryBase
     {
-        [JsonPropertyName("id")]
-        public string? Id { get; set; }
-        [JsonPropertyName("type")]
-        public int Type { get; set; }
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = null!;
-        [JsonPropertyName("guild")]
-        public PartialGuild Guild { get; set; } = null!;
+        public string Id { get; set; } = "";
+        public ChannelType Type { get; set; }
+        public string? Name { get; set; }
+        public Guild? Guild { get; set; }
         [JsonPropertyName("recipients")]
-        public List<string> RecipientIds { get; set; } = null!;
+        public List<string> RecipientIds { get; set; } = new();
 
-        public List<Message> Messages { get; } = new List<Message>();
+        public List<Message> Messages { get; } = new();
         public string? DMRecipientId { get; set; }
         public bool HasDuplicates { get; set; }
 
@@ -85,17 +82,17 @@ namespace DataPackageTool.Core.Models
 
         public bool IsDM()
         {
-            return this.Type == 1;
+            return this.Type == ChannelType.DM;
         }
 
         public bool IsGroupDM()
         {
-            return this.Type == 3;
+            return this.Type == ChannelType.GROUP_DM;
         }
 
         public bool IsVoice()
         {
-            return this.Type == 2 || this.Type == 13;
+            return this.Type == ChannelType.GUILD_VOICE || this.Type == ChannelType.GUILD_STAGE_VOICE;
         }
 
         public string GetOtherDMRecipient(User user)

@@ -25,25 +25,26 @@ namespace DataPackageTool.Core.Models
         public List<string> Features { get; set; } = new();
         public List<string> Invites { get; set; } = new();
         public DateTime Timestamp { get; set; }
+        public List<Channel> Channels { get; set; } = new();
 
         private bool _fetchedData;
+        private DataSourceUsability _triedfetchedData = DataSourceUsability.NotUsable;
         private Invite? _inviteData;
 
 
-        private async Task FetchData(DataSourceUsability neededUsability = DataSourceUsability.Auto, bool partialData = true)
+        private async Task FetchData(DataSourceUsability neededUsability = DataSourceUsability.Auto)
         {
-            if (DataPackage == null) return;
+            if (DataPackage == null || _fetchedData ||_triedfetchedData <= neededUsability) return;
             _fetchedData = true;
+            _triedfetchedData = neededUsability;
 
             object? DeserializeGuild(string json) => JsonSerializer.Deserialize<Guild>(json, Shared.JsonSerializerOptions);
             object? DeserializeInvite(string json) => JsonSerializer.Deserialize<Invite>(json, Shared.JsonSerializerOptions);
 
             object? res = await DataPackage.GetObjectFromSources(neededUsability,
-                    (partialData ? new List<DRequest>() : new List<DRequest>() {
-                        DRequest.Get("guilds/"+Id,context:DRequestContext.Bot),
-                        DRequest.Get("guilds/"+Id,context:DRequestContext.User)
-                    }).Concat(Invites.Select(x=>DRequest.Get("invites/"+x,context:DRequestContext.Invite,queue:"invite"))).ToList(),
-                    [..Enumerable.Repeat(DeserializeGuild, partialData ? 0 : 2),..Enumerable.Repeat(DeserializeInvite,Invites.Count)],
+                    [DRequest.Get("guilds/"+Id,context:DRequestContext.Bot),DRequest.Get("guilds/"+Id+"/preview",context:DRequestContext.User),
+                    ..Invites.Select(x=>DRequest.Get("invites/"+x,context:DRequestContext.Invite,queue:"invite"))],
+                    [..Enumerable.Repeat(DeserializeGuild, 3),..Enumerable.Repeat(DeserializeInvite,Invites.Count)],
                     (x, _) =>
                     {
                         switch (x)
@@ -65,6 +66,7 @@ namespace DataPackageTool.Core.Models
                     Shared.Mapper.Map(invite.Guild, this);
                     break;
                 case Guild guild:
+                    Debug.WriteLine(JsonSerializer.Serialize(guild, new JsonSerializerOptions() { WriteIndented = true }));
                     Shared.Mapper.Map(guild, this);
                     break;
                 default:
@@ -75,10 +77,10 @@ namespace DataPackageTool.Core.Models
 
         private IImage? _iconImage;
         public IImage? GetIcon() => _iconImage;
-        public async Task<IImage> GetIconAsync()
+        public async Task<IImage> GetIconAsync(DataSourceUsability neededUsability = DataSourceUsability.Auto)
         {
             if (_iconImage != null) return _iconImage;
-            IImage icon = await DownloadIcon();
+            IImage icon = await DownloadIcon(neededUsability);
             if (_inviteData != null) _iconImage = icon;
 
             return icon;
@@ -87,19 +89,16 @@ namespace DataPackageTool.Core.Models
         {
             if (Name != null) return Name;
 
-            if (!_fetchedData)
-            {
-                await FetchData(neededUsability);
-            }
+            await FetchData(neededUsability);
 
             return Name ?? Id;
         }
 
-        async Task<IImage> DownloadIcon()
+        async Task<IImage> DownloadIcon(DataSourceUsability neededUsability = DataSourceUsability.Auto)
         {
-            if (Icon == null && !_fetchedData)
+            if (Icon == null)
             {
-                await FetchData();
+                await FetchData(neededUsability);
             }
             if (Icon != null)
             {

@@ -20,6 +20,8 @@
 			<SolidColorBrush x:Key='BackgroundModifierHover'>#2980848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#3d80848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundFloating'>#fff</SolidColorBrush>
+			<SolidColorBrush x:Key='ChannelDefault'>#5c5e66</SolidColorBrush>
+			<SolidColorBrush x:Key='ChannelIcon'>#6d6f78</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#000</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderPrimary'>#060607</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderSecondary'>#4e5058</SolidColorBrush>
@@ -39,6 +41,8 @@
 			<SolidColorBrush x:Key='BackgroundModifierHover'>#4d4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierSelected'>#994e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundFloating'>#111214</SolidColorBrush>
+			<SolidColorBrush x:Key='ChannelDefault'>#949ba4</SolidColorBrush>
+			<SolidColorBrush x:Key='ChannelIcon'>#80848e</SolidColorBrush>
 			<SolidColorBrush x:Key='ForegroundBrush'>#fff</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderPrimary'>#f2f3f5</SolidColorBrush>
 			<SolidColorBrush x:Key='HeaderSecondary'>#b5bac1</SolidColorBrush>

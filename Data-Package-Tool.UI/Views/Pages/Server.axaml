@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:rxui="http://reactiveui.net"
              xmlns:pages="clr-namespace:DataPackageTool.UI.Views.Pages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.Pages.Server"
@@ -9,7 +10,43 @@
 	<Design.DataContext>
 		<pages:ServerViewModel />
 	</Design.DataContext>
-	<Grid>
-		<TextBlock Text="{CompiledBinding Name}" Classes="h1"/>
+	<Grid ColumnDefinitions="240,*">
+		<ListBox x:Name="NavBox" Background="{DynamicResource BackgroundSecondary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="8 12" BorderThickness="0">
+			<ListBox.Styles>
+				<Style Selector="ListBoxItem">
+					<Setter Property="Margin" Value="0 1"/>
+					<Setter Property="Padding" Value="8 6"/>
+					<Setter Property="Foreground" Value="{DynamicResource ChannelDefault}"/>
+					<Setter Property="CornerRadius" Value="4"/>
+				</Style>
+				<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+					<Setter Property="Background" Value="{DynamicResource BackgroundModifierHover}"/>
+					<Setter Property="Foreground" Value="{DynamicResource InteractiveHover}"/>
+				</Style>
+				<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+					<Setter Property="Background" Value="{DynamicResource BackgroundModifierSelected}"/>
+					<Setter Property="Foreground" Value="{DynamicResource InteractiveActive}"/>
+				</Style>
+			</ListBox.Styles>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid ColumnDefinitions="26,*">
+						<PathIcon Data="{CompiledBinding Path}" Width="20" Height="20" HorizontalAlignment="Left" Foreground="{DynamicResource ChannelIcon}" />
+						<TextBlock VerticalAlignment="Center" Grid.Column="1" Text="{CompiledBinding Name}" FontWeight="600" FontSize="14" />
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
+			<rxui:RoutedViewHost.ViewLocator>
+				<pages:ServerViewLocator/>
+			</rxui:RoutedViewHost.ViewLocator>
+			<rxui:RoutedViewHost.PageTransition>
+				<x:Null/>
+			</rxui:RoutedViewHost.PageTransition>
+			<rxui:RoutedViewHost.DefaultContent>
+				<TextBlock Text="Select a tab"/>
+			</rxui:RoutedViewHost.DefaultContent>
+		</rxui:RoutedViewHost>
 	</Grid>
 </UserControl>

@@ -34,6 +34,7 @@ namespace DataPackageTool.Core.Utils
                         if (dp.BotUsability < neededUsability) continue;
                         break;
                     case DRequestContext.User:
+                        Debug.WriteLineIf(neededUsability<DataSourceUsability.Auto,$"Selfbot usability : {dp.SelfbotUsability} / {dp.SelfbotUsability < neededUsability}");
                         if (dp.SelfbotUsability <  neededUsability) continue;
                         break;
                     case DRequestContext.Invite:

@@ -24,7 +24,6 @@ namespace DataPackageTool.UI.Views.Sidebar
         {
             NavItemModel? navItem = e.AddedItems.Count > 0 ? (e.AddedItems[0] as NavItemModel) : null;
             if (navItem == null) return;
-            Debug.WriteLine($"Going to page {navItem.Tooltip}");
             IRoutableViewModel? link = navItem.Link;
             if (link == null) return;
             switch(link)

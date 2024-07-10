@@ -59,11 +59,13 @@ namespace DataPackageTool.UI.Views.Sidebar
                 IImage? icon = guild.GetIcon();
                 string? name = guild.Name;
 
+                IRoutableViewModel? LinkGetter() => new ServerViewModel(guild);
+
                 var model = new NavItemModel()
                 {
                     Image = icon ?? guild.DefaultIcon(),
                     Tooltip = name ?? guild.Id,
-                    Link = new ServerViewModel(guild)
+                    LinkGetter = LinkGetter
                 };
 
                 NavItems.Add(model);

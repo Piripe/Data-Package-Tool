@@ -128,7 +128,7 @@ namespace DataPackageTool.Core
                 {
                     foreach (var relationship in dp.User.Relationships)
                     {
-                        if (relationship.User.Id != null) dp.UsersMap.TryAdd(relationship.User.Id, relationship.User);
+                        if (relationship.User?.Id != null) dp.UsersMap.TryAdd(relationship.User.Id, relationship.User);
                     }
                 }
                 else
@@ -262,7 +262,7 @@ namespace DataPackageTool.Core
                         Channel? channel = null;
                         if (entry.channelStream != null)
                         {
-                            channel = JsonSerializer.Deserialize<Channel>(entry.channelStream);
+                            channel = JsonSerializer.Deserialize<Channel>(entry.channelStream, Shared.JsonSerializerOptions);
                             entry.channelStream.Dispose();
                         }
 
@@ -334,7 +334,7 @@ namespace DataPackageTool.Core
                             }
                         }
                         dp.Channels.Add(channel);
-                        dp.ChannelsMap[channel.Id] = channel;
+                        dp.ChannelsMap.TryAdd(channel.Id,channel);
                     }
                     else if (entry is Bitmap avatar)
                     {
@@ -345,7 +345,6 @@ namespace DataPackageTool.Core
                         analyticsFiles.Add(zipEntry);
                     }
                     i++;
-                    //if (i % 100 == 0) UpdateStatus((i / parsedEntries.Count) * 0.05f + 0.5f, $"Loading data ({i}/{parsedEntries.Count})");
                 }
 
                 analyticsTask.Wait();
@@ -397,6 +396,7 @@ namespace DataPackageTool.Core
                                 MergeGuild(partialGuild);
                             }
                             break;
+
                     }
                 }
 
@@ -420,7 +420,24 @@ namespace DataPackageTool.Core
                         });
                 }
 
-                dp.Guilds.ForEach((x) => x.DataPackage = dp);
+                dp.Guilds.ForEach((x) =>
+                {
+                    x.DataPackage = dp;
+                    dp.GuildsMap.Add(x.Id, x);
+                });
+
+                dp.Channels.ForEach((x) =>
+                {
+                    x.DataPackage = dp;
+                    if (x.Guild != null)
+                    {
+                        if (dp.GuildsMap.TryGetValue(x.Guild.Id, out Guild? guild))
+                        {
+                            x.Guild = guild;
+                            guild.Channels.Add(x);
+                        }
+                    }
+                });
 
                 UpdateStatus(1f, $"Finished! Parsed {dp.MessagesMap.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
 
@@ -438,7 +455,7 @@ namespace DataPackageTool.Core
 
                 List<Guild>? partialGuilds = await this.GetObjectFromSources(DataSourceUsability.Auto, [DRequest.Get("users/@me/guilds", context: DRequestContext.User)], [(HttpResponseMessage res) => JsonSerializer.Deserialize<List<Guild>>(res.Content.ReadAsStream(),Shared.JsonSerializerOptions)]);
 
-                Debug.WriteLine("Partial guilds are null : "+(partialGuilds == null).ToString());
+                Debug.WriteLine(JsonSerializer.Serialize(partialGuilds, new JsonSerializerOptions() { WriteIndented = true}));
                 if (partialGuilds == null) return;
 
                 foreach (Guild guild in partialGuilds)
@@ -447,7 +464,6 @@ namespace DataPackageTool.Core
                     if (packageGuild == null) continue;
 
                     Shared.Mapper.Map(guild, packageGuild);
-                    Debug.WriteLine($"Guild {guild.Name}({guild.Id}) now has icon : {guild.Icon}");
                 }
             }
             catch (Exception ex) {

@@ -10,6 +10,7 @@ namespace DataPackageTool.Core.Enums
     {
         None,
         Manual,
-        Auto
+        Auto,
+        NotUsable
     }
 }

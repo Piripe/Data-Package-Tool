@@ -57,6 +57,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Pages\ServerPages\ServerOverview.axaml.cs">
+      <DependentUpon>ServerOverview.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Wizard\DataSourcePage.axaml.cs">
       <DependentUpon>DataSourcePage.axaml</DependentUpon>
     </Compile>
@@ -70,7 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Pages\ServerPages\" />
     <Folder Include="Views\Pages\OverviewPages\" />
   </ItemGroup>
 

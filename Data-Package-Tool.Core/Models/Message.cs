@@ -5,21 +5,22 @@ namespace DataPackageTool.Core.Models
 {
     public class Message : DataPackageEntryBase
     {
-        public string? Id { get; set; }
+        public string Id { get; set; } = "";
         public DateTime Timestamp { get; set; }
-        public string Content { get; set; } = null!;
-        public List<Attachment> Attachments { get; } = new List<Attachment>();
-        public Channel Channel { get; set; } = null!;
+        public string? Content { get; set; }
+        public List<Attachment> Attachments { get; } = new();
+        public Channel? Channel { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public string GetMessageLink()
+        public string? GetMessageLink()
         {
+            if (Channel == null) return null;
             string guild;
-            if (this.Channel.Guild != null)
+            if (Channel.Guild != null)
             {
-                guild = Channel.Guild.Id.ToString();
+                guild = Channel.Guild.Id;
             }
-            else if (this.Channel.IsDM() || this.Channel.IsGroupDM())
+            else if (Channel.IsDM() || Channel.IsGroupDM())
             {
                 guild = "@me";
             }
