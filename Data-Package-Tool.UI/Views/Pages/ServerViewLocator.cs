@@ -13,7 +13,8 @@ namespace DataPackageTool.UI.Views.Pages
     {
         public IViewFor? ResolveView<T>(T? viewModel, string? contract = null) => viewModel switch
         {
-            ServerOverviewViewModel => new ServerOverview() { DataContext = viewModel},
+            ServerOverviewViewModel => new ServerOverview() { DataContext = viewModel },
+            ServerChannelViewModel => new ServerChannel() { DataContext = viewModel },
             _ => default
         };
     }

@@ -44,7 +44,7 @@ namespace DataPackageTool.Core.Models
             object? res = await DataPackage.GetObjectFromSources(neededUsability,
                     [DRequest.Get("guilds/"+Id,context:DRequestContext.Bot),DRequest.Get("guilds/"+Id+"/preview",context:DRequestContext.User),
                     ..Invites.Select(x=>DRequest.Get("invites/"+x,context:DRequestContext.Invite,queue:"invite"))],
-                    [..Enumerable.Repeat(DeserializeGuild, 3),..Enumerable.Repeat(DeserializeInvite,Invites.Count)],
+                    [..Enumerable.Repeat(DeserializeGuild, 2),..Enumerable.Repeat(DeserializeInvite,Invites.Count)],
                     (x, _) =>
                     {
                         switch (x)

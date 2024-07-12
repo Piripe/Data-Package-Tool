@@ -65,7 +65,7 @@ namespace DataPackageTool.UI.Views.Pages
         {
             NavItems.Remove(NavItems.Skip(1)); // Remove all items except the default one
             NavItems.AddRange(Guild.Channels.Select(x => {
-                IRoutableViewModel? LinkGetter() => null;
+                IRoutableViewModel? LinkGetter() => new ServerChannelViewModel(x);
                 return new NavItemModel() { Path = Constants.ChannelIcons[x.Type], Name = x.Name, LinkGetter = LinkGetter };
             }));
         }

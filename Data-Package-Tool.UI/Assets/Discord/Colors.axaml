@@ -15,6 +15,7 @@
 			<SolidColorBrush x:Key='BackgroundSecondary'>#f2f3f5</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundSecondaryAlt'>#ebedef</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundTertiary'>#e3e5e8</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundMessageHover'>#08020202</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierAccent'>#3d80848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#3380848e</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierHover'>#2980848e</SolidColorBrush>
@@ -29,6 +30,7 @@
 			<SolidColorBrush x:Key='InteractiveNormal'>#4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='InteractiveHover'>#313338</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#55ffffff</SolidColorBrush>
+			<SolidColorBrush x:Key='TextMuted'>#5c5e66</SolidColorBrush>
 			<SolidColorBrush x:Key='TextNormal'>#313338</SolidColorBrush>
 		</ResourceDictionary>
 		<ResourceDictionary x:Key='Dark'>
@@ -36,6 +38,7 @@
 			<SolidColorBrush x:Key='BackgroundSecondary'>#2b2d31</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundSecondaryAlt'>#232428</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundTertiary'>#1e1f22</SolidColorBrush>
+			<SolidColorBrush x:Key='BackgroundMessageHover'>#0f020202</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierAccent'>#7a4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierActive'>#7a4e5058</SolidColorBrush>
 			<SolidColorBrush x:Key='BackgroundModifierHover'>#4d4e5058</SolidColorBrush>
@@ -50,6 +53,7 @@
 			<SolidColorBrush x:Key='InteractiveNormal'>#b5bac1</SolidColorBrush>
 			<SolidColorBrush x:Key='InteractiveHover'>#dbdee1</SolidColorBrush>
 			<SolidColorBrush x:Key='OnBrandModifier'>#7a000000</SolidColorBrush>
+			<SolidColorBrush x:Key='TextMuted'>#949ba4</SolidColorBrush>
 			<SolidColorBrush x:Key='TextNormal'>#dbdee1</SolidColorBrush>
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
