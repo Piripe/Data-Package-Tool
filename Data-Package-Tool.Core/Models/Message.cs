@@ -10,6 +10,7 @@ namespace DataPackageTool.Core.Models
         public string? Content { get; set; }
         public List<Attachment> Attachments { get; } = new();
         public Channel? Channel { get; set; }
+        public User? Author { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         public string? GetMessageLink()

@@ -2,7 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
+             xmlns:spages="clr-namespace:DataPackageTool.UI.Views.Pages.ServerPages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="DataPackageTool.UI.Views.Pages.ServerPages.ServerChannel">
-  Channel say Welcome to Avalonia!
+             x:Class="DataPackageTool.UI.Views.Pages.ServerPages.ServerChannel"
+			 x:DataType="spages:ServerChannelViewModel">
+	<Design.DataContext>
+		<spages:ServerChannelViewModel />
+	</Design.DataContext>
+	<ScrollViewer Offset="0 2147483647">
+			<ItemsControl ItemsSource="{CompiledBinding Messages}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<c:DiscordMessage Message="{CompiledBinding .}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+	</ScrollViewer>
 </UserControl>

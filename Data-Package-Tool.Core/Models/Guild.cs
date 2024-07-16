@@ -27,16 +27,16 @@ namespace DataPackageTool.Core.Models
         public DateTime Timestamp { get; set; }
         public List<Channel> Channels { get; set; } = new();
 
-        private bool _fetchedData;
-        private DataSourceUsability _triedfetchedData = DataSourceUsability.NotUsable;
+        internal bool fetchedData;
+        internal DataSourceUsability triedfetchedData = DataSourceUsability.NotUsable;
         private Invite? _inviteData;
 
 
         private async Task FetchData(DataSourceUsability neededUsability = DataSourceUsability.Auto)
         {
-            if (DataPackage == null || _fetchedData ||_triedfetchedData <= neededUsability) return;
-            _fetchedData = true;
-            _triedfetchedData = neededUsability;
+            if (DataPackage == null || fetchedData ||triedfetchedData <= neededUsability) return;
+            fetchedData = true;
+            triedfetchedData = neededUsability;
 
             object? DeserializeGuild(string json) => JsonSerializer.Deserialize<Guild>(json, Shared.JsonSerializerOptions);
             object? DeserializeInvite(string json) => JsonSerializer.Deserialize<Invite>(json, Shared.JsonSerializerOptions);
@@ -70,7 +70,7 @@ namespace DataPackageTool.Core.Models
                     Shared.Mapper.Map(guild, this);
                     break;
                 default:
-                    _fetchedData = false;
+                    fetchedData = false;
                     break;
             }
         }

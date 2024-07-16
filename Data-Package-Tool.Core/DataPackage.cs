@@ -29,7 +29,7 @@ namespace DataPackageTool.Core
         public User User { get; private set; } = new User()
 #if DEBUG
         // Dummy user for debugging/previewing
-        { DisplayName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023, 10, 5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
+        { GlobalName = "Dummy user", Flags = (UserFlag)0x400048, ProfileMetadata = new UserProfileMetadata() { LegacyUsername = "Dummy user#1564", NitroStartedAt = new DateTime(2023, 10, 5), BoosingStartedAt = new DateTime(2023, 10, 7) } };
 #else
 ;
 #endif
@@ -272,6 +272,7 @@ namespace DataPackageTool.Core
 
                             channel = new Channel() { Id = channelId.ToString() }; // A partial channel should be enough
                         }
+                        channel.DataPackage = dp;
 
                         switch (fileExtension)
                         {
@@ -428,7 +429,6 @@ namespace DataPackageTool.Core
 
                 dp.Channels.ForEach((x) =>
                 {
-                    x.DataPackage = dp;
                     if (x.Guild != null)
                     {
                         if (dp.GuildsMap.TryGetValue(x.Guild.Id, out Guild? guild))
@@ -464,6 +464,8 @@ namespace DataPackageTool.Core
                     if (packageGuild == null) continue;
 
                     Shared.Mapper.Map(guild, packageGuild);
+                    packageGuild.fetchedData = true;
+                    packageGuild.triedfetchedData = DataSourceUsability.Auto;
                 }
             }
             catch (Exception ex) {

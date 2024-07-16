@@ -14,7 +14,8 @@ namespace DataPackageTool.Core.Models
         public string? Id { get; set; }
         public string? Username { get; set; }
         [JsonPropertyName("global_name")]
-        public string? DisplayName { get; set; }
+        public string? GlobalName { get; set; }
+        public string DisplayName => GlobalName ?? Tag ?? (Id == Constants.DeletedUserId ? "Deleted User" : (Id == null ? "Unknown User" : $"<@{Id}>"));
         public string? Discriminator { get; set; }
         [JsonPropertyName("avatar_hash")]
         public string? AvatarHash { get; set; }
@@ -89,6 +90,5 @@ namespace DataPackageTool.Core.Models
                 return GetDefaultAvatarBitmap();
             }
         }
-        public string GetUsername() => DisplayName ?? Tag ?? (Id == Constants.DeletedUserId ? "Deleted User" : (Id == null  ? "Unknown User" : $"<@{Id}>"));
     }
 }

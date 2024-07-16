@@ -65,7 +65,8 @@ namespace DataPackageTool.Core.Models
                 Id = id,
                 Timestamp = DateTime.Parse(timestamp),
                 Content = contents,
-                Channel = this
+                Channel = this,
+                Author = DataPackage?.User,
             };
 
             if (attachments != "")

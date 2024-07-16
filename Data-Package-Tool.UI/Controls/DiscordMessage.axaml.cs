@@ -1,46 +1,21 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using DataPackageTool.Core.Models;
 using System;
 
 namespace DataPackageTool.UI.Controls
 {
     public partial class DiscordMessage : UserControl
     {
-        public static readonly StyledProperty<string?> TextProperty =
-            AvaloniaProperty.Register<DiscordMessage, string?>(nameof(Text));
-        public static readonly StyledProperty<string?> UsernameProperty =
-            AvaloniaProperty.Register<DiscordMessage, string?>(nameof(Username));
-        public static readonly StyledProperty<DateTime?> DateProperty =
-            AvaloniaProperty.Register<DiscordMessage, DateTime?>(nameof(Date));
-        public static readonly StyledProperty<IImage?> AvatarProperty =
-            AvaloniaProperty.Register<DiscordMessage, IImage?>(nameof(Avatar));
-        public string? Text
+        public static readonly StyledProperty<Message?> MessageProperty =
+            AvaloniaProperty.Register<DiscordMessage, Message?>(nameof(Message));
+        public Message? Message
         {
-            get => MessageContainer.Text;
-            set => MessageContainer.Text = value;
-        }
-        public string? Username
-        {
-            get => UsernameContainer.Text;
-            set => UsernameContainer.Text = value;
-        }
-        public DateTime? Date
-        {
-            get => GetValue(DateProperty);
+            get => GetValue(MessageProperty);
             set
             {
-                SetValue(DateProperty, value);
-                DateContainer.Text = value?.ToString(@"MM/dd/yyyy h:mm:ss tt");
-            }
-        }
-        public IImage? Avatar
-        {
-            get => GetValue(AvatarProperty);
-            set
-            {
-                SetValue(AvatarProperty, value);
-                AvatarContainer.Source = value;
+                SetValue(MessageProperty, value);
             }
         }
 
@@ -48,7 +23,13 @@ namespace DataPackageTool.UI.Controls
         public DiscordMessage()
         {
             InitializeComponent();
-            this.GetObservable(AvatarProperty).Subscribe(value => AvatarContainer.Source = value);
+            this.GetObservable(MessageProperty).Subscribe(value =>
+            {
+                MessageContainer.Text = value?.Content;
+                UsernameContainer.Text = value?.Author?.DisplayName;
+                AvatarContainer.Source = value?.Author?.AvatarImage;
+                DateContainer.Text = value?.Timestamp.ToString(@"MM/dd/yyyy h:mm:ss tt");
+            });
         }
     }
 }

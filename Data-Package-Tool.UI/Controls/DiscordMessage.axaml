@@ -22,11 +22,11 @@
 			</Border>
 			<Grid Grid.Column="1" RowDefinitions="22,Auto">
 				<SelectableTextBlock Grid.Row="0" LineHeight="22" FontSize="14" Cursor="Ibeam">
-					<Run x:Name="UsernameContainer" Text="Lorem ipsum" Foreground="{DynamicResource HeaderPrimary}" FontWeight="600"/>
+					<Run x:Name="UsernameContainer" Foreground="{DynamicResource HeaderPrimary}" FontWeight="600"/>
 					<Run Text=" " FontSize="2"/>
-					<Run x:Name="DateContainer" Text="Today at 10:05PM" Foreground="{DynamicResource TextMuted}" FontSize="10"/>
+					<Run x:Name="DateContainer" Foreground="{DynamicResource TextMuted}" FontSize="10"/>
 				</SelectableTextBlock>
-				<c:MarkdownTextBlock x:Name="MessageContainer" Text="Lorem ipsum dolor sit amet" Grid.Row="1" VerticalAlignment="Top"/>
+				<c:MarkdownTextBlock x:Name="MessageContainer" Grid.Row="1" VerticalAlignment="Top"/>
 			</Grid>
 		</Grid>
 	</Border>

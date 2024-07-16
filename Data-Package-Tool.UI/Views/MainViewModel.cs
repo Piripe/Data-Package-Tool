@@ -8,7 +8,7 @@ namespace DataPackageTool.UI.Views;
 public class MainViewModel : ReactiveObject, IScreen
 {
     public DataPackage Package { get; set; } = new DataPackage();
-    public string Username => Package.User.GetUsername();
+    public string Username => Package.User.DisplayName;
     public SidebarViewModel Sidebar => new SidebarViewModel(Package, Router, Overview);
     public OverviewViewModel Overview => new OverviewViewModel(Package);
 

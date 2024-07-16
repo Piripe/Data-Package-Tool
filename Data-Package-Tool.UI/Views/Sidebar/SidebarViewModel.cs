@@ -21,7 +21,7 @@ namespace DataPackageTool.UI.Views.Sidebar
     {
         public DataPackage Package { get; set; } = new DataPackage();
         public IImage Avatar { get; set; } = User.GetDefaultAvatarBitmap(0);
-        public string Username => Package.User.GetUsername();
+        public string Username => Package.User.DisplayName;
         public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
                 new NavItemModel() {Path = (Application.Current!.TryGetResource("HomeIcon",Application.Current.ActualThemeVariant, out var homeIcon) ? homeIcon : throw new Exception()) as StreamGeometry, Tooltip="Overview"}
             ]);
