@@ -47,7 +47,7 @@ namespace DataPackageTool.Core
 #endif
         public Dictionary<string, Guild> GuildsMap { get; } = new();
 
-        public Dictionary<string, Message> MessagesMap { get; } = new();
+        public List<Message> Messages { get; } = new();
 
         public Dictionary<string, User> UsersMap { get; } = new();
 
@@ -308,7 +308,7 @@ namespace DataPackageTool.Core
                         {
                             var recipientId = channel.GetOtherDMRecipient(dp.User);
                             channel.DMRecipientId = recipientId;
-                            if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(channel.Id ?? "", out var channelName))
+                            if (!dp.UsersMap.ContainsKey(recipientId) && recipientId != Constants.DeletedUserId && channelNamesMap.TryGetValue(channel.Id, out var channelName))
                             {
                                 var nameMatch = nameRegex.Match(channelName);
                                 if (nameMatch.Success)
@@ -323,9 +323,9 @@ namespace DataPackageTool.Core
                             }
                         }
 
+                        dp.Messages.AddRange(channel.Messages);
                         foreach (var msg in channel.Messages)
                         {
-                            dp.MessagesMap.Add(msg.Id, msg);
                             foreach (var attachment in msg.Attachments)
                             {
                                 if (attachment.IsImage)
@@ -439,7 +439,7 @@ namespace DataPackageTool.Core
                     }
                 });
 
-                UpdateStatus(1f, $"Finished! Parsed {dp.MessagesMap.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
+                UpdateStatus(1f, $"Finished! Parsed {dp.Messages.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
 
                 return dp;
             });

@@ -41,6 +41,9 @@ namespace DataPackageTool.UI.Controls
 
             this.GetObservable(MessagesProperty).Subscribe(value =>
             {
+                _pages.Clear();
+                _pagesPanel.Children.Clear();
+                _pageIndex = 0;
                 UpdatePages();
             });
         }

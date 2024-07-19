@@ -14,6 +14,7 @@ namespace DataPackageTool.UI
         {
             OverviewViewModel overview => new Overview { DataContext = overview },
             ServerViewModel server => new Server { DataContext = server },
+            SearchViewModel search => new Search { DataContext = search },
             _ => default
         };
     }

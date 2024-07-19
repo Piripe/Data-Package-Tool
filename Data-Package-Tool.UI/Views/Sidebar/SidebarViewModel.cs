@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using DataPackageTool.Core;
@@ -23,10 +24,10 @@ namespace DataPackageTool.UI.Views.Sidebar
         public IImage Avatar { get; set; } = User.GetDefaultAvatarBitmap(0);
         public string Username => Package.User.DisplayName;
         public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
-                new NavItemModel() {Path = (Application.Current!.TryGetResource("HomeIcon",Application.Current.ActualThemeVariant, out var homeIcon) ? homeIcon : throw new Exception()) as StreamGeometry, Tooltip="Overview"}
+                new NavItemModel() {Path = Application.Current!.FindResource(Application.Current!.ActualThemeVariant,"HomeIcon") as StreamGeometry, Tooltip="Overview"},
+                new NavItemModel() {Path = Application.Current!.FindResource(Application.Current!.ActualThemeVariant,"SearchIcon") as StreamGeometry, Tooltip="Search"},
             ]);
         public RoutingState? Router { get; }
-        //public ReactiveCommand<SelectingItemsControl, object?>? GotoPage { get; }
 
         public SidebarViewModel()
         {
@@ -38,10 +39,7 @@ namespace DataPackageTool.UI.Views.Sidebar
             Package = package;
             Router = router;
             NavItems[0].Link = overview;
-            //GotoPage = ReactiveCommand.Create<SelectingItemsControl, object?>(
-            //        (e) => {
-            //            }
-            //    );
+            NavItems[1].LinkGetter = ()=>new SearchViewModel(package);
             Init();
         }
         private void Init()
