@@ -10,13 +10,5 @@
 	<Design.DataContext>
 		<spages:ServerChannelViewModel />
 	</Design.DataContext>
-	<ScrollViewer Offset="0 2147483647">
-			<ItemsControl ItemsSource="{CompiledBinding Messages}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<c:DiscordMessage Message="{CompiledBinding .}"/>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-	</ScrollViewer>
+	<c:DiscordMessageList Messages="{CompiledBinding Messages}"/>
 </UserControl>

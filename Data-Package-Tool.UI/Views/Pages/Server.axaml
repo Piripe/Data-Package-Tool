@@ -11,7 +11,7 @@
 		<pages:ServerViewModel />
 	</Design.DataContext>
 	<Grid ColumnDefinitions="240,*">
-		<ListBox x:Name="NavBox" Background="{DynamicResource BackgroundSecondary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="8 12" BorderThickness="0">
+		<ListBox x:Name="NavBox" Background="{DynamicResource BackgroundSecondary}" ItemsSource="{CompiledBinding NavItems}" SelectedValue="{CompiledBinding Mode=OneTime,Path=NavItems[0]}" Padding="8 12" Margin="0 0 0 53" BorderThickness="0">
 			<ListBox.Styles>
 				<Style Selector="ListBoxItem">
 					<Setter Property="Margin" Value="0 1"/>
@@ -32,7 +32,7 @@
 				<DataTemplate>
 					<Grid ColumnDefinitions="26,*">
 						<PathIcon Data="{CompiledBinding Path}" Width="20" Height="20" HorizontalAlignment="Left" Foreground="{DynamicResource ChannelIcon}" />
-						<TextBlock VerticalAlignment="Center" Grid.Column="1" Text="{CompiledBinding Name}" FontWeight="600" FontSize="14" />
+						<TextBlock MaxWidth="182" TextTrimming="WordEllipsis" VerticalAlignment="Center" Grid.Column="1" Text="{CompiledBinding Name}" FontWeight="600" FontSize="14" />
 					</Grid>
 				</DataTemplate>
 			</ListBox.ItemTemplate>

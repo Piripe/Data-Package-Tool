@@ -133,7 +133,7 @@
 		<Setter Property="Margin" Value="0 20 0 0"/>
 	</Style>
 
-
+	
 	<Styles.Resources>
 		<ResourceDictionary>
 			<!--Button-->

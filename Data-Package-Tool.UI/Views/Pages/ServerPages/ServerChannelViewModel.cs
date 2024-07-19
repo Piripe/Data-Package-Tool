@@ -41,7 +41,7 @@ namespace DataPackageTool.UI.Views.Pages.ServerPages
             avatarTask.Wait(); // Supposed to be instant
             Avatar = avatarTask.Result;
 
-            Messages.AddRange(Channel.Messages.Reverse<Message>());
+            Messages.AddRange(Channel.Messages);
         }
     }
 }
