@@ -16,7 +16,11 @@
 			<Border Padding="8 8 8 0">
 				<TextBox Text="{CompiledBinding Mode=TwoWay, Path=SearchText}"/>
 			</Border>
-			<c:DiscordMessageList Grid.Row="1" Messages="{CompiledBinding Results}"/>
+			<c:DiscordMessageList x:Name="Results" Grid.Row="1" Messages="{CompiledBinding Results}">
+				<c:DiscordMessageList.MessageContextMenu>
+					<MenuItem x:Name="OpenChannelButton" Header="Open channel"/>
+				</c:DiscordMessageList.MessageContextMenu>	
+			</c:DiscordMessageList>
 		</Grid>
 	</Grid>
 </UserControl>

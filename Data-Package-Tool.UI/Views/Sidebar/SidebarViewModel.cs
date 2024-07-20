@@ -34,12 +34,12 @@ namespace DataPackageTool.UI.Views.Sidebar
 
             Init();
         }
-        public SidebarViewModel(DataPackage package, RoutingState router, OverviewViewModel overview)
+        public SidebarViewModel(DataPackage package, IScreen screen, OverviewViewModel overview)
         {
             Package = package;
-            Router = router;
+            Router = screen.Router;
             NavItems[0].Link = overview;
-            NavItems[1].LinkGetter = ()=>new SearchViewModel(package);
+            NavItems[1].LinkGetter = ()=>new SearchViewModel(package, screen);
             Init();
         }
         private void Init()

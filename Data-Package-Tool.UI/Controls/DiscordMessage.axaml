@@ -21,12 +21,12 @@
 				<Image x:Name="AvatarContainer"/>
 			</Border>
 			<Grid Grid.Column="1" RowDefinitions="22,Auto">
-				<SelectableTextBlock Grid.Row="0" LineHeight="22" FontSize="14" Cursor="Ibeam">
+				<SelectableTextBlock ContextMenu="{CompiledBinding $parent.ContextMenu}" Grid.Row="0" LineHeight="22" FontSize="14" Cursor="Ibeam">
 					<Run x:Name="UsernameContainer" Foreground="{DynamicResource HeaderPrimary}" FontWeight="600"/>
 					<Run Text=" " FontSize="2"/>
 					<Run x:Name="DateContainer" Foreground="{DynamicResource TextMuted}" FontSize="10"/>
 				</SelectableTextBlock>
-				<c:MarkdownTextBlock x:Name="MessageContainer" Grid.Row="1" VerticalAlignment="Top"/>
+				<c:MarkdownTextBlock ContextMenu="{CompiledBinding $parent.ContextMenu}" x:Name="MessageContainer" Grid.Row="1" VerticalAlignment="Top"/>
 			</Grid>
 		</Grid>
 	</Border>

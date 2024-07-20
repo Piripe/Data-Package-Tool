@@ -1,10 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using DataPackageTool.Core;
 using DataPackageTool.Core.Models;
 using DataPackageTool.UI.Models;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,7 +20,7 @@ namespace DataPackageTool.UI.Views.Pages
 {
     public class SearchViewModel : ReactiveObject, IRoutableViewModel
     {
-        public IScreen HostScreen { get; } = null!;
+        public IScreen HostScreen { get; }
         public string? UrlPathSegment => "search";
 
         public DataPackage Package { get; set; } = new DataPackage();
@@ -32,10 +34,12 @@ namespace DataPackageTool.UI.Views.Pages
 
         public SearchViewModel()
         {
+            HostScreen = Locator.Current.GetService<IScreen>()!;
         }
-        public SearchViewModel(DataPackage package)
+        public SearchViewModel(DataPackage package, IScreen? screen = null)
         {
             Package = package;
+            HostScreen = screen ?? Locator.Current.GetService<IScreen>()!;
         }
 
         private CancellationTokenSource? _searchCts;
@@ -47,16 +51,13 @@ namespace DataPackageTool.UI.Views.Pages
                 _searchCts = new CancellationTokenSource();
             }
             Task.Run(() => {
-                Debug.WriteLine("Searching");
                 var results = Package.Messages.Where((msg) => msg.Content?.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase) ?? false).OrderByDescending((msg) => msg.Timestamp).ToArray();
-                Debug.WriteLine("Searched");
-            Dispatcher.UIThread.Invoke(() => {
-                Debug.WriteLine("Setting results");
-                Results = results;
-                Debug.WriteLine("Results set");
-            });
+                Dispatcher.UIThread.Invoke(() => {
+                    Results = results;
+                });
             }, _searchCts.Token);
 
         }
+
     }
 }

@@ -30,7 +30,7 @@ namespace DataPackageTool.Core.Models
                 throw new Exception($"Unable to find the server this message was sent in. This usually happens if you've left the server.");
             }
 
-            return $"{guild}/{this.Channel.Id}/{this.Id}";
+            return $"https://discord.com/channels/{guild}/{this.Channel.Id}/{this.Id}";
         }
     }
 }

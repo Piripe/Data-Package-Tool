@@ -36,7 +36,7 @@ namespace DataPackageTool.UI.Controls
         private void UpdateContent()
         {
             // TODO: Parse text to apply Discord's markdown https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline
-            Content = new SelectableTextBlock() { Text = Text, Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Ibeam), FontSize = 14, LineHeight = 22, TextWrapping = TextWrapping.Wrap };
+            Content = new SelectableTextBlock() { Text = Text, Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Ibeam), FontSize = 14, LineHeight = 22, TextWrapping = TextWrapping.Wrap, ContextMenu = ContextMenu };
         }
     }
 }
