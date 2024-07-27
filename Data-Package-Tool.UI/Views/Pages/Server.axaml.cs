@@ -27,7 +27,6 @@ namespace DataPackageTool.UI.Views.Pages
             {
             }
             ((ServerViewModel)DataContext!).Router!.Navigate.Execute(link);
-
         }
     }
 }

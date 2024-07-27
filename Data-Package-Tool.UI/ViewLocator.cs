@@ -1,4 +1,6 @@
 ﻿using DataPackageTool.UI.Views.Pages;
+using DataPackageTool.UI.Views.Pages.OverviewPages;
+using DataPackageTool.UI.Views.Pages.ServerPages;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,9 @@ namespace DataPackageTool.UI
             OverviewViewModel overview => new Overview { DataContext = overview },
             ServerViewModel server => new Server { DataContext = server },
             SearchViewModel search => new Search { DataContext = search },
+            ServerOverviewViewModel => new ServerOverview() { DataContext = viewModel },
+            ServerChannelViewModel => new ServerChannel() { DataContext = viewModel },
+            ProfileViewModel => new Profile() { DataContext = viewModel },
             _ => default
         };
     }

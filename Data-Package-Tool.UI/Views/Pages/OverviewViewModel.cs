@@ -1,8 +1,12 @@
-﻿using Avalonia.Media;
+﻿using Avalonia;
+using Avalonia.Media;
 using DataPackageTool.Core;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
 using DataPackageTool.UI.Models;
+using DataPackageTool.UI.Views.Pages.OverviewPages;
+using DataPackageTool.UI.Views.Pages.ServerPages;
+using DynamicData;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -15,32 +19,28 @@ using System.Threading.Tasks;
 
 namespace DataPackageTool.UI.Views.Pages
 {
-    public class OverviewViewModel : ReactiveObject, IRoutableViewModel
+    public class OverviewViewModel : ReactiveObject, IRoutableViewModel, IScreen
     {
+        public RoutingState Router { get; } = new RoutingState();
         public IScreen HostScreen { get; } = null!;
         public string? UrlPathSegment => "overview";
 
         public DataPackage Package { get; set; } = new DataPackage();
-        public IImage Avatar { get; set; } = User.GetDefaultAvatarBitmap(0);
-        public string Username => Package.User.DisplayName;
-        public ObservableCollection<BadgeModel> Badges { get; set; } = new ObservableCollection<BadgeModel>();
-
+        public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>();
         public OverviewViewModel()
         {
-            Badges = new ObservableCollection<BadgeModel>(BadgeModel.GetUserBadges(Package.User, Package.CreationTime));
             Init();
         }
         public OverviewViewModel(DataPackage package)
         {
             Package = package;
-            Badges = new ObservableCollection<BadgeModel>(BadgeModel.GetUserBadges(Package.User, Package.CreationTime));
             Init();
         }
         private void Init()
         {
-            Task<IImage> avatarTask = Package.User.GetAvatar();
-            avatarTask.Wait(); // Supposed to be instant
-            Avatar = avatarTask.Result;
+            NavItems.AddRange([
+                new NavItemModel() {Path = Constants.HomeIcon, Name="Profile", LinkGetter=()=>new ProfileViewModel(Package)},
+                ]);
         }
     }
 }

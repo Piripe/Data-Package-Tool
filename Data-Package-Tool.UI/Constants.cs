@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Svg.Skia;
 using DataPackageTool.Core.Enums;
@@ -29,18 +30,20 @@ namespace DataPackageTool.UI
         };
         public static readonly Dictionary<ChannelType, StreamGeometry?> ChannelIcons = new()
         {
-            {ChannelType.GUILD_TEXT, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var textChannelIcon) ? textChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.DM, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var DMIcon) ? DMIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_VOICE, (Application.Current!.TryGetResource("VoiceChannelIcon",Application.Current.ActualThemeVariant, out var voiceChannelIcon) ? voiceChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GROUP_DM, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var groupDMIcon) ? groupDMIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_ANNOUNCEMENT, (Application.Current!.TryGetResource("AnnouncementChannelIcon",Application.Current.ActualThemeVariant, out var announcementChannelIcon) ? announcementChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.ANNOUNCEMENT_THREAD, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var announcementThreadIcon) ? announcementThreadIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.PUBLIC_THREAD, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var publicThreadIcon) ? publicThreadIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.PRIVATE_THREAD, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var privateThreadIcon) ? privateThreadIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_STAGE_VOICE, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var stageChannelIcon) ? stageChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_DIRECTORY, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var directoryChannelIcon) ? directoryChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_FORUM, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var forumChannelIcon) ? forumChannelIcon : throw new Exception()) as StreamGeometry },
-            {ChannelType.GUILD_MEDIA, (Application.Current!.TryGetResource("TextChannelIcon",Application.Current.ActualThemeVariant, out var mediaChannelIcon) ? mediaChannelIcon : throw new Exception()) as StreamGeometry },
+            {ChannelType.GUILD_TEXT, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.DM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_VOICE, Application.Current!.FindResource("VoiceChannelIcon") as StreamGeometry },
+            {ChannelType.GROUP_DM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_ANNOUNCEMENT, Application.Current!.FindResource("AnnouncementChannelIcon") as StreamGeometry },
+            {ChannelType.ANNOUNCEMENT_THREAD, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.PUBLIC_THREAD, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.PRIVATE_THREAD, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_STAGE_VOICE, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_DIRECTORY, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_FORUM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_MEDIA, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
         };
+        public static readonly StreamGeometry? HomeIcon = Application.Current!.FindResource("HomeIcon") as StreamGeometry;
+        public static readonly StreamGeometry? SearchIcon = Application.Current!.FindResource("SearchIcon") as StreamGeometry;
     }
 }

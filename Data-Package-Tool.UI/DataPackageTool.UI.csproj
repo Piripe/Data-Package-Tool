@@ -73,10 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Pages\OverviewPages\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AvaloniaXaml Update="Assets\Discord\Fonts.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>

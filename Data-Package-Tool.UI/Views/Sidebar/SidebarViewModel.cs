@@ -24,8 +24,8 @@ namespace DataPackageTool.UI.Views.Sidebar
         public IImage Avatar { get; set; } = User.GetDefaultAvatarBitmap(0);
         public string Username => Package.User.DisplayName;
         public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
-                new NavItemModel() {Path = Application.Current!.FindResource(Application.Current!.ActualThemeVariant,"HomeIcon") as StreamGeometry, Tooltip="Overview"},
-                new NavItemModel() {Path = Application.Current!.FindResource(Application.Current!.ActualThemeVariant,"SearchIcon") as StreamGeometry, Tooltip="Search"},
+                new NavItemModel() {Path = Constants.HomeIcon, Tooltip="Overview"},
+                new NavItemModel() {Path = Constants.SearchIcon, Tooltip="Search"},
             ]);
         public RoutingState? Router { get; }
 

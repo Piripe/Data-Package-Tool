@@ -28,7 +28,7 @@ namespace DataPackageTool.UI.Views.Pages
         private string? _name;
         public string? Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); }
         public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
-                new NavItemModel() {Path = (Application.Current!.TryGetResource("HomeIcon",Application.Current.ActualThemeVariant, out var homeIcon) ? homeIcon : throw new Exception()) as StreamGeometry, Name="Overview", Link=new ServerOverviewViewModel()},
+                new NavItemModel() {Path = Constants.HomeIcon, Name="Overview", Link=new ServerOverviewViewModel()},
             ]);
         public ServerViewModel()
         {

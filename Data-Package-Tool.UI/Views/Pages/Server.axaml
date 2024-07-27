@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:rxui="http://reactiveui.net"
+             xmlns:ui="clr-namespace:DataPackageTool.UI"
              xmlns:pages="clr-namespace:DataPackageTool.UI.Views.Pages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.Pages.Server"
@@ -39,7 +40,7 @@
 		</ListBox>
 		<rxui:RoutedViewHost Grid.Column="1" Router="{CompiledBinding Router}">
 			<rxui:RoutedViewHost.ViewLocator>
-				<pages:ServerViewLocator/>
+				<ui:ViewLocator/>
 			</rxui:RoutedViewHost.ViewLocator>
 			<rxui:RoutedViewHost.PageTransition>
 				<x:Null/>

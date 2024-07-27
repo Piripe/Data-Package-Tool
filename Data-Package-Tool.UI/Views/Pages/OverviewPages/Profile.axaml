@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
+             xmlns:opages="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Profile"
+			 x:DataType="opages:ProfileViewModel">
+	<StackPanel Orientation="Vertical" Spacing="4">
+		<Border Classes="Card" Margin="0 8 0 0">
+			<DockPanel>
+				<StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="8">
+					<Border CornerRadius="32" Width="64" Height="64" ClipToBounds="True">
+						<Image Source="{CompiledBinding Avatar}"/>
+					</Border>
+					<Grid RowDefinitions="*,*">
+						<TextBlock Grid.Row="0" VerticalAlignment="Center" FontSize="20" FontWeight="600" Text="{CompiledBinding Username}"/>
+						<ItemsControl Grid.Row="1" VerticalAlignment="Top" ItemsSource="{CompiledBinding Badges}" >
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal" Spacing="2"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Image Width="24" Source="{CompiledBinding Image}"  ToolTip.Placement="Bottom" ToolTip.VerticalOffset="4" ToolTip.Tip="{CompiledBinding Tooltip}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						<StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal" Spacing="4">
+						</StackPanel>
+					</Grid>
+				</StackPanel>
+			</DockPanel>
+
+		</Border>
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border Classes="Card">
+				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Stats about the account"/>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Stats based of the package content"/>
+			</Border>
+		</Grid>
+		<Grid ColumnDefinitions="*,4,*,4,*" >
+			<Border Classes="Card">
+				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Random stats"/>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Even more random stats"/>
+			</Border>
+			<Border Grid.Column="4" Classes="Card">
+				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Interesting stats"/>
+			</Border>
+		</Grid>
+	</StackPanel>
+</UserControl>
