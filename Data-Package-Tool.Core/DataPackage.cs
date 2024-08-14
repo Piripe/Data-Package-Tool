@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Avalonia.Controls.Shapes;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Data_Package_Tool.Core.Utils.Json;
 using DataPackageTool.Core.Enums;
@@ -8,13 +6,11 @@ using DataPackageTool.Core.Models;
 using DataPackageTool.Core.Models.Analytics;
 using DataPackageTool.Core.Models.UserModels;
 using DataPackageTool.Core.Utils;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataPackageTool.Core
 {
@@ -165,7 +161,7 @@ namespace DataPackageTool.Core
                 var messagesRegex = new Regex(@"messages/(c?(\d+))/messages\.(csv|json)", RegexOptions.Compiled);
                 var avatarRegex = new Regex(@"account/avatar\.[a-z]+", RegexOptions.Compiled);
                 var nameRegex = new Regex(@"^Direct Message with (.+)#(\d{1,4})$", RegexOptions.Compiled);
-                var activityRegex = new Regex(@"activity/(analytics|reporting)/events.+\.json", RegexOptions.Compiled);
+                var activityRegex = new Regex(@"activity/(analytics|reporting|tns)/events.+\.json", RegexOptions.Compiled);
 
                 List<ZipArchiveEntry> analyticsFiles = new List<ZipArchiveEntry>();
 
@@ -235,7 +231,7 @@ namespace DataPackageTool.Core
                                     if (Constants.ParsedEvents.Any(x => line.StartsWith("{\"event_type\":\"" + x + "\"")))
                                     {
                                         AnalyticsEvent? e = JsonSerializer.Deserialize<AnalyticsEvent>(line, Shared.JsonSerializerOptions);
-                                        if (e != null) dp.AnalyticsEvents.Add(e);
+                                        if (e != null) Dispatcher.UIThread.Invoke(() => dp.AnalyticsEvents.Add(e));
                                     }
 
                                     updateCounter++;
@@ -352,6 +348,8 @@ namespace DataPackageTool.Core
 
                 zip.Dispose();
                 file.Dispose();
+
+                dp.AnalyticsEvents = dp.AnalyticsEvents.Distinct().ToList();
 
                 void MergeGuild(Guild guild)
                 {

@@ -18,5 +18,10 @@ namespace DataPackageTool.Core.Models.Analytics
         public bool EmojiCustom { get; set; }
         [JsonPropertyName("is_burst")]
         public bool IsBurst { get; set; }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (MessageId?.GetHashCode() ?? 0);
+        }
     }
 }

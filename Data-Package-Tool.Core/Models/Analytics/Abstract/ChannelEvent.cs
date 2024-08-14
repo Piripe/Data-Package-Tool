@@ -19,5 +19,10 @@ namespace DataPackageTool.Core.Models.Analytics.Abstract
         public string? ParentChannelType { get; set; }
         [JsonPropertyName("guild_id")]
         public string? GuildId { get; set; }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (ChannelId?.GetHashCode()??0);
+        }
     }
 }

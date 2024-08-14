@@ -23,5 +23,9 @@ namespace DataPackageTool.Core.Models.Analytics
         public string? LocationChannelType { get; set; }
         [JsonPropertyName("location_message_id")]
         public string? LocationMessageId { get; set; }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Invite?.GetHashCode() ?? 0);
+        }
     }
 }

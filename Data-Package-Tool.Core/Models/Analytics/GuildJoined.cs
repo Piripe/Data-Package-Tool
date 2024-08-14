@@ -11,5 +11,10 @@ namespace DataPackageTool.Core.Models.Analytics
         public string? JoinMethod { get; set; }
         [JsonPropertyName("join_type")]
         public string? JoinType { get; set; }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (JoinType?.GetHashCode() ?? 0);
+        }
     }
 }

@@ -4,5 +4,9 @@
     {
         public string? Session {  get; set; }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Session?.GetHashCode() ?? 0);
+        }
     }
 }

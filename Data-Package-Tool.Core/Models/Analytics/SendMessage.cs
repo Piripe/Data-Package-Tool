@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace DataPackageTool.Core.Models.Analytics
 {
@@ -31,5 +32,9 @@ namespace DataPackageTool.Core.Models.Analytics
         [JsonPropertyName("attachment_ids")]
         public string[]? AttachmentIds { get; set; }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (MessageId?.GetHashCode() ?? 0) ^ (Length << 8);
+        }
     }
 }

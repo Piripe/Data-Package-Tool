@@ -1,5 +1,6 @@
 ﻿using DataPackageTool.Core.Models.Analytics;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
@@ -22,9 +23,27 @@ namespace DataPackageTool.Core.Models
         [JsonPropertyName("event_source")]
         public string? EventSource { get; set; }
         public int Day { get; set; }
-        [JsonIgnore]
+        [JsonPropertyName("")]
         public DateTime Timestamp { get; set; }
         [JsonPropertyName("timestamp")]
-        private string _timestamp { set => Timestamp = DateTime.Parse(value.Replace("\"", ""), null, DateTimeStyles.RoundtripKind); }
+        public string _timestamp { set => Timestamp = DateTime.Parse(value.Replace("\"", ""), null, DateTimeStyles.RoundtripKind); }
+
+        public override int GetHashCode()
+        {
+            return (EventSource?.GetHashCode() ?? Day) + Timestamp.GetHashCode();
+        }
+        public override bool Equals(object? obj)
+        {
+            //Debug.WriteLine($"{ToString()} != {obj?.ToString()}");
+            if (obj is AnalyticsEvent e)
+            {
+                if ((GetHashCode() == e?.GetHashCode()) && (Timestamp != e.Timestamp))
+                {
+                    Debug.WriteLine($"{ToString()} != {e.ToString()}");
+                }
+                return (GetHashCode() == e?.GetHashCode());
+            }
+            return false;
+        }
     }
 }

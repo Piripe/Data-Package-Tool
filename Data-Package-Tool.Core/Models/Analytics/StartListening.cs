@@ -6,5 +6,9 @@ namespace DataPackageTool.Core.Models.Analytics
     {
         public bool Mute { get; set; }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ (Mute.GetHashCode()<<5);
+        }
     }
 }
