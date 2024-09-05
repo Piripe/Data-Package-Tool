@@ -9,6 +9,7 @@ using DataPackageTool.Core.Utils;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -94,6 +95,7 @@ namespace DataPackageTool.Core
                     PropertyNameCaseInsensitive = true,
                 };
                 Shared.JsonSerializerOptions.Converters.Add(new RelationshipTypeConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new ChannelTypeConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new InviteTypeConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new AutoNumberToStringConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new AutoStringToIntConverter());
@@ -351,15 +353,16 @@ namespace DataPackageTool.Core
 
                 dp.AnalyticsEvents = dp.AnalyticsEvents.Distinct().ToList();
 
-                void MergeGuild(Guild guild)
+                Guild MergeGuild(Guild guild)
                 {
                     Guild? alreadyIncludedGuild = dp.Guilds.FirstOrDefault(x => x.Id == guild.Id);
                     if (alreadyIncludedGuild == null)
                     {
                         dp.Guilds.Add(guild);
-                        return;
+                        return guild;
                     }
                     Shared.Mapper.Map(guild,alreadyIncludedGuild);
+                    return alreadyIncludedGuild;
                 }
 
                 var analyticsGroups = dp.AnalyticsEvents.GroupBy(x => x.GetType());
@@ -419,22 +422,19 @@ namespace DataPackageTool.Core
                         });
                 }
 
-                dp.Guilds.ForEach((x) =>
-                {
-                    x.DataPackage = dp;
-                    dp.GuildsMap.Add(x.Id, x);
-                });
-
                 dp.Channels.ForEach((x) =>
                 {
                     if (x.Guild != null)
                     {
-                        if (dp.GuildsMap.TryGetValue(x.Guild.Id, out Guild? guild))
-                        {
-                            x.Guild = guild;
-                            guild.Channels.Add(x);
-                        }
+                         x.Guild = MergeGuild(x.Guild);
+                         x.Guild.Channels.Add(x);
                     }
+                });
+
+                dp.Guilds.ForEach((x) =>
+                {
+                    x.DataPackage = dp;
+                    dp.GuildsMap.Add(x.Id, x);
                 });
 
                 UpdateStatus(1f, $"Finished! Parsed {dp.Messages.Count.ToString("N0", new NumberFormatInfo { NumberGroupSeparator = " " })} messages in {Math.Floor((DateTime.Now - startTime).TotalSeconds)}s\nPackage created at: {dp.CreationTime.ToShortDateString()}", true);
