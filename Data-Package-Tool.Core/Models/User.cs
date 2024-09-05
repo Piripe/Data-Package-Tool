@@ -15,7 +15,7 @@ namespace DataPackageTool.Core.Models
         public string? Username { get; set; }
         [JsonPropertyName("global_name")]
         public string? GlobalName { get; set; }
-        public string DisplayName => GlobalName ?? Tag ?? (Id == Constants.DeletedUserId ? "Deleted User" : (Id == null ? "Unknown User" : $"<@{Id}>"));
+        public string DisplayName => string.IsNullOrWhiteSpace(GlobalName) ? (string.IsNullOrWhiteSpace(Tag) ? (Id == Constants.DeletedUserId ? "Deleted User" : (Id == null ? "Unknown User" : $"<@{Id}>")) : Tag) : GlobalName;
         public string? Discriminator { get; set; }
         [JsonPropertyName("avatar_hash")]
         public string? AvatarHash { get; set; }

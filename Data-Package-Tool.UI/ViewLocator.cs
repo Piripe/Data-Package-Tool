@@ -20,6 +20,7 @@ namespace DataPackageTool.UI
             ServerOverviewViewModel => new ServerOverview() { DataContext = viewModel },
             ServerChannelViewModel => new ServerChannel() { DataContext = viewModel },
             ProfileViewModel => new Profile() { DataContext = viewModel },
+            FriendsViewModel => new Friends() { DataContext = viewModel },
             _ => default
         };
     }

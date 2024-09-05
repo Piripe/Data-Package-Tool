@@ -44,6 +44,7 @@ namespace DataPackageTool.UI
             {ChannelType.GUILD_MEDIA, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
         };
         public static readonly StreamGeometry? HomeIcon = Application.Current!.FindResource("HomeIcon") as StreamGeometry;
+        public static readonly StreamGeometry? FriendsIcon = Application.Current!.FindResource("FriendsIcon") as StreamGeometry;
         public static readonly StreamGeometry? SearchIcon = Application.Current!.FindResource("SearchIcon") as StreamGeometry;
     }
 }

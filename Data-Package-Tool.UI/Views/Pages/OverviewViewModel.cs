@@ -26,7 +26,7 @@ namespace DataPackageTool.UI.Views.Pages
         public string? UrlPathSegment => "overview";
 
         public DataPackage Package { get; set; } = new DataPackage();
-        public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>();
+        public ObservableCollection<NavItemModel> NavItems { get; } = new();
         public OverviewViewModel()
         {
             Init();
@@ -40,6 +40,7 @@ namespace DataPackageTool.UI.Views.Pages
         {
             NavItems.AddRange([
                 new NavItemModel() {Path = Constants.HomeIcon, Name="Profile", LinkGetter=()=>new ProfileViewModel(Package)},
+                new NavItemModel() {Path = Constants.FriendsIcon, Name="Friends", LinkGetter=()=>new FriendsViewModel(Package)},
                 ]);
         }
     }

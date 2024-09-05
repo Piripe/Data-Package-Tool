@@ -17,8 +17,10 @@ namespace DataPackageTool.Core.Models
         [JsonPropertyName("recipients")]
         public List<string> RecipientIds { get; set; } = new();
 
-        public List<Message> Messages { get; } = new();
+        public HashSet<Message> Messages { get; } = new();
         public string? DMRecipientId { get; set; }
+        private User? _DMRecipient;
+        public User? DMRecipient { get => DMRecipientId == null ? null : (_DMRecipient ?? ((DataPackage?.UsersMap.TryGetValue(DMRecipientId, out User? usr) ?? false) ? usr : new User() { Id = DMRecipientId})); }
         public bool HasDuplicates { get; set; }
 
         public void LoadMessagesFromCsv(Stream csv)

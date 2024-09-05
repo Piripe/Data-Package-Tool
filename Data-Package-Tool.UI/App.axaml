@@ -6,6 +6,7 @@
 
     <Application.Styles>
         <SimpleTheme />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
 		
 		<StyleInclude Source="/Styles/DataPackageTool.axaml"/>
     </Application.Styles>
