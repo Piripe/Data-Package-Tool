@@ -186,6 +186,7 @@
 					<Setter Property="Foreground" Value="{DynamicResource TextNormal}"/>
 					<Setter Property="MinWidth" Value="32"/>
 					<Setter Property="Padding" Value="4"/>
+					<Setter Property="HorizontalContentAlignment" Value="Left"/>
 					<Setter Property="Transitions">
 						<Setter.Value>
 							<Transitions>

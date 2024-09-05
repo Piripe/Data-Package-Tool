@@ -32,6 +32,10 @@
 			</Setter>
 			<Setter Property="RenderTransform" Value="rotate(-180deg)"/>
 		</Style>
+		<Style Selector="Button.SettingsButton">
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
 		<Style Selector="Button Path.InteractiveIcon">
 			<Setter Property="Fill" Value="{DynamicResource InteractiveNormal}"/>
 		</Style>
