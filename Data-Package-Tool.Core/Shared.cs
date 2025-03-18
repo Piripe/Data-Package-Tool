@@ -6,7 +6,7 @@ namespace DataPackageTool.Core
 {
     public static class Shared
     {
-        public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions();
+        public static JsonSerializerOptions JsonSerializerOptions = new();
 
         public static IMapper Mapper = new MapperConfiguration(cfg => {
             cfg.CreateMap<Guild, Guild>()

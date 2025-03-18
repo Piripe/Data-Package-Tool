@@ -6,6 +6,7 @@ using DataPackageTool.Core.Models;
 using DataPackageTool.Core.Models.Analytics;
 using DataPackageTool.Core.Models.UserModels;
 using DataPackageTool.Core.Utils;
+using DataPackageTool.Core.Utils.Json;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
@@ -99,6 +100,7 @@ namespace DataPackageTool.Core
                 Shared.JsonSerializerOptions.Converters.Add(new InviteTypeConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new AutoNumberToStringConverter());
                 Shared.JsonSerializerOptions.Converters.Add(new AutoStringToIntConverter());
+                Shared.JsonSerializerOptions.Converters.Add(new UserFlagConverter());
 
                 DataPackage dp = new DataPackage();
 

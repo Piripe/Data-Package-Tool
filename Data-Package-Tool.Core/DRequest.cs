@@ -1,4 +1,6 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Styling;
+using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -10,6 +12,7 @@ using System.Net.Http;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -40,7 +43,7 @@ namespace DataPackageTool.Core
         public string? client_event_source;
 
     }
-    class DHeaders
+    public class DHeaders
     {
         public static string? BROWSER_VERSION;
         public static string? BROWSER_VERSION_FULL;
@@ -125,29 +128,30 @@ namespace DataPackageTool.Core
 
             var res = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://canary.discord.com/app"));
             var content = await res.Content.ReadAsStringAsync();
-            foreach (Match match in Regex.Matches(content, "<script src=\"(\\/assets\\/.+?\\.js)", RegexOptions.None))
+            foreach (Match match in Regex.Matches(content, @"<script (?:defer )?src=""(\/assets\/.+?\.js)", RegexOptions.None))
             {
                 var scriptPath = match.Groups[1].Value;
                 var scriptRes = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"https://canary.discord.com{scriptPath}"));
                 var scriptContent = await scriptRes.Content.ReadAsStringAsync();
-                if (scriptContent.Contains("build_number"))
+                if(scriptContent.Contains("build_number"))
                 {
                     var buildNumber = Regex.Match(scriptContent, "build_number:\"(\\d+)\"").Groups[1].Value;
-                    if (buildNumber != "") return Int32.Parse(buildNumber);
+                    if(buildNumber != "") return Int32.Parse(buildNumber);
                 }
             }
 
+            
             throw new Exception("Failed to get client build number");
         }
 
         public static async Task<string> GetLatestChromeVersion()
         {
-            return "126";
+            //return "126";
             var res = await new HttpClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"));
             var content = await res.Content.ReadAsStringAsync();
 
-            var data = JsonSerializer.Deserialize<dynamic>(content);
-            string latest = data?["versions"][0]["version"] ?? "126.0.6478.61";
+            var data = JsonNode.Parse(content);
+            string latest = data?["versions"]?[0]?["version"]?.ToString() ?? "126.0.6478.61";
             var majorNum = latest.Split('.')[0];
 
             return majorNum;
