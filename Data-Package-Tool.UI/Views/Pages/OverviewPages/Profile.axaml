@@ -5,7 +5,7 @@
              xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
              xmlns:opages="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
 			 xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1450"
              x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Profile"
 			 x:DataType="opages:ProfileViewModel">
 	<StackPanel Orientation="Vertical" Spacing="4">
@@ -47,6 +47,20 @@
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages activity"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxes}" YAxes="{CompiledBinding WeekHeatmapYAxes}" ZoomMode="PanX" CornerRadius="4"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice activity"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxes}" YAxes="{CompiledBinding WeekHeatmapYAxes}" ZoomMode="PanX" CornerRadius="4"/>
+				</StackPanel>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxes}" YAxes="{CompiledBinding BaseYAxes}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
 		</Grid>
