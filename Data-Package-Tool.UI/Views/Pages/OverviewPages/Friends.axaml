@@ -2,11 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1450"
              xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
              xmlns:m="using:DataPackageTool.Core.Models"
              xmlns:opages="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
-             x:Class="DataPackageTool.UI.Friends"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+			 x:Class="DataPackageTool.UI.Friends"
 			 x:DataType="opages:FriendsViewModel">
 	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 4 0 0">
 		<Border Classes="Card">
@@ -41,5 +42,23 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Border>
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Message count friends share"/>
+					<Viewbox>
+						<lvc:PieChart Width="800" Height="800" Series="{CompiledBinding MessagesFriendsShareSeries}"/>
+					</Viewbox>
+				</StackPanel>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time friends share"/>
+					<Viewbox>
+						<lvc:PieChart Width="800" Height="800" Series="{CompiledBinding VoiceFriendsShareSeries}"/>
+					</Viewbox>
+				</StackPanel>
+			</Border>
+		</Grid>
     </StackPanel>
 </UserControl>
