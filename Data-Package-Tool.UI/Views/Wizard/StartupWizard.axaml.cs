@@ -1,8 +1,11 @@
+using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using DataPackageTool.Core;
+using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.IO;

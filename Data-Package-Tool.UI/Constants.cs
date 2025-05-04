@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Svg.Skia;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.UI.Models;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace DataPackageTool.UI
 {
     public static class Constants
     {
+        public static readonly SKTypeface ggSansTypeface = Application.Current!.TryGetResource("gg sans", null, out object? font) ?
+            FontManager.Current.TryGetGlyphTypeface(new Typeface((FontFamily)font!), out IGlyphTypeface? gtf) ?
+                gtf.GetType().GetField("_typeface", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(gtf) as SKTypeface ?? SKTypeface.Default
+                : SKTypeface.Default
+            : SKTypeface.Default;
+
         public static readonly Dictionary<UserFlag, BadgeModel> BadgesImage = new()
         {
             {UserFlag.STAFF,  new BadgeModel(new SvgImage() {Source = SvgSource.Load("/Assets/Discord/Badges/Staff.svg",new Uri("avares://DataPackageTool.UI"))},"Discord Staff") },

@@ -1,5 +1,8 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+		xmlns:lvp="using:LiveChartsCore.SkiaSharpView.Painting"
+		xmlns:sk="using:SkiaSharp">
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
@@ -262,6 +265,11 @@
 				<Style Selector="^[IsEnabled=True]">
 					<Setter Property="Cursor" Value="IBeam" />
 				</Style>
+			</ControlTheme>
+
+			<!--CartesianChart-->
+			<ControlTheme x:Key="{x:Type lvc:CartesianChart}" TargetType="lvc:CartesianChart">
+				<Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
 			</ControlTheme>
 		</ResourceDictionary>
 	</Styles.Resources>
