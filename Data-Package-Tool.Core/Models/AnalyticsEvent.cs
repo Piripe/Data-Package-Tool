@@ -17,6 +17,7 @@ namespace DataPackageTool.Core.Models
     [JsonDerivedType(typeof(SessionStart), "session_start")]
     [JsonDerivedType(typeof(StartListening), "start_listening")]
     [JsonDerivedType(typeof(VoiceDisconnect), "voice_disconnect")]
+    [JsonDerivedType(typeof(LeaveVoiceChannel), "leave_voice_channel")]
 
     public class AnalyticsEvent
     {

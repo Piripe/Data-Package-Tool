@@ -115,6 +115,6 @@ namespace DataPackageTool.Core.Models
 
             throw new Exception("This shouldn't happen");
         }
-        public TimeSpan VoiceTimeIn => TimeSpan.FromSeconds(DataPackage?.VoiceDisconnections.Where(x => x.ChannelId == Id).Select(x => x.DurationConnected).Sum() ?? 0);
+        public TimeSpan VoiceTimeIn => TimeSpan.FromTicks(DataPackage?.VoiceCalls.Where(x => x.Channel == this).Select(x => x.Duration.Ticks).Sum() ?? 0);
     }
 }

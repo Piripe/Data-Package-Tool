@@ -1,9 +1,11 @@
-﻿using Avalonia.Media.Imaging;
+﻿using AutoMapper.Internal;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Data_Package_Tool.Core.Utils.Json;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models;
 using DataPackageTool.Core.Models.Analytics;
+using DataPackageTool.Core.Models.Analytics.Abstract;
 using DataPackageTool.Core.Models.UserModels;
 using DataPackageTool.Core.Utils;
 using DataPackageTool.Core.Utils.Json;
@@ -52,7 +54,7 @@ namespace DataPackageTool.Core
 
         public HashSet<Attachment> ImageAttachments { get; private set; } = [];
         public HashSet<AnalyticsEvent> AnalyticsEvents { get; private set; } = [];
-        public HashSet<VoiceDisconnect> VoiceDisconnections { get; private set; } = [];
+        public HashSet<VoiceCall> VoiceCalls { get; private set; } = [];
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
 
@@ -402,7 +404,30 @@ namespace DataPackageTool.Core
                             }
                             break;
                         case VoiceDisconnect:
-                            dp.VoiceDisconnections = group.Cast<VoiceDisconnect>().ToHashSet();
+                        case LeaveVoiceChannel:
+                            foreach (var e in group.Cast<DurationChannelEvent>())
+                            {
+                                Channel? channel = null;
+                                if (e.ChannelId != null && !dp.ChannelsMap.TryGetValue(e.ChannelId, out channel))
+                                {
+                                    channel = new Channel() { Id = e.ChannelId };
+                                    dp.Channels.TryAdd(channel);
+                                    dp.ChannelsMap.Add(e.ChannelId, channel);
+                                }
+                                var call = new VoiceCall(e.Timestamp.AddMilliseconds(e.Duration * -1), TimeSpan.FromMilliseconds(e.Duration), channel);
+
+                                foreach (var otherCall in dp.VoiceCalls)
+                                {
+                                    if (otherCall.Intersect(call) && call.Duration <= TimeSpan.Zero) break;
+                                }
+                                if (call.Duration <= TimeSpan.Zero) continue;
+
+                                VoiceCall? altCall = call.SplitDay();
+                                dp.VoiceCalls.Add(call);
+                                if (altCall != null) dp.VoiceCalls.Add(altCall);
+                            }
+                            //dp.VoiceDisconnections.UnionWith();
+
                             break;
 
                     }
