@@ -15,9 +15,9 @@ namespace DataPackageTool.Core.Models
         public string? Name { get; set; }
         public Guild? Guild { get; set; }
         [JsonPropertyName("recipients")]
-        public List<string> RecipientIds { get; set; } = new();
+        public List<string> RecipientIds { get; set; } = [];
 
-        public HashSet<Message> Messages { get; } = new();
+        public HashSet<Message> Messages { get; } = [];
         public string? DMRecipientId { get; set; }
         private User? _DMRecipient;
         public User? DMRecipient { get => DMRecipientId == null ? null : (_DMRecipient ?? ((DataPackage?.UsersMap.TryGetValue(DMRecipientId, out User? usr) ?? false) ? usr : new User() { Id = DMRecipientId})); }
@@ -115,5 +115,6 @@ namespace DataPackageTool.Core.Models
 
             throw new Exception("This shouldn't happen");
         }
+        public TimeSpan VoiceTimeIn => TimeSpan.FromSeconds(DataPackage?.VoiceDisconnections.Where(x => x.ChannelId == Id).Select(x => x.DurationConnected).Sum() ?? 0);
     }
 }

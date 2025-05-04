@@ -4,6 +4,8 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using DataPackageTool.Core.Enums;
 using DataPackageTool.Core.Models.UserModels;
+using DataPackageTool.Core.Utils;
+using System.Diagnostics;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -20,7 +22,7 @@ namespace DataPackageTool.Core.Models
         [JsonPropertyName("avatar_hash")]
         public string? AvatarHash { get; set; }
         [JsonPropertyName("avatar")]
-        private string _avatar { set => AvatarHash = value; } // relationship user field
+        public string _avatar { set => AvatarHash = value; } // relationship user field
         public Dictionary<string, string>? Notes { get; set; }
         public UserFlag Flags { get; set; }
 
@@ -28,6 +30,7 @@ namespace DataPackageTool.Core.Models
         public UserProfileMetadata? ProfileMetadata { get; set; }
         public List<Relationship>? Relationships { get; set; }
         public UserSettingsCategory? Settings { get; set; }
+        public DateTimeOffset CreationDate => SnowflakeUtils.FromSnowflake(ulong.TryParse(Id, out ulong v) ? v : 0);
 
         public IImage? AvatarImage { get; set; }
         public bool IsPomelo
@@ -48,14 +51,15 @@ namespace DataPackageTool.Core.Models
             {
                 if(IsPomelo)
                 {
-                    return (int)((long.Parse(Id??"0") >> 22) % 6);
+                    return (int)(((long.TryParse(Id,out long v) ? v : 0) >> 22) % 6);
                 } else
                 {
-                    return int.Parse(Discriminator??"0") % 5;
+                    return (int.TryParse(Discriminator, out int v) ? v : 0) % 5;
                 }
             }
         }
 
+        public Task<IImage> GetAvatarTask => GetAvatar();
         public async Task<IImage> GetAvatar()
         {
             if (AvatarImage != null) return AvatarImage;

@@ -31,27 +31,28 @@ namespace DataPackageTool.Core
 #else
 ;
 #endif
-        public List<Channel> Channels { get; } = new();
-        public Dictionary<string, Channel> ChannelsMap { get; } = new();
+        public List<Channel> Channels { get; } = [];
+        public Dictionary<string, Channel> ChannelsMap { get; } = [];
 
-        public List<Guild> Guilds { get; private set; } = new()
+        public List<Guild> Guilds { get; private set; } = [
 #if DEBUG
-        { new Guild() {
+         new Guild() {
             Id = "603970300668805120",
             Invites = ["discord-603970300668805120"]
-        } };
+        } 
+         ];
 #else
-            ;
+            ];
 #endif
-        public Dictionary<string, Guild> GuildsMap { get; } = new();
+        public Dictionary<string, Guild> GuildsMap { get; } = [];
 
-        public List<Message> Messages { get; } = new();
+        public HashSet<Message> Messages { get; } = [];
 
-        public Dictionary<string, User> UsersMap { get; } = new();
+        public Dictionary<string, User> UsersMap { get; } = [];
 
-        public List<Attachment> ImageAttachments { get; private set; } = new();
-        public List<AnalyticsEvent> AnalyticsEvents { get; private set; } = new List<AnalyticsEvent>();
-        public List<VoiceDisconnect> VoiceDisconnections { get; private set; } = new List<VoiceDisconnect>();
+        public HashSet<Attachment> ImageAttachments { get; private set; } = [];
+        public HashSet<AnalyticsEvent> AnalyticsEvents { get; private set; } = [];
+        public HashSet<VoiceDisconnect> VoiceDisconnections { get; private set; } = [];
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
 
@@ -61,7 +62,7 @@ namespace DataPackageTool.Core
 
         public bool UsesUnsignedCDNLinks
         {
-            get => ImageAttachments.Count > 0 && !ImageAttachments[0].Url.Contains("?ex=");
+            get => ImageAttachments.Count > 0 && (!ImageAttachments.FirstOrDefault()?.Url.Contains("?ex=")??false);
         }
 
         internal struct ZipEntryStreamAndMatches
@@ -323,7 +324,7 @@ namespace DataPackageTool.Core
                             }
                         }
 
-                        dp.Messages.AddRange(channel.Messages);
+                        dp.Messages.UnionWith(channel.Messages);
                         foreach (var msg in channel.Messages)
                         {
                             foreach (var attachment in msg.Attachments)
@@ -353,7 +354,7 @@ namespace DataPackageTool.Core
                 zip.Dispose();
                 file.Dispose();
 
-                dp.AnalyticsEvents = dp.AnalyticsEvents.Distinct().ToList();
+                dp.AnalyticsEvents = dp.AnalyticsEvents.Distinct().ToHashSet();
 
                 Guild MergeGuild(Guild guild)
                 {
@@ -400,11 +401,14 @@ namespace DataPackageTool.Core
                                 MergeGuild(partialGuild);
                             }
                             break;
+                        case VoiceDisconnect:
+                            dp.VoiceDisconnections = group.Cast<VoiceDisconnect>().ToHashSet();
+                            break;
 
                     }
                 }
 
-                dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToList();
+                dp.ImageAttachments = dp.ImageAttachments.OrderByDescending(o => o.Message.Id).ToHashSet();
                 List<GuildFolder>? folders = dp.User.Settings?.Settings?.GuildFolders?.Folders;
                 if (folders != null)
                 {
