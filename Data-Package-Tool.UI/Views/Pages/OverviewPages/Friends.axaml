@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
+             xmlns:m="using:DataPackageTool.Core.Models"
              xmlns:opages="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
              x:Class="DataPackageTool.UI.Friends"
 			 x:DataType="opages:FriendsViewModel">
@@ -15,9 +16,28 @@
 					  CanUserResizeColumns="True"
 					  CanUserSortColumns="True"
 					  Height="384">
+				<DataGrid.Styles>
+					<Style Selector="DataGridRow">
+						<Setter Property="ContextMenu">
+							<ContextMenu x:DataType="m:Channel">
+								<MenuItem Header="{Binding DMRecipient.DisplayName}"/>
+							</ContextMenu>
+						</Setter>
+					</Style>
+				</DataGrid.Styles>
 				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="Avatar" Width="48">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border CornerRadius="1000" ClipToBounds="True">
+									<Image Source="{CompiledBinding DMRecipient.GetAvatarTask^}"/>
+								</Border>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
 					<DataGridTextColumn Header="User" Binding="{CompiledBinding DMRecipient.DisplayName}"/>
 					<DataGridTextColumn Header="Messages Sent" Binding="{CompiledBinding Messages.Count}"/>
+					<DataGridTextColumn Header="Voice Time" Binding="{CompiledBinding VoiceTimeIn, StringFormat='d\\d\\ hh\\h\\ mm\\m\\ ss\\s'}"/>
 				</DataGrid.Columns>
 			</DataGrid>
 		</Border>
