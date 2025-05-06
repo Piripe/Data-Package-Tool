@@ -94,6 +94,12 @@
 		<Setter Property="FontFamily" Value="{StaticResource Ginto Nord}"/>
 		<Setter Property="FontWeight" Value="800"/>
 	</Style>
+	<Style Selector="TextBlock.bold">
+		<Setter Property="FontWeight" Value="Bold"/>
+	</Style>
+	<Style Selector="TextBlock.semibold">
+		<Setter Property="FontWeight" Value="600"/>
+	</Style>
 	<Style Selector="TextBlock.h1">
 		<Setter Property="FontSize" Value="32"/>
 	</Style>
@@ -108,6 +114,9 @@
 	</Style>
 	<Style Selector="TextBlock.h5">
 		<Setter Property="FontSize" Value="14"/>
+	</Style>
+	<Style Selector="TextBlock.xs">
+		<Setter Property="FontSize" Value="12"/>
 	</Style>
 
 	<!--Tooltip-->

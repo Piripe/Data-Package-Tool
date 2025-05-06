@@ -27,22 +27,25 @@ namespace DataPackageTool.UI.Views.Pages
         public DataPackage Package { get; set; } = new DataPackage();
         private string? _name;
         public string? Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); }
-        public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>([
-                new NavItemModel() {Path = Constants.HomeIcon, Name="Overview", Link=new ServerOverviewViewModel()},
-            ]);
+
+        private ServerOverviewViewModel _serverOverview;
+        public ObservableCollection<NavItemModel> NavItems { get; } = new ObservableCollection<NavItemModel>();
         public ServerViewModel()
         {
+            _serverOverview = new();
             Init();
         }
         public ServerViewModel(Guild guild)
         {
             Guild = guild;
             Package = guild.DataPackage??Package;
+            _serverOverview = new(guild);
             Init();
         }
         private void Init()
         {
             Name = Guild.Name ?? Guild.Id;
+            NavItems.Add(new NavItemModel() { Path = Constants.HomeIcon, Name = "Overview", Link = _serverOverview });
             UpdateChannels();
         }
         public async Task InitData()
@@ -56,6 +59,7 @@ namespace DataPackageTool.UI.Views.Pages
                 {
                     UpdateChannels();
                 }
+                _serverOverview.UpdateData();
             }
             else
             {

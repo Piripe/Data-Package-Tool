@@ -2,7 +2,68 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:spages="clr-namespace:DataPackageTool.UI.Views.Pages.ServerPages"
+             xmlns:models="clr-namespace:DataPackageTool.UI.Models"
+			 xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="DataPackageTool.UI.Views.Pages.ServerPages.ServerOverview">
-  Welcome to Avalonia!
+             x:Class="DataPackageTool.UI.Views.Pages.ServerPages.ServerOverview"
+			 x:DataType="spages:ServerOverviewViewModel">
+	<StackPanel Orientation="Vertical" Spacing="4" Margin="8 8 8 0">
+		<Border Classes="Card">
+			<Grid>
+				<StackPanel>
+					<StackPanel Orientation="Horizontal" Spacing="48">
+						<Border CornerRadius="24" Width="96" Height="96" ClipToBounds="True">
+							<Image Source="{CompiledBinding Icon}"/>
+						</Border>
+
+						<StackPanel Orientation="Horizontal" Spacing="32" Margin="0 12 0 0">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="xs semibold" Text="Created At"/>
+								<TextBlock ToolTip.Tip="{CompiledBinding Guild.CreationDate}" Text="{CompiledBinding Guild.CreationDate, StringFormat='MMM dd, yyyy'}"/>
+							</StackPanel>
+							<StackPanel IsVisible="{CompiledBinding Guild.JoinDate, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="8">
+								<TextBlock Classes="xs semibold" Text="Joined At"/>
+								<TextBlock ToolTip.Tip="{CompiledBinding Guild.JoinDate}" Text="{CompiledBinding Guild.JoinDate, StringFormat='MMM dd, yyyy'}"/>
+							</StackPanel>
+							<StackPanel IsVisible="{CompiledBinding Guild.LeaveDate, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="8">
+								<TextBlock Classes="xs semibold" Text="Leave At"/>
+								<TextBlock ToolTip.Tip="{CompiledBinding Guild.LeaveDate}" Text="{CompiledBinding Guild.LeaveDate, StringFormat='MMM dd, yyyy'}"/>
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Spacing="8" Margin="0 24 0 0">
+						<TextBlock Classes="h1 bold" Text="{CompiledBinding Name}"/>
+					</StackPanel>
+				</StackPanel>
+				<StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+					<SplitButton IsVisible="{CompiledBinding Guild.Invites.Count}" Content="Copy Invite" Command="{CompiledBinding CopyInvite}" CommandParameter="{CompiledBinding Guild.Invites[0]}">
+						<SplitButton.Flyout>
+							<MenuFlyout ItemsSource="{CompiledBinding Invites}" />
+						</SplitButton.Flyout>
+						<SplitButton.Styles>
+							<Style Selector="MenuItem" x:DataType="models:InviteCopyModel">
+								<Setter Property="Header" Value="{CompiledBinding Invite, StringFormat='Copy {0}'}"/>
+								<Setter Property="Command" Value="{CompiledBinding CopyInvite}"/>
+							</Style>
+						</SplitButton.Styles>
+					</SplitButton>
+				</StackPanel>
+			</Grid>
+		</Border>
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border IsVisible="{CompiledBinding HasMessages}" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages sent per month"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
+				</StackPanel>
+			</Border>
+			<Border IsVisible="{CompiledBinding HasVoice}" Grid.Column="2" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+	</StackPanel>
 </UserControl>
