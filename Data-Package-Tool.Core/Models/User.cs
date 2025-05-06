@@ -30,7 +30,7 @@ namespace DataPackageTool.Core.Models
         public UserProfileMetadata? ProfileMetadata { get; set; }
         public List<Relationship>? Relationships { get; set; }
         public UserSettingsCategory? Settings { get; set; }
-        public DateTimeOffset CreationDate => SnowflakeUtils.FromSnowflake(ulong.TryParse(Id, out ulong v) ? v : 0);
+        public DateTime CreationDate => SnowflakeUtils.FromSnowflake(ulong.TryParse(Id, out ulong v) ? v : 0);
 
         public IImage? AvatarImage { get; set; }
         public bool IsPomelo

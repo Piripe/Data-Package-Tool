@@ -8,8 +8,8 @@ namespace DataPackageTool.Core.Utils
 {
     internal static class SnowflakeUtils
     {
-        public static DateTimeOffset FromSnowflake(ulong value)
-            => DateTimeOffset.FromUnixTimeMilliseconds((long)((value >> 22) + 1420070400000UL));
+        public static DateTime FromSnowflake(ulong value)
+            => DateTimeOffset.FromUnixTimeMilliseconds((long)((value >> 22) + 1420070400000UL)).LocalDateTime;
         public static ulong ToSnowflake(DateTimeOffset value)
             => ((ulong)value.ToUnixTimeMilliseconds() - 1420070400000UL) << 22;
     }
