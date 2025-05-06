@@ -29,7 +29,7 @@
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="Avatar" Width="48">
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
+							<DataTemplate x:DataType="m:Channel">
 								<Border CornerRadius="1000" ClipToBounds="True">
 									<Image Source="{CompiledBinding DMRecipient.GetAvatarTask^}"/>
 								</Border>
@@ -46,16 +46,16 @@
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Message count friends share"/>
-					<Viewbox>
-						<lvc:PieChart Width="800" Height="800" Series="{CompiledBinding MessagesFriendsShareSeries}"/>
+					<Viewbox MaxWidth="400">
+						<lvc:PieChart Width="400" Height="400" Series="{CompiledBinding MessagesFriendsShareSeries}"/>
 					</Viewbox>
 				</StackPanel>
 			</Border>
 			<Border Grid.Column="2" Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time friends share"/>
-					<Viewbox>
-						<lvc:PieChart Width="800" Height="800" Series="{CompiledBinding VoiceFriendsShareSeries}"/>
+					<Viewbox MaxWidth="400">
+						<lvc:PieChart Width="400" Height="400" Series="{CompiledBinding VoiceFriendsShareSeries}"/>
 					</Viewbox>
 				</StackPanel>
 			</Border>
