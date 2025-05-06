@@ -100,50 +100,12 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
                 }
             ];
 
-        public Axis[] MonthXAxes => [
-            new DateTimeAxis(TimeSpan.FromDays(30), date => date.ToString("yyyy\\-MM")) {
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
-                LabelsRotation = -35,
-                ShowSeparatorLines = true,
-                Padding = new(8),
-                LabelsPaint = LegendTextPaint,
-                TextSize = 12,
-            }
-            ];
-        public Axis[] WeekHeatmapXAxes => [
-            new DateTimeAxis(TimeSpan.FromDays(7), date => date.ToString("yyyy\\-MM\\-dd")) {
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
-                LabelsRotation = -35,
-                ShowSeparatorLines = false,
-                Padding = new(8),
-                LabelsPaint = LegendTextPaint,
-                TextSize = 12,
-                MinLimit = DateTime.Now.AddDays(-7*12).Ticks,
-                MaxLimit = DateTime.Now.Ticks
-            }
-            ];
-        public Axis[] WeekHeatmapYAxes => [
-            new Axis() {
-                Labels = ["Mon","Tue","Wen","Thu","Fri","Sat","Sun"],
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
-                LabelsRotation = -35,
-                ShowSeparatorLines = true,
-                Padding = new(8),
-                LabelsPaint = LegendTextPaint,
-                TextSize = 12,
-            }
-            ];
-        public Axis[] BaseYAxes => [
-            new Axis() {
-                LabelsPaint = LegendTextPaint,
-                TextSize = 12,
-            }
-            ];
-        public SolidColorPaint LegendTextPaint => new SolidColorPaint
-        {
-            Color = Application.Current!.TryGetResource("ForegroundBrush", Application.Current.ActualThemeVariant, out object? v) ? ((ImmutableSolidColorBrush)v!).Color.ToSKColor() : new SKColor(127, 127, 127),
-            SKTypeface = Constants.ggSansTypeface,
-        };
+        public static Axis[] MonthXAxis => Constants.MonthXAxis;
+        public static Axis[] WeekHeatmapXAxis => Constants.WeekHeatmapXAxis;
+        public static Axis[] BaseYAxis => Constants.BaseYAxis;
+        public static Axis[] TimespanYAxis => Constants.TimespanYAxis;
+        public static Axis[] WeekHeatmapYAxis => Constants.WeekHeatmapYAxis;
+
 
         public ProfileViewModel()
         {

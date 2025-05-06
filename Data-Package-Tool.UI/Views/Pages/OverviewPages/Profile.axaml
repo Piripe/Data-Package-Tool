@@ -40,13 +40,13 @@
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages sent per month"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxes}" YAxes="{CompiledBinding BaseYAxes}" ZoomMode="X"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
 			<Border Grid.Column="2" Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages activity"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxes}" YAxes="{CompiledBinding WeekHeatmapYAxes}" ZoomMode="PanX" CornerRadius="4"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
 				</StackPanel>
 			</Border>
 		</Grid>
@@ -54,13 +54,13 @@
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice activity"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxes}" YAxes="{CompiledBinding WeekHeatmapYAxes}" ZoomMode="PanX" CornerRadius="4"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
 				</StackPanel>
 			</Border>
 			<Border Grid.Column="2" Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxes}" YAxes="{CompiledBinding BaseYAxes}" ZoomMode="X"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
 		</Grid>
