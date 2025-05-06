@@ -382,10 +382,24 @@ namespace DataPackageTool.Core
                             {
                                 Id = x.GuildId,
                                 JoinMethod = x.JoinMethod,
-                                JoinType = x.JoinType
+                                JoinType = x.JoinType,
+                                JoinDate = x.Timestamp
                             } : null).Where(x => x != null).Cast<Guild>();
 
                             foreach (Guild partialGuild in partialJoinedGuilds)
+                            {
+                                MergeGuild(partialGuild);
+                            }
+                            break;
+                        case LeaveGuild:
+                            IEnumerable<Guild> partialLeaveGuilds = group.Cast<LeaveGuild>()
+                            .Select(x => x.GuildId != null ? new Guild()
+                            {
+                                Id = x.GuildId,
+                                LeaveDate = x.Timestamp
+                            } : null).Where(x => x != null).Cast<Guild>();
+
+                            foreach (Guild partialGuild in partialLeaveGuilds)
                             {
                                 MergeGuild(partialGuild);
                             }

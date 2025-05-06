@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataPackageTool.Core.Models.Analytics.Abstract
 {
-    public class ChannelEvent : AnalyticsEvent, IChannelEvent, IGuildEvent
+    public class ChannelEvent : GuildEvent, IChannelEvent
     {
         [JsonPropertyName("channel_id")]
         public string? ChannelId { get; set; }
@@ -17,8 +17,6 @@ namespace DataPackageTool.Core.Models.Analytics.Abstract
         public string? ParentChannelId { get; set; }
         [JsonPropertyName("parent_channel_type")]
         public string? ParentChannelType { get; set; }
-        [JsonPropertyName("guild_id")]
-        public string? GuildId { get; set; }
 
         public override int GetHashCode()
         {

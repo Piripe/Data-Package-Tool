@@ -17,6 +17,9 @@ namespace DataPackageTool.Core.Models
         public string? Name { get; set; }
         public string? JoinType { get; set; }
         public string? JoinMethod { get; set; }
+        public DateTime? JoinDate { get; set; }
+        public DateTime? LeaveDate { get; set; }
+        public DateTime CreationDate => SnowflakeUtils.FromSnowflake(ulong.TryParse(Id, out ulong v) ? v : 0);
         public long ApplicationId { get; set; }
         public string? Splash { get; set; }
         public string? Banner { get; set; }
@@ -24,7 +27,6 @@ namespace DataPackageTool.Core.Models
         public string? Icon { get; set; }
         public List<string> Features { get; set; } = new();
         public List<string> Invites { get; set; } = new();
-        public DateTime Timestamp { get; set; }
         public List<Channel> Channels { get; set; } = new();
 
         internal bool fetchedData;
