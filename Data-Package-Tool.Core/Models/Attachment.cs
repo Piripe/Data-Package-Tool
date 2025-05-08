@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace DataPackageTool.Core.Models
 {
-    public class Attachment
+    public partial class Attachment
     {
         public static readonly List<string> ImageExtensions = new() { "png", "gif", "jpg", "jpeg", "apng", "jfif", "webp" };
         public static readonly List<string> VideoExtensions = new() { "mp4", "webm", "avi", "mov" };
@@ -30,10 +30,13 @@ namespace DataPackageTool.Core.Models
             this.Url = url;
             this.Message = message;
 
-            var match = Regex.Match(url, @"attachments\/\d+\/(\d+)\/([\w.-]+\.(\w+))");
+            var match = AttachmentRegex().Match(url);
             this.Id = match.Groups[1].Value;
             this.FileName = match.Groups[2].Value;
             this.Extension = match.Groups[3].Value;
         }
+
+        [GeneratedRegex(@"attachments\/\d+\/(\d+)\/([\w.-]+\.(\w+))")]
+        private static partial Regex AttachmentRegex();
     }
 }

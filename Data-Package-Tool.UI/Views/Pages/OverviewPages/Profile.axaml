@@ -32,6 +32,16 @@
 						<StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal" Spacing="4">
 						</StackPanel>
 					</Grid>
+					<StackPanel Orientation="Horizontal" Spacing="32" Margin="48 12 0 0">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="xs semibold" Text="Created At"/>
+							<TextBlock ToolTip.Tip="{CompiledBinding Package.User.CreationDate}" Text="{CompiledBinding Package.User.CreationDate, StringFormat='MMM dd, yyyy'}"/>
+						</StackPanel>
+						<StackPanel Spacing="8">
+							<TextBlock Classes="xs semibold" Text="Messages Sent"/>
+							<TextBlock Text="{CompiledBinding Package.Messages.Count}"/>
+						</StackPanel>
+					</StackPanel>
 				</StackPanel>
 			</DockPanel>
 
@@ -61,6 +71,20 @@
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments sent per month"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentAttachmentsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
+				</StackPanel>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments activity"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding AttachmentsActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
 				</StackPanel>
 			</Border>
 		</Grid>

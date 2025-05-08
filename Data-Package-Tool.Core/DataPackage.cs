@@ -52,6 +52,7 @@ namespace DataPackageTool.Core
 
         public Dictionary<string, User> UsersMap { get; } = [];
 
+        public HashSet<Attachment> Attachments { get; private set; } = [];
         public HashSet<Attachment> ImageAttachments { get; private set; } = [];
         public HashSet<AnalyticsEvent> AnalyticsEvents { get; private set; } = [];
         public HashSet<VoiceCall> VoiceCalls { get; private set; } = [];
@@ -64,7 +65,7 @@ namespace DataPackageTool.Core
 
         public bool UsesUnsignedCDNLinks
         {
-            get => ImageAttachments.Count > 0 && (!ImageAttachments.FirstOrDefault()?.Url.Contains("?ex=")??false);
+            get => Attachments.Count > 0 && (!Attachments.FirstOrDefault()?.Url.Contains("?ex=")??false);
         }
 
         internal struct ZipEntryStreamAndMatches
@@ -336,6 +337,7 @@ namespace DataPackageTool.Core
                                     dp.ImageAttachments.Add(attachment);
                                 }
                             }
+                            dp.Attachments.UnionWith(msg.Attachments);
                         }
                         dp.Channels.Add(channel);
                         dp.ChannelsMap.TryAdd(channel.Id,channel);
