@@ -140,6 +140,7 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
         public static Axis[] TimespanYAxis => Constants.TimespanYAxis;
         public static Axis[] WeekHeatmapYAxis => Constants.WeekHeatmapYAxis;
 
+        public int JoinCallShare => Package.JoinCalls.Count*20 / (Package.StartCalls.Count + Package.JoinCalls.Count);
 
         public ProfileViewModel()
         {

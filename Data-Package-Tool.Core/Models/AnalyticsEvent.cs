@@ -19,6 +19,8 @@ namespace DataPackageTool.Core.Models
     [JsonDerivedType(typeof(VoiceDisconnect), "voice_disconnect")]
     [JsonDerivedType(typeof(LeaveVoiceChannel), "leave_voice_channel")]
     [JsonDerivedType(typeof(LeaveGuild), "leave_guild")]
+    [JsonDerivedType(typeof(StartCall), "start_call")]
+    [JsonDerivedType(typeof(JoinCall), "join_call")]
 
     public class AnalyticsEvent
     {

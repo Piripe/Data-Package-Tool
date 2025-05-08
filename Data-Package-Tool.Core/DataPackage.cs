@@ -56,6 +56,8 @@ namespace DataPackageTool.Core
         public HashSet<Attachment> ImageAttachments { get; private set; } = [];
         public HashSet<AnalyticsEvent> AnalyticsEvents { get; private set; } = [];
         public HashSet<VoiceCall> VoiceCalls { get; private set; } = [];
+        public HashSet<StartCall> StartCalls { get; private set; } = [];
+        public HashSet<JoinCall> JoinCalls { get; private set; } = [];
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
 
@@ -443,7 +445,12 @@ namespace DataPackageTool.Core
                                 if (altCall != null) dp.VoiceCalls.Add(altCall);
                             }
                             //dp.VoiceDisconnections.UnionWith();
-
+                            break;
+                        case StartCall:
+                            dp.StartCalls = group.Cast<StartCall>().ToHashSet();
+                            break;
+                        case JoinCall:
+                            dp.JoinCalls = group.Cast<JoinCall>().ToHashSet();
                             break;
 
                     }
