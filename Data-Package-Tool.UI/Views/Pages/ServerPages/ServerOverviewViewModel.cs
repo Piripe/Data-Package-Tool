@@ -51,6 +51,7 @@ namespace DataPackageTool.UI.Views.Pages.ServerPages
             Application.Current?.GetTopLevel()?.Clipboard?.SetTextAsync("https://discord.gg/" + invite);
         }
 
+        public int MessageCount => Guild.Channels.Sum(x=>x.Messages.Count);
         public bool HasMessages => Guild.Channels.Any(x => x.Messages.Count > 0);
         public bool HasVoice => Package.VoiceCalls.Any(x => x.Channel != null && Guild.Channels.Contains(x.Channel));
         public ISeries[] MonthlySentMessagesSeries => [
