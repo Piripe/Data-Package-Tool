@@ -35,19 +35,19 @@
 					<StackPanel Orientation="Horizontal" Spacing="32" Margin="48 12 0 0">
 						<StackPanel Spacing="8">
 							<TextBlock Classes="xs semibold" Text="Created At"/>
-							<TextBlock ToolTip.Tip="{CompiledBinding Package.User.CreationDate}" Text="{CompiledBinding Package.User.CreationDate, StringFormat='MMM dd, yyyy'}"/>
+							<TextBlock Classes="sm" ToolTip.Tip="{CompiledBinding Package.User.CreationDate}" Text="{CompiledBinding Package.User.CreationDate, StringFormat='MMM dd, yyyy'}"/>
 						</StackPanel>
 						<StackPanel Spacing="8">
 							<TextBlock Classes="xs semibold" Text="Messages Sent"/>
-							<TextBlock Text="{CompiledBinding Package.Messages.Count}"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding Package.Messages.Count}"/>
 						</StackPanel>
 						<StackPanel Spacing="8">
 							<TextBlock Classes="xs semibold" Text="Friends"/>
-							<TextBlock Text="{CompiledBinding Package.User.Relationships.Count}"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding Package.User.Relationships.Count}"/>
 						</StackPanel>
 						<StackPanel Spacing="8">
 							<TextBlock Classes="xs semibold" Text="Notifications clicked"/>
-							<TextBlock Text="{CompiledBinding Package.NotificationsClicked.Count}"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding Package.NotificationsClicked.Count}"/>
 						</StackPanel>
 					</StackPanel>
 				</StackPanel>

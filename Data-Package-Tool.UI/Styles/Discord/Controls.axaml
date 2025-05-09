@@ -115,6 +115,10 @@
 	<Style Selector="TextBlock.h5">
 		<Setter Property="FontSize" Value="14"/>
 	</Style>
+	<Style Selector="TextBlock.sm">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="LineHeight" Value="18"/>
+	</Style>
 	<Style Selector="TextBlock.xs">
 		<Setter Property="FontSize" Value="12"/>
 	</Style>

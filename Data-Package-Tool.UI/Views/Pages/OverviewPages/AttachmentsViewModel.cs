@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Kernel;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace DataPackageTool.UI.Views.Pages.OverviewPages
 {
@@ -20,6 +22,7 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
 
         public static Axis[] MonthXAxis => Constants.MonthXAxis;
         public static Axis[] WeekHeatmapXAxis => Constants.WeekHeatmapXAxis;
+        public static Axis[] WeekXAxis => Constants.WeekXAxis;
         public static Axis[] BaseYAxis => Constants.BaseYAxis;
         public static Axis[] WeekHeatmapYAxis => Constants.WeekHeatmapYAxis;
 
@@ -57,6 +60,13 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
                     YToolTipLabelFormatter = (x)=>((int?)x.Model?.Weight??0).ToString(),
                 }
             ];
+        public ISeries[] AttachingClock { get; set; } = null!;
+        public string MaxAttachingClockHour { get; set; } = "";
+        public int MaxAttachingClock { get; set; } = 0;
+
+        public ISeries[] WeeklySentAttachmentsSeries { get; set; } = null!;
+        public string MaxWeeklySentAttachmentsDay { get; set; } = "";
+        public int MaxWeeklySentAttachments { get; set; } = 0;
 
         public AttachmentsViewModel()
         {
@@ -71,6 +81,36 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
 
         private void Init()
         {
+            var weeklySentAttachmentsSeries = Package.Attachments.GroupBy(x => x.Message.Timestamp.DayOfWeek).OrderBy(x => x.Key);
+            WeeklySentAttachmentsSeries = [
+                new ColumnSeries<int>
+                {
+                    Values = weeklySentAttachmentsSeries.Select(x => x.Count()).AsArray(),
+                    MaxBarWidth = 64,
+                    Padding = 8,
+                }
+            ];
+            var maxWeeklySentAttachments = weeklySentAttachmentsSeries.MaxBy(x => x.Count())!;
+            MaxWeeklySentAttachments = maxWeeklySentAttachments.Count();
+            MaxWeeklySentAttachmentsDay = maxWeeklySentAttachments.Key.ToString();
+            var clockData = Package.Attachments.GroupBy(x => x.Message.Timestamp.Hour).OrderBy(x => x.Key).Select(x => (x.Key, Value: x.Count()));
+            MaxAttachingClock = clockData.Max(x => x.Value);
+            MaxAttachingClockHour = new DateTime(1, 1, 1, clockData.First(x => x.Value == MaxAttachingClock).Key, 0, 0).ToShortTimeString();
+            AttachingClock = clockData.Select((value) =>
+            {
+                var series = new PieSeries<int>(1)
+                {
+                    InnerRadius = 35,
+                    Pushout = 12,
+                    HoverPushout = 24,
+                    CornerRadius = 4,
+                    OuterRadiusOffset = 250 - value.Value * 250 / MaxAttachingClock,
+                    Name = new DateTime(1, 1, 1, value.Key, 0, 0).ToShortTimeString(),
+                    ToolTipLabelFormatter = (x) => value.Value + " Attachments",
+                    Fill = new RadialGradientPaint(Constants.SKBlurple.WithAlpha(80), Constants.SKBlurple),
+                };
+                return series;
+            }).ToArray();
             Task.Run(() =>
             {
 

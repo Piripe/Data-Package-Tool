@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Kernel;
+using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace DataPackageTool.UI.Views.Pages.OverviewPages
 {
@@ -20,6 +22,7 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
 
         public static Axis[] MonthXAxis => Constants.MonthXAxis;
         public static Axis[] WeekHeatmapXAxis => Constants.WeekHeatmapXAxis;
+        public static Axis[] WeekXAxis => Constants.WeekXAxis;
         public static Axis[] BaseYAxis => Constants.BaseYAxis;
         public static Axis[] WeekHeatmapYAxis => Constants.WeekHeatmapYAxis;
 
@@ -58,6 +61,13 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
                     YToolTipLabelFormatter = (x)=>((int?)x.Model?.Weight??0).ToString(),
                 }
             ];
+        public ISeries[] NotifyingClock { get; set; } = null!;
+        public string MaxNotifyingClockHour { get; set; } = "";
+        public int MaxNotifyingClock { get; set; } = 0;
+
+        public ISeries[] WeeklyClickedNotificationsSeries { get; set; } = null!;
+        public string MaxWeeklyClickedNotificationsDay { get; set; } = "";
+        public int MaxWeeklyClickedNotifications { get; set; } = 0;
 
         public NotificationsViewModel()
         {
@@ -72,6 +82,36 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
 
         private void Init()
         {
+            var weeklyClickedNotificationsSeries = Package.Messages.GroupBy(x => x.Timestamp.DayOfWeek).OrderBy(x => x.Key);
+            WeeklyClickedNotificationsSeries = [
+                new ColumnSeries<int>
+                {
+                    Values = weeklyClickedNotificationsSeries.Select(x => x.Count()).AsArray(),
+                    MaxBarWidth = 64,
+                    Padding = 8,
+                }
+            ];
+            var maxWeeklyClickedNotifications = weeklyClickedNotificationsSeries.MaxBy(x => x.Count())!;
+            MaxWeeklyClickedNotifications = maxWeeklyClickedNotifications.Count();
+            MaxWeeklyClickedNotificationsDay = maxWeeklyClickedNotifications.Key.ToString();
+            var clockData = Package.NotificationsClicked.GroupBy(x => x.Timestamp.Hour).OrderBy(x => x.Key).Select(x => (x.Key, Value: x.Count()));
+            MaxNotifyingClock = clockData.Max(x => x.Value);
+            MaxNotifyingClockHour = new DateTime(1, 1, 1, clockData.First(x => x.Value == MaxNotifyingClock).Key, 0, 0).ToShortTimeString();
+            NotifyingClock = clockData.Select((value) =>
+            {
+                var series = new PieSeries<int>(1)
+                {
+                    InnerRadius = 35,
+                    Pushout = 12,
+                    HoverPushout = 24,
+                    CornerRadius = 4,
+                    OuterRadiusOffset = 250 - value.Value * 250 / MaxNotifyingClock,
+                    Name = new DateTime(1, 1, 1, value.Key, 0, 0).ToShortTimeString(),
+                    ToolTipLabelFormatter = (x) => value.Value + " Notifications clicked",
+                    Fill = new RadialGradientPaint(Constants.SKBlurple.WithAlpha(80), Constants.SKBlurple),
+                };
+                return series;
+            }).ToArray();
             Task.Run(() =>
             {
 

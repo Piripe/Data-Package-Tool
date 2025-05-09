@@ -29,10 +29,19 @@ namespace DataPackageTool.UI
             Color = Application.Current!.TryGetResource("ForegroundBrush", Application.Current.ActualThemeVariant, out object? v) ? ((ImmutableSolidColorBrush)v!).Color.ToSKColor() : new SKColor(127, 127, 127),
             SKTypeface = ggSansTypeface,
         };
+        public static readonly SKColor SKBlurple = new(88, 101, 242);
         public static Axis[] MonthXAxis => [
             new DateTimeAxis(TimeSpan.FromDays(30), date => date.ToString("yyyy\\-MM")) {
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
                 LabelsRotation = -35,
+                ShowSeparatorLines = true,
+                Padding = new(8),
+                LabelsPaint = Constants.LegendTextPaint,
+                TextSize = 12,
+            }
+            ];
+        public static Axis[] WeekXAxis => [
+            new Axis() {
+                Labels = ["Mon","Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                 ShowSeparatorLines = true,
                 Padding = new(8),
                 LabelsPaint = Constants.LegendTextPaint,
@@ -41,7 +50,6 @@ namespace DataPackageTool.UI
             ];
         public static Axis[] WeekHeatmapXAxis => [
             new DateTimeAxis(TimeSpan.FromDays(7), date => date.ToString("yyyy\\-MM\\-dd")) {
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
                 LabelsRotation = -35,
                 ShowSeparatorLines = false,
                 Padding = new(8),
@@ -89,7 +97,6 @@ namespace DataPackageTool.UI
         public static Axis[] WeekHeatmapYAxis => [
             new Axis() {
                 Labels = ["Mon","Tue","Wen","Thu","Fri","Sat","Sun"],
-                //Position = LiveChartsCore.Measure.AxisPosition.End,
                 LabelsRotation = -35,
                 ShowSeparatorLines = true,
                 Padding = new(8),

@@ -20,19 +20,19 @@
 						<StackPanel Orientation="Horizontal" Spacing="32" Margin="0 12 0 0">
 							<StackPanel Spacing="8">
 								<TextBlock Classes="xs semibold" Text="Created At"/>
-								<TextBlock ToolTip.Tip="{CompiledBinding Guild.CreationDate}" Text="{CompiledBinding Guild.CreationDate, StringFormat='MMM dd, yyyy'}"/>
+								<TextBlock Classes="sm" ToolTip.Tip="{CompiledBinding Guild.CreationDate}" Text="{CompiledBinding Guild.CreationDate, StringFormat='MMM dd, yyyy'}"/>
 							</StackPanel>
 							<StackPanel IsVisible="{CompiledBinding Guild.JoinDate, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="8">
 								<TextBlock Classes="xs semibold" Text="Joined At"/>
-								<TextBlock ToolTip.Tip="{CompiledBinding Guild.JoinDate}" Text="{CompiledBinding Guild.JoinDate, StringFormat='MMM dd, yyyy'}"/>
+								<TextBlock Classes="sm" ToolTip.Tip="{CompiledBinding Guild.JoinDate}" Text="{CompiledBinding Guild.JoinDate, StringFormat='MMM dd, yyyy'}"/>
 							</StackPanel>
 							<StackPanel IsVisible="{CompiledBinding Guild.LeaveDate, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="8">
 								<TextBlock Classes="xs semibold" Text="Leave At"/>
-								<TextBlock ToolTip.Tip="{CompiledBinding Guild.LeaveDate}" Text="{CompiledBinding Guild.LeaveDate, StringFormat='MMM dd, yyyy'}"/>
+								<TextBlock Classes="sm" ToolTip.Tip="{CompiledBinding Guild.LeaveDate}" Text="{CompiledBinding Guild.LeaveDate, StringFormat='MMM dd, yyyy'}"/>
 							</StackPanel>
 							<StackPanel IsVisible="{CompiledBinding MessageCount}" Spacing="8">
 								<TextBlock Classes="xs semibold" Text="Messages Sent"/>
-								<TextBlock Text="{CompiledBinding MessageCount}"/>
+								<TextBlock Classes="sm" Text="{CompiledBinding MessageCount}"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>

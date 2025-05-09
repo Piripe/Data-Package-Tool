@@ -8,10 +8,10 @@
              x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Messages"
 			 x:DataType="local:MessagesViewModel">
 	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
-		<UniformGrid Columns="2" ColumnSpacing="4">
+		<UniformGrid Columns="2" ColumnSpacing="4" Rows="2" RowSpacing="4">
 			<Border Classes="Card">
 				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages sent per month"/>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Monthly messages sent"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
@@ -19,6 +19,44 @@
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages activity"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+				</StackPanel>
+			</Border>
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Weekly messages sent"/>
+					<Grid ColumnDefinitions="*,Auto">
+						<lvc:CartesianChart Height="360" Series="{CompiledBinding WeeklySentMessagesSeries}" XAxes="{CompiledBinding WeekXAxis}" YAxes="{CompiledBinding BaseYAxis}"/>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center">
+							<TextBlock Classes="semibold xs" Text="Messaging day"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxWeeklySentMessagesDay}"/>
+							<TextBlock Margin="0 24 0 0" Classes="semibold xs" Text="Messages sent on messaging day" TextWrapping="Wrap" Width="128"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxWeeklySentMessages}"/>
+						</StackPanel>
+					</Grid>
+				</StackPanel>
+			</Border>
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messaging clock"/>
+					<Grid ColumnDefinitions="*,Auto">
+						<Viewbox MaxWidth="400">
+							<Grid Width="400" Height="400">
+								<Grid Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+									<TextBlock Text="00" Classes="semibold xs" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+									<TextBlock Text="06" Classes="semibold xs" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+									<TextBlock Text="12" Classes="semibold xs" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+									<TextBlock Text="18" Classes="semibold xs" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+								</Grid>
+								<lvc:PieChart Width="400" Height="400" Series="{CompiledBinding MessagingClock}" InitialRotation="-90" />
+							</Grid>
+						</Viewbox>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center">
+							<TextBlock Classes="semibold xs" Text="Messaging hour"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxMessagingClockHour}"/>
+							<TextBlock Margin="0 24 0 0" Classes="semibold xs" Text="Messages sent on messaging hour" TextWrapping="Wrap" Width="128"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxMessagingClock}"/>
+						</StackPanel>
+					</Grid>
 				</StackPanel>
 			</Border>
 		</UniformGrid>

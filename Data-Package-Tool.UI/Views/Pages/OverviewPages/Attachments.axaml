@@ -8,7 +8,7 @@
              x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Attachments"
 			 x:DataType="local:AttachmentsViewModel">
 	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
-		<UniformGrid Columns="2" ColumnSpacing="4">
+		<UniformGrid Columns="2" ColumnSpacing="4" Rows="2" RowSpacing="4">
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments sent per month"/>
@@ -19,6 +19,44 @@
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments activity"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding AttachmentsActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+				</StackPanel>
+			</Border>
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Weekly attachments sent"/>
+					<Grid ColumnDefinitions="*,Auto">
+						<lvc:CartesianChart Height="360" Series="{CompiledBinding WeeklySentAttachmentsSeries}" XAxes="{CompiledBinding WeekXAxis}" YAxes="{CompiledBinding BaseYAxis}"/>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center">
+							<TextBlock Classes="semibold xs" Text="Sharing day"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxWeeklySentAttachmentsDay}"/>
+							<TextBlock Margin="0 24 0 0" Classes="semibold xs" Text="Attachments sent on sharing day" TextWrapping="Wrap" Width="128"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxWeeklySentAttachments}"/>
+						</StackPanel>
+					</Grid>
+				</StackPanel>
+			</Border>
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="File sharing clock"/>
+					<Grid ColumnDefinitions="*,Auto">
+						<Viewbox MaxWidth="400">
+							<Grid Width="400" Height="400">
+								<Grid Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+									<TextBlock Text="00" Classes="semibold xs" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+									<TextBlock Text="06" Classes="semibold xs" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+									<TextBlock Text="12" Classes="semibold xs" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+									<TextBlock Text="18" Classes="semibold xs" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+								</Grid>
+								<lvc:PieChart Width="400" Height="400" Series="{CompiledBinding AttachingClock}" InitialRotation="-90" />
+							</Grid>
+						</Viewbox>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center">
+							<TextBlock Classes="semibold xs" Text="Sharing hour"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxAttachingClockHour}"/>
+							<TextBlock Margin="0 24 0 0" Classes="semibold xs" Text="Attachments sent on sharing hour" TextWrapping="Wrap" Width="128"/>
+							<TextBlock Classes="sm" Text="{CompiledBinding MaxAttachingClock}"/>
+						</StackPanel>
+					</Grid>
 				</StackPanel>
 			</Border>
 		</UniformGrid>
