@@ -94,16 +94,16 @@
 				</Grid>
 			</StackPanel>
 		</Border>
-		<Grid ColumnDefinitions="*,4,*,4,*" >
+		<UniformGrid Columns="3" ColumnSpacing="4">
 			<Border Classes="Card">
 				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Random stats"/>
 			</Border>
-			<Border Grid.Column="2" Classes="Card">
+			<Border Classes="Card">
 				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Even more random stats"/>
 			</Border>
-			<Border Grid.Column="4" Classes="Card">
+			<Border Classes="Card">
 				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Interesting stats"/>
 			</Border>
-		</Grid>
+		</UniformGrid>
 	</StackPanel>
 </UserControl>

@@ -42,7 +42,7 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Border>
-		<Grid ColumnDefinitions="*,4,*" >
+		<UniformGrid Columns="2" ColumnSpacing="4">
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Message count friends share"/>
@@ -51,7 +51,7 @@
 					</Viewbox>
 				</StackPanel>
 			</Border>
-			<Border Grid.Column="2" Classes="Card">
+			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time friends share"/>
 					<Viewbox MaxWidth="400">
@@ -59,6 +59,6 @@
 					</Viewbox>
 				</StackPanel>
 			</Border>
-		</Grid>
+		</UniformGrid>
     </StackPanel>
 </UserControl>

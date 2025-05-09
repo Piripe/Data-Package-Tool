@@ -8,19 +8,19 @@
              x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Notifications"
 			 x:DataType="local:NotificationsViewModel">
 	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
-		<Grid ColumnDefinitions="*,4,*" >
+		<UniformGrid Columns="2" ColumnSpacing="4">
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Notifications clicked per month"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyClickedNotificationsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
-			<Border Grid.Column="2" Classes="Card">
+			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Notifications clicked activity"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding NotificationsClickedActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
 				</StackPanel>
 			</Border>
-		</Grid>
+		</UniformGrid>
 	</StackPanel>
 </UserControl>

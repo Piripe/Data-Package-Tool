@@ -7,20 +7,20 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Attachments"
 			 x:DataType="local:AttachmentsViewModel">
-	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 4 0 0">
-		<Grid ColumnDefinitions="*,4,*" >
+	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
+		<UniformGrid Columns="2" ColumnSpacing="4">
 			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments sent per month"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentAttachmentsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
 				</StackPanel>
 			</Border>
-			<Border Grid.Column="2" Classes="Card">
+			<Border Classes="Card">
 				<StackPanel>
 					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments activity"/>
 					<lvc:CartesianChart Height="360" Series="{CompiledBinding AttachmentsActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
 				</StackPanel>
 			</Border>
-		</Grid>
+		</UniformGrid>
 	</StackPanel>
 </UserControl>
