@@ -21,6 +21,10 @@ namespace DataPackageTool.UI
             ServerChannelViewModel => new ServerChannel() { DataContext = viewModel },
             ProfileViewModel => new Profile() { DataContext = viewModel },
             FriendsViewModel => new Friends() { DataContext = viewModel },
+            MessagesViewModel => new Messages() { DataContext = viewModel },
+            VoiceViewModel => new Voice() { DataContext = viewModel },
+            AttachmentsViewModel => new Attachments() { DataContext = viewModel },
+            NotificationsViewModel => new Notifications() { DataContext = viewModel },
             _ => default
         };
     }

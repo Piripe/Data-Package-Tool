@@ -5,11 +5,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1450"
              xmlns:c="clr-namespace:DataPackageTool.UI.Controls"
              xmlns:m="using:DataPackageTool.Core.Models"
-             xmlns:opages="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
+             xmlns:local="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
-			 x:Class="DataPackageTool.UI.Friends"
-			 x:DataType="opages:FriendsViewModel">
-	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 4 0 0">
+			 x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Friends"
+			 x:DataType="local:FriendsViewModel">
+	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
 		<Border Classes="Card">
 			<DataGrid Margin="4" ItemsSource="{CompiledBinding ChannelsDataGrid}"
 					  IsReadOnly="True"

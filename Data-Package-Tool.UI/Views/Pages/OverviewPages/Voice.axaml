@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="clr-namespace:DataPackageTool.UI.Views.Pages.OverviewPages"
+			 xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DataPackageTool.UI.Views.Pages.OverviewPages.Voice"
+			 x:DataType="local:VoiceViewModel">
+	<StackPanel Orientation="Vertical" Spacing="4" Margin="0 8 0 0">
+		<Grid ColumnDefinitions="*,4,*" >
+			<Border Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
+				</StackPanel>
+			</Border>
+			<Border Grid.Column="2" Classes="Card">
+				<StackPanel>
+					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice activity"/>
+					<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+	</StackPanel>
+</UserControl>

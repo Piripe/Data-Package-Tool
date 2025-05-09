@@ -5,7 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using DataPackageTool.UI.Views.Pages.OverviewPages;
 
-namespace DataPackageTool.UI;
+namespace DataPackageTool.UI.Views.Pages.OverviewPages;
 
 public partial class Friends : ReactiveUserControl<FriendsViewModel>
 {

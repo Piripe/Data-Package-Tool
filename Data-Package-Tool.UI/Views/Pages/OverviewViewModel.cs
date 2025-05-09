@@ -41,6 +41,10 @@ namespace DataPackageTool.UI.Views.Pages
             NavItems.AddRange([
                 new NavItemModel() {Path = Constants.HomeIcon, Name="Profile", LinkGetter=()=>new ProfileViewModel(Package)},
                 new NavItemModel() {Path = Constants.FriendsIcon, Name="Friends", LinkGetter=()=>new FriendsViewModel(Package)},
+                new NavItemModel() {Path = Constants.MessageIcon, Name="Messages", LinkGetter=()=>new MessagesViewModel(Package)},
+                new NavItemModel() {Path = Constants.VoiceChannelIcon, Name="Voice", LinkGetter=()=>new VoiceViewModel(Package)},
+                new NavItemModel() {Path = Constants.MediaChannelIcon, Name="Attachments", LinkGetter=()=>new AttachmentsViewModel(Package)},
+                new NavItemModel() {Path = Constants.NotificationIcon, Name="Notifications", LinkGetter=()=>new NotificationsViewModel(Package)},
                 ]);
         }
     }

@@ -117,7 +117,7 @@ namespace DataPackageTool.UI
         {
             {ChannelType.GUILD_TEXT, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
             {ChannelType.DM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
-            {ChannelType.GUILD_VOICE, Application.Current!.FindResource("VoiceChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_VOICE, VoiceChannelIcon },
             {ChannelType.GROUP_DM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
             {ChannelType.GUILD_ANNOUNCEMENT, Application.Current!.FindResource("AnnouncementChannelIcon") as StreamGeometry },
             {ChannelType.ANNOUNCEMENT_THREAD, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
@@ -126,10 +126,14 @@ namespace DataPackageTool.UI
             {ChannelType.GUILD_STAGE_VOICE, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
             {ChannelType.GUILD_DIRECTORY, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
             {ChannelType.GUILD_FORUM, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
-            {ChannelType.GUILD_MEDIA, Application.Current!.FindResource("TextChannelIcon") as StreamGeometry },
+            {ChannelType.GUILD_MEDIA, MediaChannelIcon },
         };
         public static readonly StreamGeometry? HomeIcon = Application.Current!.FindResource("HomeIcon") as StreamGeometry;
         public static readonly StreamGeometry? FriendsIcon = Application.Current!.FindResource("FriendsIcon") as StreamGeometry;
         public static readonly StreamGeometry? SearchIcon = Application.Current!.FindResource("SearchIcon") as StreamGeometry;
+        public static readonly StreamGeometry? MessageIcon = Application.Current!.FindResource("MessageIcon") as StreamGeometry;
+        public static readonly StreamGeometry? NotificationIcon = Application.Current!.FindResource("NotificationIcon") as StreamGeometry;
+        public static readonly StreamGeometry? VoiceChannelIcon = Application.Current!.FindResource("VoiceChannelIcon") as StreamGeometry;
+        public static readonly StreamGeometry? MediaChannelIcon = Application.Current!.FindResource("MediaChannelIcon") as StreamGeometry;
     }
 }

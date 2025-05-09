@@ -46,9 +46,6 @@ namespace DataPackageTool.UI.Views.Pages.OverviewPages
         }
         private void Init()
         {
-
-
-
             Task.Run(() =>
             {
                 HashSet<Channel> channelsDataGrid = Package.Channels.Where(x => x.IsDM()).ToHashSet();
