@@ -22,6 +22,6 @@ namespace DataPackageTool.Core
         public const string APIEndpoint = "https://discordapp.com/api/v9/";
         public const string CDNEndpoint = "https://cdn.discordapp.com/";
 
-        public static readonly List<string> ParsedEvents = ["accepted_instant_invite", "create_guild", "guild_joined", "voice_disconnect", "leave_voice_channel", "leave_guild", "start_call", "join_call"];
+        public static readonly List<string> ParsedEvents = ["accepted_instant_invite", "create_guild", "guild_joined", "voice_disconnect", "leave_voice_channel", "leave_guild", "start_call", "join_call", "notification_clicked", "in_app_notification_clicked"];
     }
 }

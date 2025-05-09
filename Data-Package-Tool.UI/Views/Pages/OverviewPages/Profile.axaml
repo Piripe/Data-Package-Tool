@@ -41,95 +41,125 @@
 							<TextBlock Classes="xs semibold" Text="Messages Sent"/>
 							<TextBlock Text="{CompiledBinding Package.Messages.Count}"/>
 						</StackPanel>
+						<StackPanel Spacing="8">
+							<TextBlock Classes="xs semibold" Text="Notifications clicked"/>
+							<TextBlock Text="{CompiledBinding Package.NotificationsClicked.Count}"/>
+						</StackPanel>
 					</StackPanel>
 				</StackPanel>
 			</DockPanel>
 
 		</Border>
-		<Grid ColumnDefinitions="*,4,*" >
-			<Border Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages sent per month"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
-				</StackPanel>
-			</Border>
-			<Border Grid.Column="2" Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages activity"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
-				</StackPanel>
-			</Border>
-		</Grid>
-		<Grid ColumnDefinitions="*,4,*" >
-			<Border Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice activity"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
-				</StackPanel>
-			</Border>
-			<Border Grid.Column="2" Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
-				</StackPanel>
-			</Border>
-		</Grid>
-		<Grid>
-			<Border Classes="Card">
-				<StackPanel Spacing="8">
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Incoming calls / Outgoing calls"/>
-					<Grid Height="48" Margin="8,0" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*">
-						<Grid.Styles>
-							<Style Selector="Border">
-								<Setter Property="Transitions">
-									<Setter.Value>
-										<Transitions>
-											<TransformOperationsTransition Duration="0.3" Easing="CubicEaseInOut" Property="RenderTransform"/>
-											<CornerRadiusTransition Duration="0.3" Easing="CubicEaseInOut" Property="CornerRadius"/>
-										</Transitions>
-									</Setter.Value>
-								</Setter>
-							</Style>
-							<Style Selector="Border.first">
-								<Setter Property="CornerRadius" Value="8,6,6,8"/>
-							</Style>
-							<Style Selector="Border.last">
-								<Setter Property="CornerRadius" Value="6,8,8,6"/>
-							</Style>
-							<Style Selector="Border:pointerover">
-								<Setter Property="CornerRadius" Value="8"/>
-							</Style>
-							<Style Selector="Border.first:pointerover">
-								<Setter Property="RenderTransform" Value="translateX(-8px) scaleY(1.075)"/>
-							</Style>
-							<Style Selector="Border.last:pointerover">
-								<Setter Property="RenderTransform" Value="translateX(8px) scaleY(1.075)"/>
-							</Style>
-						</Grid.Styles>
-						<Border Grid.ColumnSpan="{CompiledBinding JoinCallShare}" Classes="first" Margin="0,0,2,0" Background="Red" ToolTip.Tip="{CompiledBinding Package.JoinCalls.Count, StringFormat='0 Calls Joined'}">
-							<TextBlock Classes="h5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" Text="{CompiledBinding Package.JoinCalls.Count, StringFormat='0 Calls Joined'}"/>
-						</Border>
-						<Border Grid.Column="{CompiledBinding JoinCallShare}" Grid.ColumnSpan="100" Classes="last" Margin="2,0,0,0" Background="Blue" ToolTip.Tip="{CompiledBinding Package.StartCalls.Count, StringFormat='0 Calls Started'}">
-							<TextBlock Classes="h5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" Text="{CompiledBinding Package.StartCalls.Count, StringFormat='0 Calls Started'}"/>
+		<TabControl>
+			<TabItem Header="Messages">
+				<Grid ColumnDefinitions="*,4,*" >
+					<Border Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages sent per month"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentMessagesSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
+						</StackPanel>
+					</Border>
+					<Border Grid.Column="2" Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Messages activity"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding MessagesActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+						</StackPanel>
+					</Border>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Voice">
+				<StackPanel Orientation="Vertical" Spacing="4">
+				<Grid ColumnDefinitions="*,4,*" >
+					<Border Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice time per month"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyVoiceTimeSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding TimespanYAxis}" ZoomMode="X"/>
+						</StackPanel>
+					</Border>
+					<Border Grid.Column="2" Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Voice activity"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding VoiceActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+						</StackPanel>
+					</Border>
+				</Grid>
+				<Grid>
+					<Border Classes="Card">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Incoming calls / Outgoing calls"/>
+								<Grid Height="48" Margin="8,0" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*">
+									<Grid.Styles>
+										<Style Selector="Border">
+											<Setter Property="Transitions">
+												<Setter.Value>
+													<Transitions>
+														<TransformOperationsTransition Duration="0.3" Easing="CubicEaseInOut" Property="RenderTransform"/>
+														<CornerRadiusTransition Duration="0.3" Easing="CubicEaseInOut" Property="CornerRadius"/>
+													</Transitions>
+												</Setter.Value>
+											</Setter>
+										</Style>
+										<Style Selector="Border.first">
+											<Setter Property="CornerRadius" Value="8,6,6,8"/>
+										</Style>
+										<Style Selector="Border.last">
+											<Setter Property="CornerRadius" Value="6,8,8,6"/>
+										</Style>
+										<Style Selector="Border:pointerover">
+											<Setter Property="CornerRadius" Value="8"/>
+										</Style>
+										<Style Selector="Border.first:pointerover">
+											<Setter Property="RenderTransform" Value="translateX(-8px) scaleY(1.075)"/>
+										</Style>
+										<Style Selector="Border.last:pointerover">
+											<Setter Property="RenderTransform" Value="translateX(8px) scaleY(1.075)"/>
+										</Style>
+									</Grid.Styles>
+									<Border Grid.ColumnSpan="{CompiledBinding JoinCallShare}" Classes="first" Margin="0,0,2,0" Background="Red" ToolTip.Tip="{CompiledBinding Package.JoinCalls.Count, StringFormat='0 Calls Joined'}">
+										<TextBlock Classes="h5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" Text="{CompiledBinding Package.JoinCalls.Count, StringFormat='0 Calls Joined'}"/>
+									</Border>
+									<Border Grid.Column="{CompiledBinding JoinCallShare}" Grid.ColumnSpan="100" Classes="last" Margin="2,0,0,0" Background="Blue" ToolTip.Tip="{CompiledBinding Package.StartCalls.Count, StringFormat='0 Calls Started'}">
+										<TextBlock Classes="h5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" Text="{CompiledBinding Package.StartCalls.Count, StringFormat='0 Calls Started'}"/>
+									</Border>
+								</Grid>
+							</StackPanel>
 						</Border>
 					</Grid>
 				</StackPanel>
-			</Border>
-		</Grid>
-		<Grid ColumnDefinitions="*,4,*" >
-			<Border Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments sent per month"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentAttachmentsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
-				</StackPanel>
-			</Border>
-			<Border Grid.Column="2" Classes="Card">
-				<StackPanel>
-					<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments activity"/>
-					<lvc:CartesianChart Height="360" Series="{CompiledBinding AttachmentsActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
-				</StackPanel>
-			</Border>
-		</Grid>
+			</TabItem>
+			<TabItem Header="Attachments">
+				<Grid ColumnDefinitions="*,4,*" >
+					<Border Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments sent per month"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlySentAttachmentsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
+						</StackPanel>
+					</Border>
+					<Border Grid.Column="2" Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Attachments activity"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding AttachmentsActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+						</StackPanel>
+					</Border>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Notifications Clicked">
+				<Grid ColumnDefinitions="*,4,*" >
+					<Border Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Notifications clicked per month"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding MonthlyClickedNotificationsSeries}" XAxes="{CompiledBinding MonthXAxis}" YAxes="{CompiledBinding BaseYAxis}" ZoomMode="X"/>
+						</StackPanel>
+					</Border>
+					<Border Grid.Column="2" Classes="Card">
+						<StackPanel>
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="Notifications clicked activity"/>
+							<lvc:CartesianChart Height="360" Series="{CompiledBinding NotificationsClickedActivityHeatmapSeries}" XAxes="{CompiledBinding WeekHeatmapXAxis}" YAxes="{CompiledBinding WeekHeatmapYAxis}" ZoomMode="PanX" CornerRadius="4"/>
+						</StackPanel>
+					</Border>
+				</Grid>
+			</TabItem>
+		</TabControl>
 		<Grid ColumnDefinitions="*,4,*,4,*" >
 			<Border Classes="Card">
 				<TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Random stats"/>

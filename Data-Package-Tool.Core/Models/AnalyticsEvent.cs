@@ -21,6 +21,8 @@ namespace DataPackageTool.Core.Models
     [JsonDerivedType(typeof(LeaveGuild), "leave_guild")]
     [JsonDerivedType(typeof(StartCall), "start_call")]
     [JsonDerivedType(typeof(JoinCall), "join_call")]
+    [JsonDerivedType(typeof(NotificationClicked), "notification_clicked")]
+    [JsonDerivedType(typeof(InAppNotificationClicked), "in_app_notification_clicked")]
 
     public class AnalyticsEvent
     {

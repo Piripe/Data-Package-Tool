@@ -58,6 +58,7 @@ namespace DataPackageTool.Core
         public HashSet<VoiceCall> VoiceCalls { get; private set; } = [];
         public HashSet<StartCall> StartCalls { get; private set; } = [];
         public HashSet<JoinCall> JoinCalls { get; private set; } = [];
+        public HashSet<AnalyticsEvent> NotificationsClicked { get; private set; } = [];
 
         public DateTime CreationTime { get; private set; } = DateTime.Now;
 
@@ -452,7 +453,10 @@ namespace DataPackageTool.Core
                         case JoinCall:
                             dp.JoinCalls = group.Cast<JoinCall>().ToHashSet();
                             break;
-
+                        case NotificationClicked:
+                        case InAppNotificationClicked:
+                            dp.NotificationsClicked.UnionWith(group);
+                            break;
                     }
                 }
 
