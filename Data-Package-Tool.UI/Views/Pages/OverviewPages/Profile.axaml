@@ -42,6 +42,10 @@
 							<TextBlock Text="{CompiledBinding Package.Messages.Count}"/>
 						</StackPanel>
 						<StackPanel Spacing="8">
+							<TextBlock Classes="xs semibold" Text="Friends"/>
+							<TextBlock Text="{CompiledBinding Package.User.Relationships.Count}"/>
+						</StackPanel>
+						<StackPanel Spacing="8">
 							<TextBlock Classes="xs semibold" Text="Notifications clicked"/>
 							<TextBlock Text="{CompiledBinding Package.NotificationsClicked.Count}"/>
 						</StackPanel>
